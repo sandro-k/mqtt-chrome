@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap 101 Template</title>
+
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <!--custom css via scss-->
+    <link rel="stylesheet" href="css/build/global.css"/>
+    <link rel="stylesheet" href="css/build/layout.css"/>
+</head>
+<body>
+
+
+<!--git hub-->
+<a href="https://github.com/sandro-k/mqtt-chrome">
+    <img class="github"
+         src="img/github.png"
+         alt="Fork me on GitHub">
+</a>
+
+<!--header-->
+<header class="header bg-blue gradient">
+    <div class="row">
+        <div class="col-xs-10">
+            <h1>MQTT Web Utility</h1>
+        </div>
+        <div class="col-xs-2">
+            <h1 class="pull-right"><span class="glyphicon glyphicon-cog"></span></h1>
+        </div>
+    </div>
+
+
+</header>
+
+<div class="wrapper">
+    <!--left menu-->
+    <aside class="aside menu-left connections">
+        <div class="row bg-white border-dark-grey">
+            <div class="col-xs-11 col-sm-10">
+                <h1>Connections</h1>
+            </div>
+            <div class="col-xs-1 col-sm-2">
+                <h1 class="pull-right"><span class="glyphicon glyphicon-plus"></span></h1>
+            </div>
+        </div>
+        <ul class="nav">
+            <li class="connection-1">
+                <a href="#">Connection 1 <span class="badge pull-right">disconnected</span></a>
+            </li>
+            <li class="active connection-2">
+                <a href="#">Connection 2 <span class="badge pull-right">connected</span></a>
+            </li>
+            <li class="connection-3">
+                <a href="#">Connection 3 <span class="badge pull-right">disconnected</span></a>
+            </li>
+        </ul>
+    </aside>
+
+    <!--content-->
+    <section class="main">
+        <div class="row bg-white">
+            <div class="col-xs-1 hidden-xs">
+                <h1 class="toggle" data-target=".menu-left">
+                    <span class="glyphicon glyphicon-align-justify"></span>
+                </h1>
+            </div>
+            <div class="col-xs-10 head">
+                <h1>Environment name</h1>
+            </div>
+            <div class="col-xs-1 hidden-xs">
+                <h1 class="toggle pull-right" data-target=".menu-right">
+                    <span class="glyphicon glyphicon-list"></span>
+                </h1>
+            </div>
+        </div>
+        <div class="row connection connection-2">
+            <div class="col-xs-10"><h2>Connection 2 - Subscriptions</h2></div>
+            <div class="col-xs-2">
+                <h2 class="pull-right">
+                    <span class="glyphicon glyphicon-plus pull-right"></span>
+                </h2>
+            </div>
+        </div>
+        <div class="row connection connection-2 sub">
+            <div class="col-xs-9">
+                <h3>topic/name/#</h3>
+            </div>
+            <div class="col-xs-3 options">
+                <span class="glyphicon glyphicon-chevron-down pull-right"></span>
+                <span class="glyphicon glyphicon-cog pull-right"></span>
+                <span class="pull-right">Messages <span class="badge">0/5</span></span>
+            </div>
+        </div>
+        <div class="connection connection-2 sub last expanded">
+            <div class="row">
+                <div class="col-xs-9">
+                    <h3>test/#</h3>
+                </div>
+                <div class="col-xs-3 options">
+                    <span class="glyphicon glyphicon-chevron-up pull-right"></span>
+                    <span class="glyphicon glyphicon-cog pull-right"></span>
+                    <span class="pull-right">Messages <span class="badge">1/2</span></span>
+                </div>
+            </div>
+            <div class="row table-header">
+                <div class="col-xs-2"><h4>Date</h4></div>
+                <div class="col-xs-2"><h4>Topic</h4></div>
+                <div class="col-xs-8"><h4>Message</h4></div>
+            </div>
+            <div class="row message">
+                <div class="col-xs-2">18:00</div>
+                <div class="col-xs-2">test/hello</div>
+                <div class="col-xs-8">world</div>
+            </div>
+            <div class="row message">
+                <div class="col-xs-2">18:30</div>
+                <div class="col-xs-2">test/veryLongMessage</div>
+                <div class="col-xs-8">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus alias architecto consequuntur, deleniti eligendi illum impedit neque numquam obcaecati omnis soluta totam vel, veritatis. Assumenda eum explicabo fugiat harum repellendus.</div>
+            </div>
+        </div>
+
+
+    </section>
+
+    <!--right menu-->
+    <aside class="aside menu-right">
+        <div class="row bg-white">
+            <div class="col-xs-11 col-sm-10">
+                <h1>Notifications</h1>
+            </div>
+            <div class="col-xs-1 col-sm-2">
+                <h1 class="toggle pull-right" data-target=".menu-right">
+                    <span class="glyphicon glyphicon-list"></span>
+                </h1>
+            </div>
+        </div>
+
+
+    </aside>
+</div>
+
+<!--footer-->
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="js/bootstrap.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

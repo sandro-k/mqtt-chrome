@@ -1,0 +1,22 @@
+.flexbox {
+  display: flex;
+  flex-flow: row wrap;
+//  justify-content: space-around;
+}
+.left {
+  flex-grow: 1;
+  background-color: darkseagreen;
+  flex-basis: 20%;
+}
+
+.right {
+  flex-grow: 1;
+  background-color: dodgerblue;
+  flex-basis: 20%;
+}
+
+.content {
+  flex-grow: 2;
+  background-color: #ffff00;
+  flex-basis: 60%;
+}

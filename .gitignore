@@ -1,0 +1,26 @@
+# Eclipse
+.classpath
+.project
+.settings/
+
+# Intellij
+.idea/
+*.iml
+*.iws
+
+# Mac
+.DS_Store
+
+# Maven
+log/
+target/
+
+# project
+# we use scss for styling and compile to css
+css/build/*
+# minified js
+js/build/*
+
+/node_modules/
+
+/.sass-cache/

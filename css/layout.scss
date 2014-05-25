@@ -1,0 +1,314 @@
+$margin: 4px;
+
+$grey: #f2f2f2;
+$grey_dark: #D0D0D0;
+$grey_dark_dark: #555;
+$blue: #7694c6;
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background-color: #f1f3f5;
+}
+
+h1, h2, h3, h4, h5 {
+  color: $grey_dark_dark;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: $margin;
+  padding-bottom: $margin;
+}
+
+@mixin headings($from: 1, $to: 6) {
+  @for $i from $from through $to {
+    h#{$i} {
+      @content;
+      font-size: (26-($i*2))*1px;
+    }
+  }
+}
+
+@include headings() {
+  font-family: sans-serif;
+  font-weight: bold;
+}
+
+.sub {
+  border-top: 1px dashed $grey_dark;
+
+}
+
+.connection {
+  border-right: 1px solid $grey_dark;
+  vertical-align: middle !important;
+  .glyphicon, {
+    padding-top: $margin*2;
+    padding-bottom: $margin;
+  }
+  .badge {
+    margin-top: $margin*2;
+  }
+}
+
+.last {
+  border-bottom: 1px solid $grey_dark;
+}
+
+.main .row, .aside .row  {
+  padding-top: $margin;
+  padding-bottom: $margin;
+}
+
+h1 {
+  font-size: 24px;
+}
+
+h2 {
+  font-size: 20px;
+}
+
+.row {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.wrapper {
+  display: flex;
+  flex-flow: row wrap;
+  min-height: 100%;
+  position: relative;
+}
+
+.main {
+  flex: 10 100%;
+  min-height: 100%;
+  position: relative;
+}
+
+.aside {
+  //  flex: 1 20%;
+  //  max-width: 20%;
+}
+
+.header {
+  margin-top: 0;
+  margin-bottom: $margin*3;
+  padding-top: $margin*2;
+  padding-bottom: $margin*2;
+  padding-left: $margin*2;
+  h1 {
+    font-size: 24px;
+    color: #ffffff;
+  }
+}
+
+.gradient {
+  background-image: linear-gradient(to bottom, $blue, #415577);
+  box-shadow: 0px -10px 13px 13px $grey_dark_dark;
+}
+
+.footer {
+  position: absolute;
+  width: 100%;
+  height: 80px;
+  bottom: 0;
+  left: 0;
+}
+
+.main {
+  text-align: left;
+  padding-bottom: 80px;
+}
+
+.aside > div:first-child, .main > div:first-child {
+  //  border-left: 1px solid $grey_dark;
+  border-left: 3px solid #555555;
+  border-top: 1px solid $grey_dark;
+  border-bottom: 1px solid $grey_dark;
+  border-right: 1px solid $grey_dark;
+
+}
+
+.menu-left {
+  margin-right: $margin*2;
+  //   background: linear-gradient(to right,#3a3633 93%,#2a2725 100%);
+  color: #ffffff;
+}
+
+.connections {
+  padding-left: $margin;
+  padding-right: $margin;
+//  padding-top: $margin;
+//  background-color: $grey;
+  div:nth-of-type(1) div {
+    //    border-left: 3px solid red;
+  }
+}
+
+.border-dark-grey {
+  border-left: 3px solid $grey_dark_dark;
+  border-right: 1px solid $grey;
+}
+
+.menu-right {
+  margin-left: $margin*2;
+}
+
+//small
+@media all and (max-width: 600px) {
+  .aside {
+    max-width: 100%;
+    width: 100%;
+  }
+  .menu-left {
+    margin-right: 0;
+  }
+  .menu-right {
+    margin-left: 0;
+  }
+}
+
+@media all and (min-width: 600px) {
+  .aside {
+    //    flex: 1 auto;
+  }
+}
+
+@media all and (min-width: 800px) {
+  .main {
+    flex: 2 0px;
+  }
+  .menu-left {
+    order: 1;
+  }
+  .main {
+    order: 2;
+  }
+  .menu-right {
+    order: 3;
+  }
+  .footer {
+    order: 4;
+  }
+}
+
+.github {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  border: 0;
+  z-index: 1000;
+}
+
+// colors
+.bg-grey {
+  background-color: $grey;
+}
+
+.bg-white {
+  background-color: #ffffff;
+}
+
+.bg-blue {
+  background-color: $blue;
+}
+
+.nav {
+  li {
+    //  border: 1px solid #e5e5e5;
+    //    border-top: 2px solid #000000;
+    border-bottom: 1px solid $grey_dark;
+    border-right: 1px solid $grey_dark;
+    //    border-right: 1px solid $grey_dark_dark;
+    a {
+      color: $grey_dark_dark;
+    }
+  }
+  .active {
+    font-weight: bold;
+  }
+}
+
+.main {
+  .head {
+    text-align: center;
+  }
+  .row {
+    .options > span {
+      margin-left: $margin*2;
+    }
+    // because we use pull left on all
+    // spans the fist element will be the last
+    .options > span:last-child {
+      margin-left: 0px;
+    }
+  }
+}
+
+.table-header {
+  border-top: 2px dotted $grey_dark;
+}
+
+// generate colors for the connections
+$num-colors: 6;
+$base-color: #c24;
+$spectrum: 360deg;
+$offset: 30deg;
+
+@for $i from 0 to $num-colors {
+  $connections_color: adjust-hue($base-color, $offset + $spectrum / $num-colors * $i);
+  .connection-#{$i} {
+    border-left: 3px solid $connections_color;
+    .badge {
+      background: $connections_color;
+    }
+    .message {
+      border-left: 6px solid $connections_color;
+    }
+  }
+  .main {
+    .connection-#{$i} {
+      background: lighten($connections_color, 50);
+    }
+  }
+  .nav .connection-#{$i} {
+    background: lighten($connections_color, 40);
+  }
+  .connection-#{$i}.active {
+    background: lighten($connections_color, 30);
+    border-right: 5px solid $connections_color;
+  }
+  .connection-#{$i} a:focus, .connection-#{$i} a:hover {
+    //    color: red;
+    background: lighten($connections_color, 50) !important;
+    //    background-color: #ffff00!important;
+  }
+}
+
+.nav > li > a:hover, .nav > li > a:focus {
+  //background-color: red;
+}
+
+// debug
+$debug: false;
+@if $debug {
+  .menu-right {
+    background: hotpink;
+  }
+  .menu-left {
+    background: gold;
+  }
+  .main {
+    background: deepskyblue;
+  }
+  .header {
+    background: tomato;
+  }
+  .footer {
+    background: lightgreen;
+  }
+}
+
+

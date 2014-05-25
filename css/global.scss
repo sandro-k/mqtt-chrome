@@ -1,0 +1,54 @@
+//variables
+
+//colors
+
+h1 {
+  margin: 0;
+}
+
+// layout
+.wrapper {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+/* We tell all items to be 100% width */
+
+.content {
+  flex: 2 100%;
+}
+
+.menu {
+  flex: 1 20%;
+}
+
+/* Medium screens */
+@media all and (min-width: 600px) {
+  /* We tell both sidebars to share a row */
+  .aside {
+//    flex: 1 auto;
+  }
+}
+
+/* Large screens */
+@media all and (min-width: 800px) {
+  /* We invert order of first sidebar and content
+   * And tell the content element to take twice as much width as the other two sidebars
+   */
+  .content {
+    flex: 2 0px;
+  }
+  .menu-left {
+    order: 1;
+  }
+  .content {
+    order: 2;
+  }
+  .menu-right {
+    order: 3;
+  }
+}
+
+
+
+
