@@ -10,6 +10,7 @@
     <link href="css/bootstrap.css" rel="stylesheet">
     <!--custom css via scss-->
     <link rel="stylesheet" href="css/build/global.css"/>
+    <link rel="stylesheet" href="css/build/fonts.css"/>
     <link rel="stylesheet" href="css/build/layout.css"/>
 </head>
 <body>
@@ -24,16 +25,16 @@
 
 <!--header-->
 <header class="header bg-blue gradient">
-    <div class="row">
-        <div class="col-xs-10">
-            <h1>MQTT Web Utility</h1>
-        </div>
-        <div class="col-xs-2">
-            <h1 class="pull-right"><span class="glyphicon glyphicon-cog"></span></h1>
+    <div class="header-wrapper">
+        <div class="row">
+            <div class="col-xs-9">
+                <h1 class="app-name"><span class="glyphicon glyphicon-home"></span> MQTT<span class="subline">inspect</span></h1>
+            </div>
+            <div class="col-xs-2">
+                <h1 class="config-icon pull-right"><span class="glyphicon glyphicon-cog"></span></h1>
+            </div>
         </div>
     </div>
-
-
 </header>
 
 <div class="wrapper">
@@ -64,16 +65,16 @@
     <section class="main">
         <div class="row bg-white">
             <div class="col-xs-1 hidden-xs">
-                <h1 class="toggle" data-target=".menu-left">
-                    <span class="glyphicon glyphicon-align-justify"></span>
+                <h1 class="toggle pull-left" data-target=".menu-left">
+                    <span class="glyphicon glyphicon-chevron-left"></span>
                 </h1>
             </div>
             <div class="col-xs-10 head">
-                <h1>Environment name</h1>
+                <h1>Connections Environment name</h1>
             </div>
             <div class="col-xs-1 hidden-xs">
-                <h1 class="toggle pull-right" data-target=".menu-right">
-                    <span class="glyphicon glyphicon-list"></span>
+                <h1 class="toggle pull-right icon-right" data-target=".menu-right">
+                    <span class="glyphicon glyphicon-chevron-right"></span>
                 </h1>
             </div>
         </div>
@@ -119,7 +120,10 @@
             <div class="row message">
                 <div class="col-xs-2">18:30</div>
                 <div class="col-xs-2">test/veryLongMessage</div>
-                <div class="col-xs-8">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus alias architecto consequuntur, deleniti eligendi illum impedit neque numquam obcaecati omnis soluta totam vel, veritatis. Assumenda eum explicabo fugiat harum repellendus.</div>
+                <div class="col-xs-8">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus alias
+                    architecto consequuntur, deleniti eligendi illum impedit neque numquam obcaecati omnis soluta totam
+                    vel, veritatis. Assumenda eum explicabo fugiat harum repellendus.
+                </div>
             </div>
         </div>
 
@@ -134,7 +138,7 @@
             </div>
             <div class="col-xs-1 col-sm-2">
                 <h1 class="toggle pull-right" data-target=".menu-right">
-                    <span class="glyphicon glyphicon-list"></span>
+                    <span class="glyphicon glyphicon-envelope"></span>
                 </h1>
             </div>
         </div>
@@ -144,6 +148,9 @@
 </div>
 
 <!--footer-->
+<footer>
+    footer
+</footer>
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>

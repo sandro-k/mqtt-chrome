@@ -1,24 +1,37 @@
 $margin: 4px;
 
 $grey: #f2f2f2;
-$grey_dark: #D0D0D0;
-$grey_dark_dark: #555;
+//$grey_dark: #D0D0D0;
+$grey_dark:#c1c0c6;
+//$grey_dark_dark: #555;
+$grey_dark_dark: #626267;
+$black: #010101;
 $blue: #7694c6;
+//c1c0c6
 
 html,
 body {
   margin: 0;
   padding: 0;
   height: 100%;
-  background-color: #f1f3f5;
+//  background-color: #ededf2;
+//  background: url('../../img/gray_jean.png') repeat;
+  background: #e5e5e5;
+  -webkit-font-smoothing: antialiased;
+}
+
+div {
+  -webkit-font-smoothing: antialiased;
 }
 
 h1, h2, h3, h4, h5 {
   color: $grey_dark_dark;
+  font-weight: 200;
   margin-top: 0;
   margin-bottom: 0;
   padding-top: $margin;
   padding-bottom: $margin;
+  -webkit-font-smoothing: antialiased
 }
 
 @mixin headings($from: 1, $to: 6) {
@@ -32,12 +45,16 @@ h1, h2, h3, h4, h5 {
 
 @include headings() {
   font-family: sans-serif;
-  font-weight: bold;
+//  font-weight: bold;
 }
 
 .sub {
   border-top: 1px dashed $grey_dark;
 
+}
+
+.glyphicon {
+//  color: #e5e5e5;
 }
 
 .connection {
@@ -53,12 +70,12 @@ h1, h2, h3, h4, h5 {
 }
 
 .last {
-  border-bottom: 1px solid $grey_dark;
+  border-bottom: 2px solid $grey_dark;
 }
 
 .main .row, .aside .row  {
-  padding-top: $margin;
-  padding-bottom: $margin;
+//  padding-top: $margin;
+//  padding-bottom: $margin;
 }
 
 h1 {
@@ -85,6 +102,39 @@ h2 {
   flex: 10 100%;
   min-height: 100%;
   position: relative;
+  [class*=" icon-"] {
+    .glyphicon {
+      color: dimgrey;
+//      font-size: 29px;
+    }
+  }
+  .icon-left {
+    border-right: 1px solid $grey;
+    padding-right: 15px;
+  }
+  .icon-right {
+    border-left: 1px solid $grey;
+    padding-left: 15px;
+  }
+
+  .head {
+    text-align: center;
+    h1 {
+      font-family: sans-serif;
+      //    font-size: 21px;
+      font-weight: 200;
+    }
+  }
+  .row {
+    .options > span {
+      margin-left: $margin*2;
+    }
+    // because we use pull left on all
+    // spans the fist element will be the last
+    .options > span:last-child {
+      margin-left: 0px;
+    }
+  }
 }
 
 .aside {
@@ -95,18 +145,40 @@ h2 {
 .header {
   margin-top: 0;
   margin-bottom: $margin*3;
-  padding-top: $margin*2;
-  padding-bottom: $margin*2;
-  padding-left: $margin*2;
+  padding-top: $margin;
+  padding-bottom: $margin;
+  padding-left: 0;
   h1 {
     font-size: 24px;
     color: #ffffff;
   }
+  .header-wrapper {
+    border-bottom: 1px dotted #e5e5e5;
+    border-top: 1px dotted #e5e5e5;
+    .app-name {
+      height: 67px;
+      padding: 14px 0px;
+      font-size: 32px;
+      line-height: 22px;
+      span.subline {
+        font-size: 26px;
+        position: relative;
+        top: 4px;
+      }
+    }
+    .config-icon {
+      height: 67px;
+      padding: 20px 0px;
+      font-size: 28px;
+      line-height: 22px;
+    }
+  }
 }
 
 .gradient {
-  background-image: linear-gradient(to bottom, $blue, #415577);
-  box-shadow: 0px -10px 13px 13px $grey_dark_dark;
+//  background-image: linear-gradient(to bottom, $blue, #415577);
+//    linear-gradient(#ffffff 81%,#f5f6f7);
+//  box-shadow: 0px 0px 32px 0px $grey_dark_dark;
 }
 
 .footer {
@@ -120,11 +192,13 @@ h2 {
 .main {
   text-align: left;
   padding-bottom: 80px;
+  margin-left: $margin*2;
+  margin-right: $margin*2;
 }
 
 .aside > div:first-child, .main > div:first-child {
   //  border-left: 1px solid $grey_dark;
-  border-left: 3px solid #555555;
+  border-left: 3px solid $grey_dark_dark;
   border-top: 1px solid $grey_dark;
   border-bottom: 1px solid $grey_dark;
   border-right: 1px solid $grey_dark;
@@ -132,7 +206,7 @@ h2 {
 }
 
 .menu-left {
-  margin-right: $margin*2;
+//  margin-right: $margin*2;
   //   background: linear-gradient(to right,#3a3633 93%,#2a2725 100%);
   color: #ffffff;
 }
@@ -153,7 +227,7 @@ h2 {
 }
 
 .menu-right {
-  margin-left: $margin*2;
+//  margin-left: $margin*2;
 }
 
 //small
@@ -231,21 +305,7 @@ h2 {
   }
 }
 
-.main {
-  .head {
-    text-align: center;
-  }
-  .row {
-    .options > span {
-      margin-left: $margin*2;
-    }
-    // because we use pull left on all
-    // spans the fist element will be the last
-    .options > span:last-child {
-      margin-left: 0px;
-    }
-  }
-}
+
 
 .table-header {
   border-top: 2px dotted $grey_dark;
