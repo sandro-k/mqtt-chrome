@@ -2,7 +2,7 @@ $margin: 4px;
 
 $grey: #f2f2f2;
 //$grey_dark: #D0D0D0;
-$grey_dark:#c1c0c6;
+$grey_dark: #c1c0c6;
 //$grey_dark_dark: #555;
 $grey_dark_dark: #626267;
 $black: #010101;
@@ -14,14 +14,39 @@ body {
   margin: 0;
   padding: 0;
   height: 100%;
-//  background-color: #ededf2;
-//  background: url('../../img/gray_jean.png') repeat;
+  //  background-color: #ededf2;
+  //  background: url('../../img/gray_jean.png') repeat;
   background: #e5e5e5;
   -webkit-font-smoothing: antialiased;
 }
 
 div {
   -webkit-font-smoothing: antialiased;
+  border: 0px;
+}
+
+.connected {
+  h2 {
+    font-weight: 400;
+  }
+}
+
+// todo refactor into proper selector
+.no-top-padding {
+  padding-top: 0 !important;
+}
+
+.toggle-menu {
+  .badge {
+    position: relative;
+    top: -12px;
+    left: -17px;
+    background: rgba(250, 0, 0, 1);
+    padding-left: 4px;
+    padding-right: 4px;
+    font-size: 12px;
+    z-index: 4;
+  }
 }
 
 h1, h2, h3, h4, h5 {
@@ -45,7 +70,7 @@ h1, h2, h3, h4, h5 {
 
 @include headings() {
   font-family: sans-serif;
-//  font-weight: bold;
+  //  font-weight: bold;
 }
 
 .sub {
@@ -54,28 +79,43 @@ h1, h2, h3, h4, h5 {
 }
 
 .glyphicon {
-//  color: #e5e5e5;
+  //    color: #555;
+}
+
+.hidden-init {
+  display: none;
+}
+
+.extra-margin {
+  margin-right: $margin;
 }
 
 .connection {
   border-right: 1px solid $grey_dark;
   vertical-align: middle !important;
-  .glyphicon, {
-    padding-top: $margin*2;
-    padding-bottom: $margin;
+  @media all and (min-width: 600px) {
+    .glyphicon {
+      padding-top: $margin*2;
+      padding-bottom: $margin;
+    }
   }
   .badge {
     margin-top: $margin*2;
+    @media all and (max-width: 600px) {
+      top: -40px;
+      left: 9px;
+    }
   }
 }
 
 .last {
   border-bottom: 2px solid $grey_dark;
+  margin-bottom: $margin*2;
 }
 
-.main .row, .aside .row  {
-//  padding-top: $margin;
-//  padding-bottom: $margin;
+.main .row, .aside .row {
+  //  padding-top: $margin;
+  //  padding-bottom: $margin;
 }
 
 h1 {
@@ -98,6 +138,16 @@ h2 {
   position: relative;
 }
 
+
+.separator {
+  border-right: 1px dotted #e5e5e5;
+  border-left: 1px dotted #e5e5e5;
+  margin-right: $margin*2;
+  padding-right: $margin*2 !important;
+  padding-left: $margin*2 !important;
+}
+
+
 .main {
   flex: 10 100%;
   min-height: 100%;
@@ -105,17 +155,21 @@ h2 {
   [class*=" icon-"] {
     .glyphicon {
       color: dimgrey;
-//      font-size: 29px;
+      //      font-size: 29px;
     }
   }
   .icon-left {
     border-right: 1px solid $grey;
     padding-right: 15px;
+    padding-left: 10px;
   }
   .icon-right {
     border-left: 1px solid $grey;
     padding-left: 15px;
+    //    padding-right: 10px;
+    margin-right: -15px
   }
+
 
   .head {
     text-align: center;
@@ -135,6 +189,31 @@ h2 {
       margin-left: 0px;
     }
   }
+}
+
+.red {
+  background-color: red;
+  min-height: 100px;
+}
+
+.orange {
+  background-color: orange;
+  min-height: 100px;
+}
+
+.yellow {
+  background-color: #ffff00;
+  min-height: 100px;
+}
+
+/* remove right padding from first column */
+.noleft-padding {
+  padding-left: $margin;
+}
+
+/* remove left padding from first column */
+.noright-padding {
+  padding-right: $margin;
 }
 
 .aside {
@@ -160,6 +239,12 @@ h2 {
       padding: 14px 0px;
       font-size: 32px;
       line-height: 22px;
+      .glyphicon {
+        margin-left: 4px;
+        top: 4px;
+        left: 4px;
+        -webkit-transform: rotate(67deg);
+      }
       span.subline {
         font-size: 26px;
         position: relative;
@@ -173,12 +258,27 @@ h2 {
       line-height: 22px;
     }
   }
+  .config {
+    a {
+      color: #ffffff;
+//      border: 1px solid #000000;
+
+      :hover {
+        -webkit-transform: rotate(30deg);
+//        transform: rotate(60deg);
+//        color: #c4ebfc;
+//        font-size: 30px;
+//        background: #ffffff;
+//        border: 1px solid #ffffff;
+      }
+    }
+  }
 }
 
 .gradient {
-//  background-image: linear-gradient(to bottom, $blue, #415577);
-//    linear-gradient(#ffffff 81%,#f5f6f7);
-//  box-shadow: 0px 0px 32px 0px $grey_dark_dark;
+  //  background-image: linear-gradient(to bottom, $blue, #415577);
+  //    linear-gradient(#ffffff 81%,#f5f6f7);
+  //  box-shadow: 0px 0px 32px 0px $grey_dark_dark;
 }
 
 .footer {
@@ -191,9 +291,9 @@ h2 {
 
 .main {
   text-align: left;
-  padding-bottom: 80px;
-  margin-left: $margin*2;
-  margin-right: $margin*2;
+  //  padding-bottom: 80px;
+  //  margin-left: $margin*2;
+  //  margin-right: $margin*2;
 }
 
 .aside > div:first-child, .main > div:first-child {
@@ -206,16 +306,23 @@ h2 {
 }
 
 .menu-left {
-//  margin-right: $margin*2;
+  //  margin-right: $margin*2;
   //   background: linear-gradient(to right,#3a3633 93%,#2a2725 100%);
   color: #ffffff;
 }
 
+.connections-wrapper, .content-wrapper {
+  @media all and (max-width: 768px) {
+    margin-bottom: $margin*2;
+  }
+}
+
 .connections {
-  padding-left: $margin;
-  padding-right: $margin;
-//  padding-top: $margin;
-//  background-color: $grey;
+  @media all and (min-width: 768px) {
+    padding-left: $margin;
+    padding-right: $margin;
+  }
+
   div:nth-of-type(1) div {
     //    border-left: 3px solid red;
   }
@@ -227,7 +334,7 @@ h2 {
 }
 
 .menu-right {
-//  margin-left: $margin*2;
+  //  margin-left: $margin*2;
 }
 
 //small
@@ -290,12 +397,12 @@ h2 {
 }
 
 .nav {
+  li:last-child {
+    border-bottom: 2px solid $grey_dark;
+  }
   li {
-    //  border: 1px solid #e5e5e5;
-    //    border-top: 2px solid #000000;
     border-bottom: 1px solid $grey_dark;
     border-right: 1px solid $grey_dark;
-    //    border-right: 1px solid $grey_dark_dark;
     a {
       color: $grey_dark_dark;
     }
@@ -305,10 +412,12 @@ h2 {
   }
 }
 
-
-
 .table-header {
-  border-top: 2px dotted $grey_dark;
+  //  border-top: 2px dotted $grey_dark;
+}
+
+.message {
+  overflow-wrap: break-word;
 }
 
 // generate colors for the connections
