@@ -4,8 +4,11 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap 101 Template</title>
+    <title>MQTTinspect</title>
 
+    <!--favicon-->
+
+    <link rel="shortcut icon" type="image/x-icon" href="favicon"/>
     <!-- Bootstrap -->
     <link href="css/bootstrap.css" rel="stylesheet">
     <!--custom css via scss-->
@@ -25,14 +28,16 @@
 </a>
 
 
+
+
 <!--header-->
 <header class="header bg-blue gradient">
     <div class="header-wrapper">
         <div class="row">
-            <div class="col-xs-10">
+            <div class="col-xs-9 col-sm-10">
                 <h1 class="app-name"><span class="glyphicon glyphicon-search"></span> MQTT<span>inspect</span></h1>
             </div>
-            <div class="col-xs-2">
+            <div class="col-xs-3 col-sm-2">
                 <h1 class="config-icon pull-right config extra-margin"><a href="#"><span class="glyphicon glyphicon-cog"></span></a></h1>
                 <h1 class="config-icon config toggle-menu pull-right separator" data-target=".menu-right-wrapper"><a href="#"><span class="glyphicon glyphicon-envelope"></span></a></h1>
             </div>
@@ -103,10 +108,10 @@
                             <span class="glyphicon glyphicon-chevron-left"></span>
                         </h1>
                     </div>
-                    <div class="col-xs-10 head">
+                    <div class="col-xs-9 head">
                         <h1>Environment name</h1>
                     </div>
-                    <div class="col-xs-1">
+                    <div class="col-xs-2">
                         <h1 class="toggle-menu pull-right icon-right" data-target=".menu-right-wrapper" data-up="glyphicon-envelope" data-down="glyphicon-envelope">
                             <span class="glyphicon glyphicon-envelope"></span>
                             <span class="badge">19</span>
@@ -292,9 +297,25 @@
     </div>
 </div>
 
+
+<button type="button" class="btn btn-default" data-container="body" data-toggle="popover" data-placement="right" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus.">
+    Popover on right
+</button>
+
 <!--footer-->
 <footer>
     TODO ADD MQTT LOGO AND ECLIPSE PAHO
+
+    <!-- HTML to write -->
+    <a href="#" data-toggle="tooltip" title="Some tooltip text!">Hover over me</a>
+
+    <!-- Generated markup by the plugin -->
+     <div class="tooltip top">
+      <div class="tooltip-inner">
+        Some tooltip text!
+      </div>
+       <div class="tooltip-arrow"></div>
+    </div>
 </footer>
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->

@@ -93,12 +93,16 @@ h1, h2, h3, h4, h5 {
 .connection {
   border-right: 1px solid $grey_dark;
   vertical-align: middle !important;
+  .glyphicon {
+    padding-top: $margin*2;
+  }
   @media all and (min-width: 600px) {
     .glyphicon {
-      padding-top: $margin*2;
+
       padding-bottom: $margin;
     }
   }
+
   .badge {
     margin-top: $margin*2;
     @media all and (max-width: 600px) {
