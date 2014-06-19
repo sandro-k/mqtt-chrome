@@ -142,7 +142,6 @@ h2 {
   position: relative;
 }
 
-
 .separator {
   border-right: 1px dotted #e5e5e5;
   border-left: 1px dotted #e5e5e5;
@@ -151,14 +150,13 @@ h2 {
   padding-left: $margin*2 !important;
 }
 
-
 .main {
   flex: 10 100%;
   min-height: 100%;
   position: relative;
   [class*=" icon-"] {
     .glyphicon {
-      color: dimgrey;
+      //      color: dimgrey;
       //      font-size: 29px;
     }
   }
@@ -173,7 +171,6 @@ h2 {
     //    padding-right: 10px;
     margin-right: -15px
   }
-
 
   .head {
     text-align: center;
@@ -212,17 +209,18 @@ h2 {
 
 /* remove right padding from first column */
 .noleft-padding {
-  padding-left: $margin;
+  // alter border
+  padding-left: 0;
 }
 
 /* remove left padding from first column */
 .noright-padding {
-  padding-right: $margin;
+  // alter border
+  padding-right: 0;
 }
 
-.aside {
-  //  flex: 1 20%;
-  //  max-width: 20%;
+.menu-right-wrapper {
+  right: 0;
 }
 
 .header {
@@ -265,15 +263,15 @@ h2 {
   .config {
     a {
       color: #ffffff;
-//      border: 1px solid #000000;
+      //      border: 1px solid #000000;
 
       :hover {
         -webkit-transform: rotate(30deg);
-//        transform: rotate(60deg);
-//        color: #c4ebfc;
-//        font-size: 30px;
-//        background: #ffffff;
-//        border: 1px solid #ffffff;
+        //        transform: rotate(60deg);
+        //        color: #c4ebfc;
+        //        font-size: 30px;
+        //        background: #ffffff;
+        //        border: 1px solid #ffffff;
       }
     }
   }
@@ -300,7 +298,8 @@ h2 {
   //  margin-right: $margin*2;
 }
 
-.aside > div:first-child, .main > div:first-child {
+//.aside > div:first-child
+.main > div:first-child {
   //  border-left: 1px solid $grey_dark;
   border-left: 3px solid $grey_dark_dark;
   border-top: 1px solid $grey_dark;
@@ -315,15 +314,22 @@ h2 {
   color: #ffffff;
 }
 
-.connections-wrapper, .content-wrapper {
+.content-wrapper {
+  padding-left: 0;
+}
+
+.connections-wrapper, .content-wrapper, .menu-right-wrapper {
   @media all and (max-width: 768px) {
     margin-bottom: $margin*2;
+    padding-right: $margin*0.5;
+    padding-left: $margin*0.5;
   }
 }
 
 .connections {
   @media all and (min-width: 768px) {
-    padding-left: $margin;
+    //    alter border
+    //    padding-left: $margin;
     padding-right: $margin;
   }
 
@@ -332,13 +338,74 @@ h2 {
   }
 }
 
+@media all and (min-width: 600px) {
+  .collapsed-extra-padding-left {
+    padding-left: 46px;
+  }
+
+  .collapsed-extra-padding-right {
+    padding-right: 42px;
+  }
+}
+
+.glyphicon-btn {
+  cursor: pointer;
+  &:hover {
+    text-shadow: 0px 0px 10px $blue;
+  }
+}
+
+.collapsed-custom {
+  z-index: 500;
+  position: absolute;
+  width: 38px;
+  padding: 0;
+  overflow: hidden;
+  @media all and (max-width: 600px) {
+    width: 0;
+  }
+
+  .aside {
+    padding-right: 0;
+  }
+
+  @media all and (max-width: 600px) {
+    .nav {
+      display: none;
+    }
+  }
+
+  h1, .col-xs-11, .col-sm-10 {
+    display: none;
+  }
+  .col-xs-6, .col-sm-12, .col-lg-6 {
+    visibility: hidden;
+  }
+  h1.pull-right {
+    display: block;
+  }
+  .col-xs-1, .col-sm-2 {
+    width: 32px;
+  }
+
+}
+
 .border-dark-grey {
-  border-left: 3px solid $grey_dark_dark;
-  border-right: 1px solid $grey;
+  //  alter border
+  border-right: 3px solid $grey_dark_dark;
+  border-left: 1px solid $grey_dark;
+  border-top: 1px solid $grey_dark;
+  border-bottom: 1px solid $grey_dark;
 }
 
 .menu-right {
-  //  margin-left: $margin*2;
+  .border-dark-grey {
+    border-left: 3px solid $grey_dark_dark;
+    border-right: 0;
+    @media all and (max-width: 600px) {
+      border-right: 1px solid $grey_dark;
+    }
+  }
 }
 
 //small
@@ -352,30 +419,6 @@ h2 {
   }
   .menu-right {
     margin-left: 0;
-  }
-}
-
-@media all and (min-width: 600px) {
-  .aside {
-    //    flex: 1 auto;
-  }
-}
-
-@media all and (min-width: 800px) {
-  .main {
-    flex: 2 0px;
-  }
-  .menu-left {
-    order: 1;
-  }
-  .main {
-    order: 2;
-  }
-  .menu-right {
-    order: 3;
-  }
-  .footer {
-    order: 4;
   }
 }
 
@@ -406,7 +449,9 @@ h2 {
   }
   li {
     border-bottom: 1px solid $grey_dark;
-    border-right: 1px solid $grey_dark;
+    //    alter border
+    //    border-right: 1px solid $grey_dark;
+    border-left: 1px solid $grey_dark;
     a {
       color: $grey_dark_dark;
     }
@@ -416,16 +461,12 @@ h2 {
   }
 }
 
-.table-header {
-  //  border-top: 2px dotted $grey_dark;
-}
-
 .message {
   overflow-wrap: break-word;
 }
 
 // generate colors for the connections
-$num-colors: 6;
+$num-colors: 10;
 $base-color: #c24;
 $spectrum: 360deg;
 $offset: 30deg;
@@ -433,7 +474,9 @@ $offset: 30deg;
 @for $i from 0 to $num-colors {
   $connections_color: adjust-hue($base-color, $offset + $spectrum / $num-colors * $i);
   .connection-#{$i} {
-    border-left: 3px solid $connections_color;
+    //    alter border
+    //    border-left: 3px solid $connections_color;
+    border-right: 3px solid $connections_color;
     .badge {
       background: $connections_color;
     }
@@ -444,6 +487,15 @@ $offset: 30deg;
   .main {
     .connection-#{$i} {
       background: lighten($connections_color, 50);
+      //    alter border
+      border-left: 3px solid $connections_color;
+      border-right: 1px solid $connections_color;
+      .glyphicon-btn {
+        &:hover {
+          //          color: #000000;
+          text-shadow: 0px 0px 10px lighten($connections_color, 10);
+        }
+      }
     }
   }
   .nav .connection-#{$i} {
@@ -484,4 +536,175 @@ $debug: false;
   }
 }
 
+@mixin headings {
+  h1, h2, h3
+  h4, h5, h6 {
+    @content;
+  }
+}
 
+$modal-border-radius: 5px;
+/* MODAL */
+.modal-header {
+  @extend .bg-blue;
+  border-top-left-radius: $modal-border-radius;
+  border-top-right-radius: $modal-border-radius;
+  color: #ffffff;
+  border-bottom: 1px dotted #e5e5e5;
+  // all headings get white font color
+  @include headings {
+    color: #ffffff;
+  }
+
+  .close {
+    color: #FFF;
+    text-shadow: 0 1px 0 #000;
+    opacity: 1;
+    font-weight: normal;
+    font-size: 24px;
+    &:hover {
+      font-weight: bold;
+    }
+  }
+}
+
+.modal-body {
+  border-top: $margin solid $blue;
+}
+
+.modal-title {
+  color: #ffffff;
+  font-weight: 400;
+}
+
+.modal-open {
+  overflow: visible;
+}
+
+.modal-footer {
+  margin-top: 0;
+  border-top: 1px dotted $blue;
+}
+
+.general-wrapper {
+  border: 2px solid $blue;
+  border-radius: 5px;
+  margin-top: $margin*2;
+  padding-bottom: $margin;
+  .general-head {
+    background: lighten($blue, 0);
+    > div {
+      padding-top: $margin;
+      padding-bottom: $margin;
+      padding-left: 0;
+      padding-right: 0;
+    }
+    h3 {
+      color: #ffffff;
+      border-bottom: 1px dotted white;
+      border-top: 1px dotted white;
+      padding-left: 8px;
+    }
+  }
+  .general-body {
+    padding-left: 4px;
+  }
+}
+
+.modal {
+  .modal-body {
+    .row {
+//      margin-bottom: $margin*2;
+      button.active {
+        background-color: lightgreen;
+      }
+    }
+    .advanced-wrapper {
+      border: 2px solid $blue;
+      border-radius: 5px;
+      margin-top: $margin*2;
+      .advanced-body {
+        margin-top: $margin*2;
+        padding-left: $margin*2;
+        .form-group {
+          margin-bottom: $margin;
+        }
+      }
+    }
+    .advanced {
+      background: lighten($blue, 0);
+      small {
+        color: #ffffff;
+      }
+//      margin-left: -20px;
+//      margin-right: -20px;
+      > div {
+        padding-bottom: 4px;
+        padding-top: 4px;
+        padding-left: 0px;
+        padding-right: 0px;
+      }
+      h3 {
+        color: #fff;
+        border-bottom: 1px dotted white;
+        border-top: 1px dotted white;
+        padding-left: 8px;
+      }
+    }
+  }
+  .page-header {
+    margin-top: 0;
+    padding-bottom: $margin;
+    h4 {
+      padding-bottom: 0;
+//      color: $blue;
+    }
+  }
+}
+
+.connection-wrapper {
+  label {
+//    color: $blue;
+  }
+}
+
+.control-label {
+  h4 {
+    padding-top: 0;
+  }
+}
+
+.right-spacing {
+  padding-right: $margin*2;
+}
+
+.modal {
+  .modal-body {
+    .advanced {
+      h3 {
+//        color: #ffffff;
+      }
+    }
+  }
+}
+
+#generateRandomId {
+  width: 100%;
+}
+
+@media all and (min-width: 768px) {
+  #generateRandomId {
+    margin-top: 25px;
+    line-height: 1.45;
+  }
+}
+
+
+
+.tooltip-inner {
+//  background: $blue;
+}
+.tooltip.top-right .tooltip-arrow {
+//  border-color: $blue!important;
+//  border-width: 0 5px 5px;
+}
