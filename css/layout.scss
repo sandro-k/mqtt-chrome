@@ -688,6 +688,14 @@ $modal-border-radius: 5px;
   }
 }
 
+.tooltip {
+  z-index: 1100!important;
+}
+
+.tooltip.in {
+  z-index: 1101!important;
+}
+
 #generateRandomId {
   width: 100%;
 }
