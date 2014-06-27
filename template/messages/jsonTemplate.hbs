@@ -1,1 +1,18 @@
-<div id=\"message-xxx\"  class=\"collapse ababab\"><pre class=\"prettyprint\"><div class='code-head'>JSON</div>" + JSON.stringify(object1, null, 2) + "</pre></div>
+<!--<span class="badge">{{type}}</span>-->
+
+<!--<span>-->
+    <!--{{abr contentRaw 150 false}}-->
+
+    <!--<span class="spacer badge">-->
+      <!--<i class="fa glyphicon-btn fa-angle-double-down"-->
+         <!--data-toggle="collapse"-->
+         <!--data-target="#message-{{ID}}"-->
+         <!--data-up="fa-angle-double-down"-->
+         <!--data-down="fa-angle-double-up"></i>-->
+    <!--</span>-->
+<!--</span>-->
+
+
+<div id="message-{{ID}}">
+  <pre class="prettyprint"><div class="code-head" data-toggle="message" data-message="{{content}}" data-message-short="{{abr contentRaw 150 false}}..." data-target="#message-{{ID}}">{{type}} <i class="fa glyphicon-btn fa-angle-double-down"></i></div><code class="language-json">{{abr contentRaw 150 false}}...</code></pre>
+</div>

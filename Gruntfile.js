@@ -21,7 +21,7 @@ module.exports = function (grunt) {
                 }]
             }
         },
-        // watch for sccs files and complie to css
+        // watch for sccs files and compile to css
         watch: {
             sass: {
                 files: ['css/*.scss'],
