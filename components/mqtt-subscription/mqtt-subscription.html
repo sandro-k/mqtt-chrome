@@ -1,10 +1,334 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-  <meta charset="UTF-8">
-  <title></title>
-</head>
-<body>
+<!-- import polymer-->
+<link rel="import" href="../../bower_components/polymer/polymer.html"/>
+<link rel="import" href="../../bower_components/core-collapse/core-collapse.html"/>
+<link rel="import" href="../../bower_components/core-icon/core-icon.html"/>
+<link rel="import" href="../../bower_components/core-icons/core-icons.html"/>
 
-</body>
-</html>
+<!-- declare element -->
+<polymer-element name="mqtt-subscription" attributes="colors">
+  <template>
+    <!--import style-->
+
+    <link rel="stylesheet" href="build/css/style.css"/>
+
+    <style>
+
+      :host .connection-{{connectionID}} {
+        background: {{colors[0]}};
+        border-left: 3px solid {{colors[1]}};
+        border-right: 1px solid {{colors[1]}};
+      }
+
+      :host .connection-{{connectionID}} glyphicon-btn:hover {
+        text-shadow: 0px 0px 10px {{colors[2]}};
+      }
+
+      :host .connection-{{connectionID}} .badge {
+        background: {{colors[1]}};
+      }
+
+      :host .connection-{{connectionID}} .message {
+        border-left: 6px solid {{colors[1]}};
+      }
+
+      :host .connection-{{connectionID}} .message:hover {
+      background: {{colors[2]}};
+      cursor: pointer;
+                                         }
+
+
+
+    </style>
+    <!--html markup-->
+
+    <!--template -->
+    <div class="row connection connection-{{connectionID}} connected" data-position="right">
+      <div class="col-xs-10"><h2>{{connectionName}} - Subscriptions</h2></div>
+      <div class="col-xs-2 subscription-header">
+        <div class="pull-right">
+          <div class="row">
+            <div class="col-xs-6">
+              <div data-toggle="tooltip"
+                   data-placement="top"
+                   data-container="body"
+                   title="Pause all subscriptions for {{connectionName}}">
+                <i class="fa fa-2x fa-pause fa no-top-padding glyphicon-btn"></i>
+              </div>
+            </div>
+            <div class="col-xs-6">
+              <div data-toggle="tooltip"
+                   data-placement="top"
+                   data-container="body"
+                   title="Add a new subscriptions to {{connectionName}}">
+                <i class="fa fa-2x fa-plus fa no-top-padding glyphicon-btn"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <template repeat="{{sub in subscriptions}}">
+      <!--
+      sub
+      +topic:string
+      +messages:array
+      +sumUnRead:num
+      -->
+
+      <div class="connection connection-{{connectionID}} sub expanded">
+        <div class="row">
+          <div class="col-xs-6 col-lg-9">
+            <h3>{{sub.topic}}</h3>
+          </div>
+          <div class="col-xs-6 col-lg-3 options">
+            <template if="{{ sub.messages.length > 0}}">
+              <span class="glyphicon glyphicon-chevron-down pull-right toggle-message" on-click="{{handelopen}}" data-target="{{connectionID}}{{message.ID}}" data-up="glyphicon-chevron-up" data-down="glyphicon-chevron-down"></span>
+            </template>
+            <template if="{{ sub.messages.length < 1}}">
+              <span class="glyphicon glyphicon-chevron-down pull-right toggle-message off" on-click="{{handelopen}}" data-target="{{connectionID}}{{message.ID}}" data-up="glyphicon-chevron-up" data-down="glyphicon-chevron-down"></span>
+            </template>
+
+
+
+            <span class="glyphicon glyphicon-cog pull-right"></span>
+
+            <span class="pull-right"><span class="badge">Messages: {{sub.sumUnRead}}/{{sub.messages.length}}</span></span>
+
+          </div>
+        </div>
+
+        <core-collapse id="{{connectionID}}{{message.ID}}">
+        <template if="{{ sub.messages.length > 0 }}">
+          <div class="row table-header message-{{message.ID}}">
+            <div class="hidden-xs col-sm-2 col-lg-1"><h4>Date</h4></div>
+            <div class="col-xs-5 col-sm-4 col-lg-2"><h4>Topic</h4></div>
+            <div class="col-xs-7 col-sm-6 col-lg-9"><h4>Message</h4></div>
+          </div>
+        </template>
+
+        <template repeat="{{message in sub.messages}}">
+          <!--
+          message
+          +id
+          +date
+          +topic
+          +payload
+          -->
+          <div class="row message message-{{message.ID}}">
+            <div class="hidden-xs col-sm-2 col-lg-1">{{message.date}}</div>
+            <div class="col-xs-5 col-sm-4 col-lg-2">{{message.topic}}</div>
+            <div class="col-xs-7 col-sm-6 col-lg-9">{{message.payload}}</div>
+          </div>
+
+        </template>
+
+        </core-collapse>
+
+
+
+      </div>
+    </template>
+    <!--template -->
+
+
+
+    <br>
+
+
+
+
+
+    <!--connection 2-->
+    <div class="row connection connection-2 connected" data-position="right">
+      <div class="col-xs-10"><h2>{{connectionName}} - Subscriptions</h2></div>
+      <div class="col-xs-2 subscription-header">
+        <div class="pull-right">
+          <div class="row">
+            <div class="col-xs-6">
+              <div data-toggle="tooltip"
+                   data-placement="top"
+                   data-container="body"
+                   title="Pause all subscriptions for {{connectionName}}">
+                <i class="fa fa-2x fa-pause fa no-top-padding glyphicon-btn"></i>
+              </div>
+            </div>
+            <div class="col-xs-6">
+              <div data-toggle="tooltip"
+                   data-placement="top"
+                   data-container="body"
+                   title="Add a new subscriptions to {{connectionName}}">
+                <i class="fa fa-2x fa-plus fa no-top-padding glyphicon-btn"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row connection connection-2 sub">
+      <div class="col-xs-6 col-sm-6">
+        <h3>topic/name/#</h3>
+      </div>
+      <div class="col-xs-6 col-sm-6 options">
+
+
+        <span class="glyphicon glyphicon-chevron-down pull-right off"></span>
+
+        <span class="glyphicon glyphicon-cog pull-right"></span>
+        <span class="pull-right"><span class="badge">Messages: 0/0</span></span>
+      </div>
+    </div>
+    <div class="connection connection-2 sub last expanded">
+      <div class="row">
+        <div class="col-xs-6 col-lg-9">
+          <h3>test/#</h3>
+        </div>
+        <div class="col-xs-6 col-lg-3 options">
+                    <span class="glyphicon glyphicon-chevron-up pull-right toggle-message" data-target=".message-444"
+                          data-up="glyphicon-chevron-up" data-down="glyphicon-chevron-down"></span>
+          <span class="glyphicon glyphicon-cog pull-right"></span>
+          <span class="pull-right"><span class="badge">Messages: 0/7</span></span>
+        </div>
+      </div>
+      <div class="row table-header message-444">
+        <div class="hidden-xs col-sm-2 col-lg-1"><h4>Date</h4></div>
+        <div class="col-xs-5 col-sm-4 col-lg-2"><h4>Topic</h4></div>
+        <div class="col-xs-7 col-sm-6 col-lg-9"><h4>Message</h4></div>
+      </div>
+      <div class="row message message-444">
+        <div class="hidden-xs col-sm-2 col-lg-1">18:00</div>
+        <div class="col-xs-5 col-sm-4 col-lg-2">test/hello</div>
+        <div class="col-xs-7 col-sm-6 col-lg-9">world</div>
+      </div>
+      <div class="row message message-444">
+        <div class="hidden-xs col-sm-2 col-lg-1">18:30</div>
+        <div class="col-xs-5  col-sm-4 col-lg-2">test/cat/att/home/room/basement/veryLongMessage</div>
+        <div class="col-xs-7 col-sm-6 col-lg-9">Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+          Accusamus alias
+          architecto consequuntur, deleniti eligendi illum impedit neque numquam obcaecati omnis
+          soluta totam
+          vel, veritatis. Assumenda eum explicabo fugiat harum repellendus.
+        </div>
+      </div>
+      <div class="row message message-444">
+        <div class="hidden-xs col-sm-2 col-lg-1">18:45</div>
+        <div class="col-xs-5  col-sm-4 col-lg-2">test/cat/att/home</div>
+        <div class="col-xs-7 col-sm-6 col-lg-9">
+          <div>
+            <span class="badge">JSON</span> {<span class="badge">name:"John"</span>, <span
+              class="badge">surname:"Doe"</span>,
+            <span class="badge">date:2014-06-24</span>}
+          </div>
+        </div>
+      </div>
+
+
+      <div class="row message message-444">
+        <div class="hidden-xs col-sm-2 col-lg-1">18:45</div>
+        <div class="col-xs-5  col-sm-4 col-lg-2">test/cat/att/home</div>
+        <div class="col-xs-7 col-sm-6 col-lg-9">
+          <div id="jsonExample">
+            <!--<span class="badge">Collapse <i class="fa glyphicon-btn fa-angle-double-down collapsed" data-toggle="collapse" data-target="#connectionNav" data-up="fa-angle-double-down" data-down="fa-angle-double-up"></i> </span>-->
+
+          </div>
+        </div>
+      </div>
+
+
+      <div class="row message message-444">
+        <div class="hidden-xs col-sm-2 col-lg-1">18:45</div>
+        <div class="col-xs-5  col-sm-4 col-lg-2">test/cat/att/home</div>
+        <div class="col-xs-7 col-sm-6 col-lg-9">
+          <div>
+            <span class="badge">CSV</span> <span class="badge">name:"John"</span>, <span
+              class="badge">surname:"Doe"</span>, <span class="badge">date:2014-06-24</span>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="row message message-444">
+        <div class="hidden-xs col-sm-2 col-lg-1">18:45</div>
+        <div class="col-xs-5  col-sm-4 col-lg-2">test/cat/att/home</div>
+        <div class="col-xs-7 col-sm-6 col-lg-9">
+          <div>
+            <table class="table table-condensed table-striped">
+              <thead>
+              <tr>
+                <th>#</th>
+                <th>name</th>
+                <th>surname</th>
+                <th>date</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr>
+                <td>1</td>
+                <td>John</td>
+                <td>Doe</td>
+                <td>2014-06-24</td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>John</td>
+                <td>Doe</td>
+                <td>2014-06-24</td>
+              </tr>
+              </tbody>
+            </table>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="row message message-444">
+        <div class="hidden-xs col-sm-2 col-lg-1">18:45</div>
+        <div class="col-xs-5  col-sm-4 col-lg-2">test/cat/att/home</div>
+        <div class="col-xs-7 col-sm-6 col-lg-9">
+          <div>
+            <span class="badge">TSV</span> <span class="badge">name:"John"</span> <span
+              class="badge">surname:"Doe"</span> <span class="badge">date:2014-06-24</span>}
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+
+
+  </template>
+
+  <script>
+    Polymer('mqtt-subscription', {
+      connectionID: 6,
+      connectionName: 'dev.rabbitmq.com2',
+      colors: ["#f6fdf0", "#77cc22", "#91df42"],
+      subscriptions: [
+        {
+          topic: "topic/name/#",
+          sumUnRead: 0,
+          messages: []},
+        {
+          topic: "test/#",
+          sumUnRead: 1,
+          messages: [
+          {ID: 444,
+            date: "2014-07-03",
+            topic: "test/hello",
+            payload: "world",
+            read:false}
+        ], countUnRead: function (){
+          return 1;
+        }}
+      ],
+      handelopen: function(event, detail, sender){
+        // this will toggle the collapse at data-target
+        this.$[sender.attributes['data-target'].value].toggle()
+      }
+
+    });
+
+
+  </script>
+
+</polymer-element>

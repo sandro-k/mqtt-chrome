@@ -1,0 +1,17 @@
+{
+    "id": "387",
+    "name": "greenhouse",
+    "description": "The sensorbox of the greenhouse on my terrace",
+    "datastreams": [
+        {
+            "id": "9347",
+            "name": "temperature",
+            "description": "Temperature"
+        },
+        {
+            "id": "9348",
+            "name": "Humidity",
+            "description": "Humidity"
+        }
+    ]
+}

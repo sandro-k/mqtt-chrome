@@ -1,0 +1,30 @@
+{
+    "name": "code-pretty",
+    "version": "0.0.1",
+    "authors": [
+        "Sandro Kock <sandro.kock@gmail.com>"
+    ],
+    "description": "A polymer element for pretty code",
+    "main": [
+        "elements/code-pretty.html"
+    ],
+    "keywords": [
+        "markdown",
+        "polymer",
+        "web-components",
+        "custom-elements",
+        "polymer-elements"
+    ],
+    "license": "MIT",
+//    "homepage": "",
+    "ignore": [
+        "**/.*",
+        "node_modules",
+        "bower_components",
+        "test",
+        "tests"
+    ],
+    "dependencies": {
+        "polymer": "~0.3.3"
+    }
+}

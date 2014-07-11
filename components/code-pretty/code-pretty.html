@@ -1,10 +1,137 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-  <meta charset="UTF-8">
-  <title></title>
-</head>
-<body>
+<!--polymer-->
+<link rel="import" href="../../bower_components/polymer/polymer.html"/>
+<link rel="import" href="../../bower_components/core-collapse/core-collapse.html"/>
+<link rel="import" href="../../bower_components/core-icon/core-icon.html"/>
+<link rel="import" href="../../bower_components/core-icons/core-icons.html"/>
 
-</body>
-</html>
+
+<!--code pretty-->
+<script src="../../bower_components/google-code-prettify/src/prettify.js?autoload=false"></script>
+
+<!--element definition-->
+<polymer-element name="code-pretty" attributes="lang, text, numbering, collapsed">
+  <template>
+    <link rel="stylesheet" href="../../bower_components/google-code-prettify/src/prettify.css"/>
+    <style>
+      .head {
+        direction: rtl;
+        text-transform: uppercase;
+        /*float: right;*/
+        height: 27px;
+        position: relative;
+      }
+
+      pre.prettyprint {
+        border: 0;
+        padding: 0;
+        overflow: scroll;
+      }
+      #code {
+        margin: 0;
+      }
+      .wrapper {
+        border: 1px solid #888;
+        min-height: 32px;
+      }
+
+      .head span {
+        background: #c4ee99;
+        padding: 4px 8px;
+        display: inline-block;
+        border-bottom-left-radius: 5px;
+        border-left: 1px dotted #888;
+        border-bottom: 1px dotted #888;
+      }
+
+      .head span.collapsed {
+        border-bottom: 0;
+        border-bottom-left-radius: 0px;
+      }
+
+      core-collapse {
+        margin-top: -27px;
+      }
+    </style>
+    <div class="wrapper">
+
+
+    <div class="head" on-click="{{handelopen}}">
+      <span class="{{ {collapsed:collapsed } | tokenList}}">
+        {{lang}}
+        <template bind if="{{collapsed}}">
+          <core-icon icon="arrow-drop-up"></core-icon>
+        </template>
+      <template bind if="{{!collapsed}}">
+        <core-icon icon="arrow-drop-down"></core-icon>
+      </template>
+      </span>
+    </div>
+    <!--host element for the source code-->
+    <core-collapse id="collapse" opened="true">
+    <pre id="code" class="prettyprint" part="code"></pre>
+    </core-collapse>
+    </div>
+  </template>
+  <script>
+    Polymer("code-pretty", {
+      lang: "",
+      formattedCode : "",
+      codeLang : [],
+      collapsed: false,
+//      numbering: false,
+//      number: false,
+      created: function () {
+        // add language handler
+        this.codeLang.json = this.parsAndFormatJson;
+      },
+      ready: function () {
+        this.text = this.trim(this.textContent);
+      },
+      textChanged: function () {
+        // get a formatter for the specified language
+        if( typeof this.lang != 'undefined' && typeof this.codeLang[this.lang] == 'function'  ) {
+          this.formattedCode = this.codeLang[this.lang](this.text);
+
+          this.$.code.innerHTML = PR.prettyPrintOne(this.formattedCode, this.lang, this.number);
+        } else {
+          this.$.code.innerHTML = PR.prettyPrintOne(this.text);
+        }
+      },
+      numberingChanged: function() {
+         var parsedInt = parseInt(this.numbering);
+         if (!isNaN(parsedInt)){
+           this.number = parsedInt
+         } else  {
+           this.number = this.numbering == "true" ? true : false
+         }
+        this.textChanged();
+
+      },
+      // Thanks Ryan Seddon! (https://github.com/ryanseddon/markdown-component)
+      // Remove all leading/trailing whitespace so it's not confused as
+      // a code block
+      trim: function (str) {
+        return str.replace(/^[^\S\n]+/gm, '');
+      },
+
+
+//      custom formatter
+      parsAndFormatJson: function (string) {
+        if (typeof  string == 'object') {
+          return JSON.stringify(string, null, 2);
+        } else {
+          return JSON.stringify(JSON.parse(string), null, 2);
+        }
+
+      },
+
+      handelopen: function (event, detail, sender) {
+        // this will toggle the collapse at data-target
+        console.log("log");
+        this.$.collapse.toggle();
+        this.collapsed = !this.collapsed;
+//        this.$[sender.attributes['data-target'].value].toggle()
+      }
+    });
+  </script>
+</polymer-element>
