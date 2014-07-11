@@ -51,6 +51,12 @@
       core-collapse {
         margin-top: -27px;
       }
+      .inlinetext {
+        margin-top: -20px;
+        height: 20px;
+        overflow: hidden;
+        display: block;
+      }
     </style>
     <div class="wrapper">
 
@@ -70,6 +76,9 @@
     <core-collapse id="collapse" opened="true">
     <pre id="code" class="prettyprint" part="code"></pre>
     </core-collapse>
+    <template bind if="{{collapsed}}">
+      <span class="inlinetext">{{inlinetext}}</span>
+    </template>
     </div>
   </template>
   <script>
@@ -78,6 +87,7 @@
       formattedCode : "",
       codeLang : [],
       collapsed: false,
+      inlinetext: "",
 //      numbering: false,
 //      number: false,
       created: function () {
@@ -96,6 +106,8 @@
         } else {
           this.$.code.innerHTML = PR.prettyPrintOne(this.text);
         }
+
+        this.inlinetext = this.text.replace(/(\r\n|\n|\r)/gm,"");
       },
       numberingChanged: function() {
          var parsedInt = parseInt(this.numbering);
@@ -128,6 +140,7 @@
       handelopen: function (event, detail, sender) {
         // this will toggle the collapse at data-target
         console.log("log");
+        this.$.collapse.addListener
         this.$.collapse.toggle();
         this.collapsed = !this.collapsed;
 //        this.$[sender.attributes['data-target'].value].toggle()
