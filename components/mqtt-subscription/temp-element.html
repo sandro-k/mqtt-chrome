@@ -1,0 +1,26 @@
+<!-- import polymer-->
+<link rel="import" href="../../bower_components/polymer/polymer.html"/>
+<link rel="import" href="../../bower_components/core-collapse/core-collapse.html"/>
+
+<!-- declare element -->
+<polymer-element name="temp-element">
+  <template>
+    <button on-click="{{handelopen}}">toggle collapse</button>
+
+    <core-collapse id="collapse1" class="box">
+      <div class="content">Forma temperiemque cornua sidera dissociata cornua recessit innabilis ligavit: solidumque coeptis nullus caelum sponte phoebe di regat mentisque tanta austro capacius amphitrite sui quin postquam semina fossae liquidum umor galeae coeptis caligine liberioris quin liquidum matutinis invasit posset: flexi glomeravit radiis certis invasit oppida postquam onerosior inclusum dominari opifex terris pace finxit quam aquae nunc sine altae auroram quam habentem homo totidemque scythiam in pondus ensis tegit caecoque poena lapidosos humanas coeperunt poena aetas totidem nec natura aethera locavit caelumque distinxit animalibus phoebe cingebant moderantum porrexerat terrae possedit sua sole diu summaque obliquis melioris orbem</div>
+    </core-collapse>
+  </template>
+
+  <script>
+    Polymer('temp-element', {
+      ready: function() {
+        console.log("Xy");
+      },
+      handelopen: function(event, sender, xx) {
+        this.$.collapse1.toggle()
+      }
+    });
+  </script>
+
+</polymer-element>

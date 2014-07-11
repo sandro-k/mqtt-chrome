@@ -32,6 +32,9 @@
     "core-elements": "Polymer/core-elements#~0.3.3",
     "fontawesome": "~4.1.0",
     "jquery": "~2.1.1",
-    "jquery-ui": "~1.10.4"
+    "jquery-ui": "~1.10.4",
+    "hello-world-polymer": "~0.1.2",
+    "juicy-ace-editor": "~0.0.2",
+    "mark-down": "~0.5.2"
   }
 }

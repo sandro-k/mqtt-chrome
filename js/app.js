@@ -431,10 +431,8 @@ $(function () {
     });
 
 
-
 //    $("#jsonExample").append("<button type=\"button\" class=\"btn ababab in\" data-toggle=\"collapse\" data-target=\".ababab\">simple collapsible</button>");
 //    $("#jsonExample").append("<div id=\"message-xxx\"  class=\"collapse ababab\"><pre class=\"prettyprint\"><div class='code-head'>JSON</div>" + JSON.stringify(object1, null, 2) + "</pre></div>");
-
 });
 
 function printJson2(object) {
