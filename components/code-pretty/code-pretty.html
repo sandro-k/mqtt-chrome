@@ -19,12 +19,14 @@
         /*float: right;*/
         height: 27px;
         position: relative;
+        cursor: pointer;
       }
 
       pre.prettyprint {
         border: 0;
         padding: 0;
-        overflow: scroll;
+        /*overflow: scroll;*/
+        overflow:auto;
       }
       #code {
         margin: 0;
@@ -53,7 +55,12 @@
       }
       .inlinetext {
         margin-top: -20px;
+        padding-left: 8px;
         height: 20px;
+        font-family: monospace;
+        white-space: pre;
+        font-size: 13px;
+        color: #222222;
         overflow: hidden;
         display: block;
       }
@@ -64,10 +71,10 @@
     <div class="head" on-click="{{handelopen}}">
       <span class="{{ {collapsed:collapsed } | tokenList}}">
         {{lang}}
-        <template bind if="{{collapsed}}">
+        <template bind if="{{!collapsed}}">
           <core-icon icon="arrow-drop-up"></core-icon>
         </template>
-      <template bind if="{{!collapsed}}">
+      <template bind if="{{collapsed}}">
         <core-icon icon="arrow-drop-down"></core-icon>
       </template>
       </span>
@@ -88,6 +95,7 @@
       codeLang : [],
       collapsed: false,
       inlinetext: "",
+      changed: false,
 //      numbering: false,
 //      number: false,
       created: function () {
@@ -96,6 +104,29 @@
       },
       ready: function () {
         this.text = this.trim(this.textContent);
+        var that = this;
+
+        this.$.collapse.addEventListener(
+            'core-transitionend',
+            function(e) {
+              console.log(e);
+              console.log("core-transitionend");
+            }
+        );
+        this.$.collapse.addEventListener(
+            'transitionend',
+            function(e) {
+              if (!that.changed) {
+                that.collapsed = !that.collapsed;
+              }
+              that.changed = false;
+            }
+        );
+
+
+
+//        transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd
+
       },
       textChanged: function () {
         // get a formatter for the specified language
@@ -140,9 +171,14 @@
       handelopen: function (event, detail, sender) {
         // this will toggle the collapse at data-target
         console.log("log");
-        this.$.collapse.addListener
+
+
         this.$.collapse.toggle();
-        this.collapsed = !this.collapsed;
+        console.log("done");
+        if (this.collapsed) {
+          this.collapsed = false;
+          this.changed = true;
+        }
 //        this.$[sender.attributes['data-target'].value].toggle()
       }
     });
