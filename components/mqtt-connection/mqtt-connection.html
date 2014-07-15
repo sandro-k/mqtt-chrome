@@ -1,10 +1,121 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-  <meta charset="UTF-8">
-  <title></title>
-</head>
-<body>
+<!--polymer-->
+<link rel="import" href="../../bower_components/polymer/polymer.html"/>
 
-</body>
-</html>
+<script src="../../node_modules/mows/mows.js"></script>
+<script src="../../bower_components/underscore/underscore.js"></script>
+
+<polymer-element name="mqtt-connection" attributes="messages, test, publish" constructor="mqttConnection">
+
+  <script>
+
+    (function() {
+      Polymer("mqtt-connection", {
+
+
+        observe: {
+          'messages.changed': 'validate',
+          'a.b.c': 'validateSubPath'
+        },
+
+        created: function () {
+          console.log("created");
+          this.that = this;
+          this.messages = {};
+          this.messages.changed = false;
+          this.client = {};
+          this.m = {};
+          this.m.x = [];
+          this.changed = false;
+
+          this.that = {};
+          this.name = "test";
+
+        },
+        ready: function () {
+          this.a = {
+            b: {
+              c: 'exists'
+            }
+          };
+
+
+          console.log("ready");
+          this.createClient("ws:localhost:9371");
+          this.subscribe('presence');
+          this.publish('presence', 'Hello mqtt');
+
+          // save reference to this element to reroute messages
+          var self = this;
+          this.client.on('message', function (topic, message) {
+            self.onMessage(topic, message);
+          });
+
+
+        },
+
+        subscribe: function (topic) {
+          this.client.subscribe(topic);
+        },
+
+        publish: function (topic, message) {
+          this.client.publish(topic, message);
+        },
+
+        onMessage: function (topic, message) {
+          console.log("Message: %s", message);
+          this.name += message;
+          this.m.x.push(message);
+
+          this.a.b.c += message;
+
+
+
+          if (this.messages.hasOwnProperty(topic)) {
+            this.messages[topic].push(message);
+          } else {
+            this.messages[topic] = [message];
+          }
+          this.messages.changed = !this.messages.changed;
+          this.changed = !this.changed;
+
+        },
+        messagesChanged: function () {
+          console.log("Messages: %s", this.messages);
+        },
+
+        validate: function (oldValue, newValue) {
+          console.log("Old: %s, New: %s", oldValue, newValue);
+        },
+
+        nameChanged: function () {
+          console.log("Name: %s", this.name)
+        },
+        mChanged: function () {
+          console.log("m: %s", this.m)
+        },
+
+        changedChanged: function() {
+          console.log("changedChanged: %s", this.changed)
+        },
+
+        validateSubPath: function(oldValue, newValue) {
+          var value = Path.get('a.b.c').getValueFrom(this);
+          console.log("validateSubPath: %s", value)
+          // oldValue == undefined
+          // newValue == value == this.a.b.c === 'exists'
+        },
+
+        end: function () {
+          this.client.end();
+        },
+
+        createClient: function (serverUrl) {
+          var that = this;
+          this.client = mows.createClient(serverUrl);
+          // pass an optional 'ws://localhost:port' here.
+        }
+
+      })
+    })();
+  </script>
+</polymer-element>

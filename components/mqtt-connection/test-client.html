@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+</head>
+<body>
+
+
+<script src="../../node_modules/mows/mows.js"></script>
+<script>
+  var client = mows.createClient("ws:localhost:9371");
+  // pass an optional 'ws://localhost:port' here.
+
+  client.subscribe('presence');
+  client.publish('presence', 'Hello mqtt');
+
+  client.on('message', function (topic, message) {
+    console.log("Message: %s from topic: %s", message, topic);
+
+    //client.end();
+  });
+</script>
+</body>
+</html>
