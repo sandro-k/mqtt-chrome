@@ -8,7 +8,72 @@
 </head>
 <body unresolved>
 
-<mqtt-connection></mqtt-connection>
+<polymer-element name="demo-tag">
+  <!-- outermost template defines the element's shadow DOM -->
+  <template>
+    Payload: <input value="{{messagePayload}}">
+    Topic: <input value="{{messageTopic}}">
+    <button on-tap="{{sendMessage}}">Send message</button>
+
+    <ul>
+      <template repeat="{{i in mqttCon.messages2}}">
+        <li>{{i.payload}}</li>
+      </template>
+    </ul>
+
+    <ul>
+      <template repeat="{{message in mqttCon.messages2}}">
+          <li>{{message.payload}}</li>
+      </template>
+    </ul>
+
+  </template>
+
+
+
+  <script>
+    Polymer('demo-tag', {
+
+      create: function () {
+      },
+
+      ready: function () {
+        this.messagePayload = "";
+        this.messageTopic = "presence";
+
+
+
+
+        this.numbering = 3;
+
+
+        this.mqttCon = new MqttConnection();
+        this.mqttCon.createClient("ws:localhost:9371");
+        this.mqttCon.subscribe('presence');
+        this.mqttCon.publish('presence', 'Hello mqtt');
+      },
+
+      sendMessage: function () {
+        console.log("sendMessage");
+        this.mqttCon.publish(this.messageTopic, this.messagePayload);
+      }
+    });
+  </script>
+</polymer-element>
+
+<demo-tag></demo-tag>
+
+
+<!--<script>-->
+<!--window.addEventListener('polymer-ready', function (e) {-->
+<!--//    var mqttCon = new MqttConnection();-->
+<!--//        console.log(mqttCon);-->
+<!--//    mqttCon.createClient("ws:localhost:9371");-->
+<!--//    mqttCon.subscribe('presence');-->
+<!--//    mqttCon.publish('presence', 'Hello mqtt');-->
+
+<!--});-->
+<!--</script>-->
 
 </body>
 </html>

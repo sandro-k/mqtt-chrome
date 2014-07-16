@@ -1,10 +1,14 @@
 <!--polymer-->
+<!--<script>-->
+  <!--Platform = {flags: {debug: true, log: 'bind,ready'}};-->
+<!--</script>-->
+
 <link rel="import" href="../../bower_components/polymer/polymer.html"/>
 
 <script src="../../node_modules/mows/mows.js"></script>
 <script src="../../bower_components/underscore/underscore.js"></script>
 
-<polymer-element name="mqtt-connection" attributes="messages, test, publish" constructor="mqttConnection">
+<polymer-element name="mqtt-connection" attributes="messages, test, publish, createClient" constructor="MqttConnection">
 
   <script>
 
@@ -13,8 +17,7 @@
 
 
         observe: {
-          'messages.changed': 'validate',
-          'a.b.c': 'validateSubPath'
+          'messages.changed': 'messagesChanged'
         },
 
         created: function () {
@@ -22,35 +25,14 @@
           this.that = this;
           this.messages = {};
           this.messages.changed = false;
+          this.messages2 = [];
           this.client = {};
-          this.m = {};
-          this.m.x = [];
-          this.changed = false;
-
           this.that = {};
-          this.name = "test";
+
 
         },
         ready: function () {
-          this.a = {
-            b: {
-              c: 'exists'
-            }
-          };
-
-
           console.log("ready");
-          this.createClient("ws:localhost:9371");
-          this.subscribe('presence');
-          this.publish('presence', 'Hello mqtt');
-
-          // save reference to this element to reroute messages
-          var self = this;
-          this.client.on('message', function (topic, message) {
-            self.onMessage(topic, message);
-          });
-
-
         },
 
         subscribe: function (topic) {
@@ -61,49 +43,32 @@
           this.client.publish(topic, message);
         },
 
-        onMessage: function (topic, message) {
-          console.log("Message: %s", message);
-          this.name += message;
-          this.m.x.push(message);
+        onMessage: function (topic, payload, object) {
+          console.log("onMessage: %s", payload);
 
-          this.a.b.c += message;
+          object.timestamp = Date.now();
 
-
+          this.messages2.push(object);
 
           if (this.messages.hasOwnProperty(topic)) {
-            this.messages[topic].push(message);
+            this.messages[topic].push(object);
           } else {
-            this.messages[topic] = [message];
+            this.messages[topic] = [object];
           }
+
           this.messages.changed = !this.messages.changed;
-          this.changed = !this.changed;
 
         },
+
         messagesChanged: function () {
-          console.log("Messages: %s", this.messages);
+          console.log("Messages: %s", JSON.stringify(this.messages));
         },
 
-        validate: function (oldValue, newValue) {
-          console.log("Old: %s, New: %s", oldValue, newValue);
-        },
 
-        nameChanged: function () {
-          console.log("Name: %s", this.name)
-        },
-        mChanged: function () {
-          console.log("m: %s", this.m)
-        },
+        domReady: function() {
+          console.log("domReady");
 
-        changedChanged: function() {
-          console.log("changedChanged: %s", this.changed)
-        },
-
-        validateSubPath: function(oldValue, newValue) {
-          var value = Path.get('a.b.c').getValueFrom(this);
-          console.log("validateSubPath: %s", value)
-          // oldValue == undefined
-          // newValue == value == this.a.b.c === 'exists'
-        },
+         },
 
         end: function () {
           this.client.end();
@@ -113,6 +78,12 @@
           var that = this;
           this.client = mows.createClient(serverUrl);
           // pass an optional 'ws://localhost:port' here.
+          // save reference to this element to reroute messages
+          var self = this;
+          this.client.on('message', function (topic, message, object) {
+            console.log(arguments);
+            self.onMessage(topic, message, object);
+          });
         }
 
       })
