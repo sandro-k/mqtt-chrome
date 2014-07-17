@@ -1,0 +1,38 @@
+<!-- import polymer-->
+<link rel="import" href="../../bower_components/polymer/polymer.html"/>
+<link rel="import" href="../../bower_components/core-icon/core-icon.html"/>
+<link rel="import" href="../../bower_components/core-icons/core-icons.html"/>
+
+<polymer-element name="changeover-icon"  attributes="up, down, icon" on-click="{{toogle}}" constructor="ChangeoverIcon">
+
+  <template>
+    <core-icon icon="{{icon}}" icon="{{icon}}"><content></content></core-icon>
+  </template>
+
+  <script>
+    Polymer('changeover-icon', {
+      created: function () {
+        console.debug("created:");
+        this.icon = '';
+        this.status = false;
+        this.up = '';
+        this.down = '';
+      },
+      ready: function () {
+        console.debug("ready");
+      },
+      toogle: function () {
+        console.debug("toogle");
+         if (this.icon === this.down) {
+           this.icon = this.up;
+         } else {
+           this.icon = this.down;
+         }
+         this.status != this.status;
+      }
+
+    });
+  </script>
+
+
+</polymer-element>

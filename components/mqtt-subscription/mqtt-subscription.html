@@ -5,7 +5,7 @@
 <link rel="import" href="../../bower_components/core-icons/core-icons.html"/>
 
 <!-- declare element -->
-<polymer-element name="mqtt-subscription" attributes="colors">
+<polymer-element name="mqtt-subscription" attributes="colors" constructor="MqttSubscription">
   <template>
     <!--import style-->
 
@@ -324,7 +324,11 @@
       handelopen: function(event, detail, sender){
         // this will toggle the collapse at data-target
         this.$[sender.attributes['data-target'].value].toggle()
-      }
+      },
+
+      addMessage: function(message){
+
+    }
 
     });
 

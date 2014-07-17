@@ -1,0 +1,132 @@
+<!-- import polymer-->
+<link rel="import" href="../../bower_components/polymer/polymer.html"/>
+<link rel="import" href="../../bower_components/core-collapse/core-collapse.html"/>
+<link rel="import" href="../../bower_components/core-icon/core-icon.html"/>
+<link rel="import" href="../../bower_components/core-icons/core-icons.html"/>
+<link rel="import" href="../changeover-icon/changeover-icon.html"/>
+
+<script src="../../bower_components/moment/moment.js"></script>
+
+<!-- declare element -->
+<polymer-element name="mqtt-subscription" attributes="topic, messages, connectionID" constructor="MqttSubscription">
+
+  <template>
+    <link rel="stylesheet" href="style.css"/>
+
+
+
+
+    <div class="connection connection-{{connectionID}} sub expanded">
+      <div class="row">
+        <div class="col-xs-6 col-lg-9">
+          <h3>"/{{topic}}"</h3>
+        </div>
+        <div class="col-xs-6 col-lg-3 options">
+
+
+
+          <template if="{{ messages.length > 0}}">
+
+
+
+            <changeover-icon icon="arrow-drop-down"
+                             up="arrow-drop-up"
+                             class="pull-right"
+                             on-click="{{handelopen}}"
+                             data-target="{{connectionID}}{{message.ID}}"
+                             down="arrow-drop-down"></changeover-icon>
+
+
+
+          </template>
+
+          <template if="{{ messages.length < 1}}">
+
+            <changeover-icon icon="arrow-drop-down"
+                             up="arrow-drop-up"
+                             class="pull-right off"
+                             on-click="{{handelopen}}"
+                             data-target="{{connectionID}}{{message.ID}}"
+                             down="arrow-drop-down"></changeover-icon>
+
+
+          </template>
+
+          <core-icon
+              class="pull-right"
+              icon="settings">
+              </core-icon>
+            <span class="pull-right">
+              <span class="badge">Messages: {{sumUnRead}}/{{messages.length}}</span>
+            </span>
+        </div>
+      </div>
+
+      <core-collapse id="{{connectionID}}{{message.ID}}">
+        <template if="{{ messages.length > 0 }}">
+          <div class="row table-header message-{{message.ID}}">
+            <div class="hidden-xs col-sm-2 col-lg-1"><h4>Date</h4></div>
+            <div class="col-xs-5 col-sm-4 col-lg-2"><h4>Topic</h4></div>
+            <div class="col-xs-7 col-sm-6 col-lg-9"><h4>Message</h4></div>
+          </div>
+        </template>
+
+        <template repeat="{{message in messages}}">
+          <div class="row message message-{{message.ID}}">
+            <div class="hidden-xs col-sm-2 col-lg-1">{{message.timestamp | moment }}</div>
+            <div class="col-xs-5 col-sm-4 col-lg-2">{{message.topic}}</div>
+            <div class="col-xs-7 col-sm-6 col-lg-9">{{message.payload}}</div>
+          </div>
+        </template>
+
+      </core-collapse>
+
+    </div>
+  </template>
+
+  <script>
+    Polymer('mqtt-subscription', {
+
+      created: function () {
+        console.debug("created:");
+        console.debug(this);
+        this.topic = "";
+        this.message = { ID: 1 };
+        this.messages = [];
+        // todo change
+        this.connectionID = "1";
+        this.sumUnRead = 0;
+        this.isOpen = false;
+      },
+
+      ready: function () {
+        console.debug("ready");
+      },
+
+      handelopen: function (event, detail, sender) {
+        // this will toggle the collapse at data-target
+        this.$[sender.attributes['data-target'].value].toggle()
+        this.sumUnRead = 0;
+        this.isOpen = !this.isOpen;
+      },
+
+      addMessage: function (message) {
+        console.debug("addMessage: %s", JSON.stringify(message));
+        this.messages.push(message);
+        if (!this.isObject){
+          this.sumUnRead++;
+        }
+
+      },
+
+      moment: function (value) {
+        return moment(value).calendar();
+//        return moment(value).format('MMMM Do YYYY, h:mm:ss a');
+      }
+
+    });
+
+
+  </script>
+
+</polymer-element>

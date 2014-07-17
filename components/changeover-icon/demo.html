@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <title>changeover-icon demo</title>
+  <script src="../../bower_components/platform/platform.js"></script>
+  <link rel="import" href="changeover-icon.html"/>
+  <link rel="import" href="../../bower_components/core-icons/core-icons.html">
+</head>
+<body unresolved>
+
+<changeover-icon icon="arrow-drop-down"
+                 up="arrow-drop-up"
+                 on-click="test()"
+
+                 down="arrow-drop-down">
+
+</changeover-icon>
+<script>
+  var test = function(){
+    console.log("foo");
+  }
+</script>
+</body>
+</html>

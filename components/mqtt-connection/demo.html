@@ -11,21 +11,30 @@
 <polymer-element name="demo-tag">
   <!-- outermost template defines the element's shadow DOM -->
   <template>
+    <h1>Create a connection</h1>
+    Broker URL: <input value="{{brokerUrl}}" a>
+    <button on-tap="{{createConnection}}" >create connection</button>
+
+    <span>Connected: {{connected}}</span>
+
+    <hr/>
+    <h1>Create subscription</h1>
+    Topic: <input value="{{subscriptionTopic}}">
+    <button on-tap="{{createSubscription}}" disabled?="{{!connected}}">create Subscription</button>
+
+
+    <hr/>
+    <h1>Publish</h1>
     Payload: <input value="{{messagePayload}}">
     Topic: <input value="{{messageTopic}}">
-    <button on-tap="{{sendMessage}}">Send message</button>
+    <button on-tap="{{sendMessage}}" disabled?="{{!connected}}">Send message</button>
 
-    <ul>
-      <template repeat="{{i in mqttCon.messages2}}">
-        <li>{{i.payload}}</li>
-      </template>
-    </ul>
+    <hr/>
+    <h1>Subscriptions</h1>
 
-    <ul>
-      <template repeat="{{message in mqttCon.messages2}}">
-          <li>{{message.payload}}</li>
-      </template>
-    </ul>
+    <div id="content">
+
+    </div>
 
   </template>
 
@@ -35,27 +44,35 @@
     Polymer('demo-tag', {
 
       create: function () {
+
       },
 
       ready: function () {
-        this.messagePayload = "";
+        this.connected = false;
+        this.defaultServer = "ws:broker.mqttdashboard.com:8000";
+        this.brokerUrl =  this.defaultServer;
+        this.messagePayload = "Hello World";
         this.messageTopic = "presence";
-
-
-
-
-        this.numbering = 3;
-
+        this.subscriptionTopic = this.messageTopic;
 
         this.mqttCon = new MqttConnection();
-        this.mqttCon.createClient("ws:localhost:9371");
-        this.mqttCon.subscribe('presence');
-        this.mqttCon.publish('presence', 'Hello mqtt');
+        this.$.content.appendChild(this.mqttCon);
+//        this.mqttCon.createClient("ws:localhost:9371");
+//        this.mqttCon.subscribe('presence');
+//        this.mqttCon.publish('presence', 'Hello mqtt');
       },
 
       sendMessage: function () {
         console.log("sendMessage");
         this.mqttCon.publish(this.messageTopic, this.messagePayload);
+      },
+      createSubscription: function () {
+        this.mqttCon.subscribe(this.subscriptionTopic);
+      },
+
+      createConnection: function () {
+        this.mqttCon.createClient(this.brokerUrl);
+        this.connected = true;
       }
     });
   </script>

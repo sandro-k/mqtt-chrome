@@ -4,11 +4,16 @@
 <!--</script>-->
 
 <link rel="import" href="../../bower_components/polymer/polymer.html"/>
+<link rel="import" href="../mqtt-subscription2/mqtt-subscription.html"/>
 
 <script src="../../node_modules/mows/mows.js"></script>
 <script src="../../bower_components/underscore/underscore.js"></script>
 
 <polymer-element name="mqtt-connection" attributes="messages, test, publish, createClient" constructor="MqttConnection">
+
+  <template>
+    <div id="container"></div>
+  </template>
 
   <script>
 
@@ -22,21 +27,34 @@
 
         created: function () {
           console.log("created");
+
           this.that = this;
           this.messages = {};
           this.messages.changed = false;
           this.messages2 = [];
           this.client = {};
           this.that = {};
+          this.subscriptions = {};
 
 
         },
         ready: function () {
           console.log("ready");
+          this.content = this.$.container;
         },
 
         subscribe: function (topic) {
+          console.debug("Subscribing to: \"%s\'", topic);
+//          console.trace("Connection: %s", JSON.stringify(this.client) );
           this.client.subscribe(topic);
+          this.subscriptions[topic] = new MqttSubscription();
+          this.subscriptions[topic].topic = topic;
+
+          // adding MqttSubscription to DOM
+          this.content.appendChild(this.subscriptions[topic]);
+
+
+          console.log(this.subscriptions[topic]);
         },
 
         publish: function (topic, message) {
@@ -48,13 +66,17 @@
 
           object.timestamp = Date.now();
 
-          this.messages2.push(object);
 
-          if (this.messages.hasOwnProperty(topic)) {
-            this.messages[topic].push(object);
-          } else {
-            this.messages[topic] = [object];
-          }
+          // add message to viewModel
+          this.subscriptions[topic].addMessage(object);
+
+//          this.messages2.push(object);
+//
+//          if (this.messages.hasOwnProperty(topic)) {
+//            this.messages[topic].push(object);
+//          } else {
+//            this.messages[topic] = [object];
+//          }
 
           this.messages.changed = !this.messages.changed;
 

@@ -10,6 +10,7 @@ $grey: #f2f2f2;
 $grey-light: #f6f6f6;
 //$grey_dark: #D0D0D0;
 $grey_dark: #c1c0c6;
+
 //$grey_dark_dark: #555;
 $grey_dark_dark: #626267;
 $black: #010101;
@@ -119,6 +120,18 @@ h1, h2, h3, h4, h5 {
   .options {
     .badge {
       margin-top: $margin*2;
+      margin-bottom: $margin*2;
+      font-family: sans-serif;
+      font-size: 0.8em;
+    }
+    changeover-icon, core-icon {
+      margin-left: $margin*2;
+      margin-top: $margin;
+      fill: $grey_dark_dark;
+      &:hover {
+        cursor: pointer;
+        -webkit-transform: rotate(25deg);
+      }
     }
   }
   .badge {
@@ -522,6 +535,8 @@ h2 {
 
 .message {
   overflow-wrap: break-word;
+  font-family: sans-serif;
+  color: $grey_dark_dark;
 }
 
 .row.message {
@@ -544,10 +559,6 @@ h2 {
   min-height: 1px;
   display: inline-block;
 }
-
-
-
-
 
 // generate colors for the connections
 $num-colors: 10;
@@ -586,35 +597,35 @@ $offset: 30deg;
     }
   }
 
-//  mqtt-subscription::shadow {
-////    background: #ffff00;
-//    .connection-#{$i} {
-//      background: rgba(lighten($connections_color, 50), 0.99);
-//      //    alter border
-//      border-left: 3px solid $connections_color;
-//      border-right: 1px solid $connections_color;
-//      glyphicon-btn {
-//        &:hover {
-//          //          color: #000000;
-//          text-shadow: 0px 0px 10px rgba(lighten($connections_color, 10), 1);
-//        }
-//      }
-//    }
-//  }
+  //  mqtt-subscription::shadow {
+  ////    background: #ffff00;
+  //    .connection-#{$i} {
+  //      background: rgba(lighten($connections_color, 50), 0.99);
+  //      //    alter border
+  //      border-left: 3px solid $connections_color;
+  //      border-right: 1px solid $connections_color;
+  //      glyphicon-btn {
+  //        &:hover {
+  //          //          color: #000000;
+  //          text-shadow: 0px 0px 10px rgba(lighten($connections_color, 10), 1);
+  //        }
+  //      }
+  //    }
+  //  }
 
-  .main {
-    .connection-#{$i} {
-      background: rgba(lighten($connections_color, 50), 0.99);
-      //    alter border
-      border-left: 3px solid $connections_color;
-      border-right: 1px solid $connections_color;
-      .glyphicon-btn {
-        &:hover {
-          //          color: #000000;
-          text-shadow: 0px 0px 10px rgba(lighten($connections_color, 10), 1);
-        }
+  .connection-#{$i} {
+    background: rgba(lighten($connections_color, 50), 0.99);
+    //    alter border
+    border-left: 3px solid $connections_color;
+    border-right: 1px solid $connections_color;
+
+    .glyphicon-btn, changeover-icon, core-icon {
+      &:hover {
+        text-shadow: 0px 0px 10px rgba(lighten($connections_color, 10), 1);
       }
     }
+
+
   }
   .nav .connection-#{$i} {
     background: lighten($connections_color, 40);
