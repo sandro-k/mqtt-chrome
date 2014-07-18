@@ -1,0 +1,9 @@
+{
+  "name": "mqtt-lense",
+  "version": "0.0.0",
+  "keywords": "seed, polymer, web-components",
+  "main": "mqtt-lense.html",
+  "dependencies": {
+    "polymer": "Polymer/polymer#~0.3.1"
+  }
+}

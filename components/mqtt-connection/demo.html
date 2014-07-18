@@ -56,6 +56,7 @@
         this.subscriptionTopic = this.messageTopic;
 
         this.mqttCon = new MqttConnection();
+        this.mqttCon.test = "test!!";
         this.$.content.appendChild(this.mqttCon);
 //        this.mqttCon.createClient("ws:localhost:9371");
 //        this.mqttCon.subscribe('presence');

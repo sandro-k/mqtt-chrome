@@ -1,6 +1,6 @@
 <!--polymer-->
 <!--<script>-->
-  <!--Platform = {flags: {debug: true, log: 'bind,ready'}};-->
+<!--Platform = {flags: {debug: true, log: 'bind,ready'}};-->
 <!--</script>-->
 
 <link rel="import" href="../../bower_components/polymer/polymer.html"/>
@@ -9,7 +9,7 @@
 <script src="../../node_modules/mows/mows.js"></script>
 <script src="../../bower_components/underscore/underscore.js"></script>
 
-<polymer-element name="mqtt-connection" attributes="messages, test, publish, createClient" constructor="MqttConnection">
+<polymer-element name="mqtt-connection" attributes="messages, publish, createClient, autoConnect, brokerURL, user, password, port, clientID" constructor="MqttConnection">
 
   <template>
     <div id="container"></div>
@@ -17,9 +17,56 @@
 
   <script>
 
-    (function() {
       Polymer("mqtt-connection", {
 
+        /**
+         * If `autoConnect` is set the element will try to automatically connect to the MQTT-Broker
+         * note that `brokerURL` needs to be set as well
+         *
+         * @attribute autoConnect
+         * @type boolean
+         */
+        autoConnect: false,
+
+        /**
+         * The URL of the MQTT-Broker the connection is made to.
+         * Login credentials can be given inline like `ws://[USER:PASSWORD@]broker.mqttdashboard.com:[PORT]`
+         * or set via `user`, `password` and `port`
+         *
+         * @attribute brokerURL
+         * @type string
+         */
+        brokerURL: "",
+
+        /**
+         * The username that will be used to authenticate with the MQTT-Broker
+         *
+         * @attribute user
+         * @type string
+         */
+        user: "",
+
+        /**
+         * The password that will be used to authenticate the `user` at the MQTT-Broker
+         *
+         * @attribute password
+         * @type string
+         */
+        password: "",
+
+        /**
+         * The port the connection is made with
+         *
+         * @attribute port
+         * @type number [1..2^16-1]
+         */
+         port: 1883,
+
+        /**
+         * A unique client ID to identify the MQTT-client at the broker (23 byte string)
+         */
+
+        clientID: "",
 
         observe: {
           'messages.changed': 'messagesChanged'
@@ -36,25 +83,68 @@
           this.that = {};
           this.subscriptions = {};
 
-
         },
         ready: function () {
           console.log("ready");
           this.content = this.$.container;
+
         },
 
-        subscribe: function (topic) {
+        /**
+         * Subscribes to a MQTT-topic
+         *
+         * @param {String} topic the subscription is created on
+         * @param {Object} opt_options (optional) additional options that effect the subscription type
+         * @param opt_target (optional) the target element the subscription should be appended to
+         */
+        subscribe: function (topic, opt_options, opt_target) {
           console.debug("Subscribing to: \"%s\'", topic);
-//          console.trace("Connection: %s", JSON.stringify(this.client) );
+
+          if (this.subscriptions[topic] !== undefined) {
+            console.error("Subscription to %s already exists", topic);
+            return;
+          }
+
+          // actually subscribing to the topic
           this.client.subscribe(topic);
+
+          // creating the View
           this.subscriptions[topic] = new MqttSubscription();
+          // start listening to view events
+          var self = this;
+          this.subscriptions[topic].addEventListener("unsubscribe", function (e, detail, sender) {
+            console.log("Hi");
+          });
+          // setting the view topic
           this.subscriptions[topic].topic = topic;
 
           // adding MqttSubscription to DOM
-          this.content.appendChild(this.subscriptions[topic]);
-
+          if (opt_target !== undefined) {
+            // if an extra targetID is supplied the view is appended to that
+            document.getElementById(opt_target).appendChild(this.subscriptions[topic]);
+          } else {
+            // otherwise the subscription view will be appended to the content area
+            this.content.appendChild(this.subscriptions[topic]);
+          }
 
           console.log(this.subscriptions[topic]);
+        },
+
+        unsubscribe: function (topic) {
+          if (this.subscriptions[topic] !== undefined) {
+            this.client.unsubscribe(topic);
+            delete this.subscriptions[topic];
+          } else {
+            console.error("Subscription to %s doesn't exists, can't unsubscribe", topic);
+          }
+        },
+
+        unsubscribeEvent: function (e, detail, sender) {
+          // we will receive `unsubscribeEvent` from `mqtt-subscription` elements
+          console.debug("unsubscribeEvent");
+          //todo check if connectionID is the same as this ones
+          this.unsubscribe(e.detail.topic);
+
         },
 
         publish: function (topic, message) {
@@ -87,10 +177,12 @@
         },
 
 
-        domReady: function() {
+        domReady: function () {
           console.log("domReady");
+          // at this point all attributes of the element
+          // should be loaded and we are save to act on settings
 
-         },
+        },
 
         end: function () {
           this.client.end();
@@ -108,7 +200,6 @@
           });
         }
 
-      })
-    })();
+      });
   </script>
 </polymer-element>

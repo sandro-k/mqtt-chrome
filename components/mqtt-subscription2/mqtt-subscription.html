@@ -8,7 +8,7 @@
 <script src="../../bower_components/moment/moment.js"></script>
 
 <!-- declare element -->
-<polymer-element name="mqtt-subscription" attributes="topic, messages, connectionID" constructor="MqttSubscription">
+<polymer-element id="{{connectionID}}{{topicID}}" name="mqtt-subscription" attributes="topic, messages, connectionID, topicID" constructor="MqttSubscription">
 
   <template>
     <link rel="stylesheet" href="style.css"/>
@@ -25,9 +25,10 @@
 
 
 
+          <core-icon icon="delete"
+              on-click="{{hendelUnsubscribe}}"></core-icon>
+
           <template if="{{ messages.length > 0}}">
-
-
 
             <changeover-icon icon="arrow-drop-down"
                              up="arrow-drop-up"
@@ -87,6 +88,8 @@
   <script>
     Polymer('mqtt-subscription', {
 
+      topicID: "",
+
       created: function () {
         console.debug("created:");
         console.debug(this);
@@ -117,6 +120,11 @@
           this.sumUnRead++;
         }
 
+      },
+
+      hendelUnsubscribe: function () {
+        this.fire('unsubscribe', {topic: this.topic, connectionID: this.connectionID, source: this});
+        console.log("hendelUnsubscribe");
       },
 
       moment: function (value) {
