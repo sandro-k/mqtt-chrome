@@ -25,6 +25,7 @@
          *
          * @attribute autoConnect
          * @type boolean
+         * @default false
          */
         autoConnect: false,
 
@@ -35,24 +36,28 @@
          *
          * @attribute brokerURL
          * @type string
+         * @default ''
+         *
          */
-        brokerURL: "",
+        brokerURL: '',
 
         /**
          * The username that will be used to authenticate with the MQTT-Broker
          *
          * @attribute user
          * @type string
+         * @default ''
          */
-        user: "",
+        user: '',
 
         /**
          * The password that will be used to authenticate the `user` at the MQTT-Broker
          *
          * @attribute password
          * @type string
+         * @default ''
          */
-        password: "",
+        password: '',
 
         /**
          * The port the connection is made with
@@ -64,12 +69,13 @@
 
         /**
          * A unique client ID to identify the MQTT-client at the broker (23 byte string)
+         * @default ''
          */
 
-        clientID: "",
+        clientID: '',
 
         observe: {
-          'messages.changed': 'messagesChanged'
+//          'messages.changed': 'messagesChanged'
         },
 
         created: function () {
@@ -77,8 +83,7 @@
 
           this.that = this;
           this.messages = {};
-          this.messages.changed = false;
-          this.messages2 = [];
+//          this.messages.changed = false;
           this.client = {};
           this.that = {};
           this.subscriptions = {};
@@ -121,7 +126,8 @@
           // adding MqttSubscription to DOM
           if (opt_target !== undefined) {
             // if an extra targetID is supplied the view is appended to that
-            document.getElementById(opt_target).appendChild(this.subscriptions[topic]);
+//            document.getElementById(opt_target).appendChild(this.subscriptions[topic]);
+              opt_target.appendChild(this.subscriptions[topic]);
           } else {
             // otherwise the subscription view will be appended to the content area
             this.content.appendChild(this.subscriptions[topic]);
@@ -168,7 +174,7 @@
 //            this.messages[topic] = [object];
 //          }
 
-          this.messages.changed = !this.messages.changed;
+//          this.messages.changed = !this.messages.changed;
 
         },
 

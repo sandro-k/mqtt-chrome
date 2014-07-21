@@ -37,6 +37,7 @@
     "juicy-ace-editor": "~0.0.2",
     "mark-down": "~0.5.2",
     "roboto-fontface": "~0.2.0",
-    "moment": "~2.7.0"
+    "moment": "~2.7.0",
+    "bs-modal": "EatYourSpinach/bs-modal#master"
   }
 }

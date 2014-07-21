@@ -33,7 +33,10 @@
     <h1>Subscriptions</h1>
 
     <div id="content">
-
+       <h2>content</h2>
+    </div>
+    <div id="extra">
+      <h2>extra</h2>
     </div>
 
   </template>
@@ -58,9 +61,6 @@
         this.mqttCon = new MqttConnection();
         this.mqttCon.test = "test!!";
         this.$.content.appendChild(this.mqttCon);
-//        this.mqttCon.createClient("ws:localhost:9371");
-//        this.mqttCon.subscribe('presence');
-//        this.mqttCon.publish('presence', 'Hello mqtt');
       },
 
       sendMessage: function () {
@@ -68,7 +68,8 @@
         this.mqttCon.publish(this.messageTopic, this.messagePayload);
       },
       createSubscription: function () {
-        this.mqttCon.subscribe(this.subscriptionTopic);
+//        this.mqttCon.subscribe(this.subscriptionTopic);
+          this.mqttCon.subscribe(this.subscriptionTopic, null, this.$.extra);
       },
 
       createConnection: function () {
