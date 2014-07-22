@@ -1,8 +1,16 @@
 <!-- import polymer-->
 <link rel="import" href="../../bower_components/polymer/polymer.html"/>
 <link rel="import" href="../../bower_components/core-collapse/core-collapse.html"/>
+<link rel="import" href="../../bower_components/core-overlay/core-overlay.html"/>
 <link rel="import" href="../../bower_components/core-icon/core-icon.html"/>
 <link rel="import" href="../../bower_components/core-icons/core-icons.html"/>
+<link rel="import" href="../../bower_components/core-toolbar/core-toolbar.html"/>
+<link rel="import" href="../../bower_components/core-icon-button/core-icon-button.html">
+
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog-transition.html">
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+
 <link rel="import" href="../changeover-icon/changeover-icon.html"/>
 
 <script src="../../bower_components/moment/moment.js"></script>
@@ -10,19 +18,16 @@
 <script src="../../js/libs/bootstrap.js"></script>
 
 <!-- declare element -->
-<polymer-element id="{{connectionID}}{{topicID}}" name="mqtt-subscription" attributes="topic, messages, connectionID, topicID" constructor="MqttSubscription">
+<polymer-element id="{{connectionID}}{{topicID}}" name="mqtt-subscription" attributes="topic, messages, connectionID, topicID, options" constructor="MqttSubscription">
 
   <template>
-    <link rel="stylesheet" href="../../css/build/global.css"/>
-    <link rel="stylesheet" href="../../css/build/fonts.css"/>
-    <link rel="stylesheet" href="../../css/build/layout.css"/>
+
     <link rel="stylesheet" href="style.css"/>
     <style>
       #message-warpper {
         max-height: 260px;
         overflow-y: scroll;
       }
-
     </style>
 
 
@@ -67,6 +72,7 @@
 
           <core-icon
               class="pull-right"
+              on-click="{{settings}}"
               icon="settings"></core-icon>
 
           <core-icon
@@ -103,23 +109,73 @@
 
     </div>
 
-    <div id="myModal" class="modal fade">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-            <h4 class="modal-title">Modal title</h4>
+
+
+
+    <core-overlay id="subscriptionOptions" layered transition="core-transition-top" backdrop>
+      <style no-shim>
+        #options-wrapper {
+          background: #ffffff;
+          width: 500px;
+        }
+      </style>
+
+      <style shim-shadowdom>
+
+        body {
+          font-family: sans-serif;
+        }
+
+        core-toolbar {
+          background-color: #ffffff;
+        }
+
+        .head {
+          width: 100%;
+          margin: 0;
+          background-color: #CCCCCC;
+        }
+
+
+
+
+      </style>
+      <div id="options-wrapper">
+        <core-toolbar class="tall">
+          <div class="head">
+            <span flex>Options</span>
+            <core-icon-button class="pull-right" icon="close"></core-icon-button>
           </div>
-          <div class="modal-body">
-            <p>One fine body&hellip;</p>
+          <br/>
+          <div>
+
           </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Save changes</button>
+
+          <div class="bottom">
+            <core-icon-button icon="delete">
+              <span>Delete</span>
+            </core-icon-button>
+            <core-icon-button icon="close">Close</core-icon-button>
+            <core-icon-button icon="save">Save</core-icon-button>
           </div>
-        </div><!-- /.modal-content -->
-      </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
+        </core-toolbar>
+      </div>
+    </core-overlay>
+
+
+    <paper-dialog id="subscriptionOptions" heading="Dialog" transition="paper-dialog-transition-center">
+      <p>Lorem ipsum dolor sit amet, doming noster at quo, nostrud lucilius rationibus ea duo. Vim no mucius dolores. No bonorum voluptatum vis, has iudicabit consectetuer ne. Nullam sensibus vim id, et quo graeci perpetua.</p>
+
+      <p>Id qui scripta laboramus dissentiet, verterem partiendo vim at. Stet dissentiet ut mei. Iriure facilis eloquentiam pro eu, nec an esse inciderint. In meliore abhorreant sea. Eros nostro ocurreret at nec. Cu per regione persecuti.</p>
+
+      <p>Lorem ipsum dolor sit amet, doming noster at quo, nostrud lucilius rationibus ea duo. Vim no mucius dolores. No bonorum voluptatum vis, has iudicabit consectetuer ne. Nullam sensibus vim id, et quo graeci perpetua.</p>
+
+      <paper-button label="More Info..." dismissive></paper-button>
+      <paper-button label="Decline" affirmative></paper-button>
+      <paper-button label="Accept" affirmative autofocus></paper-button>
+
+    </paper-dialog>
+
 
   </template>
 
@@ -128,12 +184,26 @@
   <script>
     Polymer('mqtt-subscription', {
 
-      topicID: "",
+      /**
+       * Extra options that control affect the subscription
+       */
+      options: {
+        qos: 0,
+        dup: false,
+        messageId: null
+      },
+
+      /**
+       *
+       */
+      topicID: '',
+
+      topic : '',
 
       created: function () {
         console.debug("created:");
         console.debug(this);
-        this.topic = "";
+
         this.message = { ID: 1 };
         this.messages = [];
         // todo change
@@ -145,6 +215,10 @@
 
       ready: function () {
         console.debug("ready");
+      },
+
+      domReady: function () {
+        this.settings();
       },
 
       handelopen: function (event, detail, sender) {
@@ -161,6 +235,9 @@
           this.sumUnRead++;
         }
 
+      },
+      settings: function () {
+        this.$.subscriptionOptions.toggle();
       },
 
       hendelUnsubscribe: function () {

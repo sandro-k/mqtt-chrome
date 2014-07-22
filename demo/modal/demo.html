@@ -18,37 +18,43 @@
 
 
 
-<core-overlay id="overlay" layered transition="core-transition-top" backdrop start>
-  <style>
-    #wrapper {
-      box-sizing: border-box;
-      -moz-box-sizing: border-box;
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 13px;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      overflow: hidden;
+<core-overlay id="overlay" layered transition="core-transition-top" backdrop>
+  <link rel="stylesheet" href="../../css/build/global.css"/>
+  <link rel="stylesheet" href="../../css/build/fonts.css"/>
+  <link rel="stylesheet" href="../../css/build/layout.css"/>
+  <!--<style>-->
+    <!--#wrapper {-->
+      <!--box-sizing: border-box;-->
+      <!---moz-box-sizing: border-box;-->
+      <!--font-family: Arial, Helvetica, sans-serif;-->
+      <!--font-size: 13px;-->
+      <!---webkit-user-select: none;-->
+      <!---moz-user-select: none;-->
+      <!--overflow: hidden;-->
 
-      max-width: 80%;
-      background: white;
-      padding:30px 42px;
-      outline: 1px solid rgba(0,0,0,0.2);
-      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
-    }
-  </style>
-  <div id="wrapper">
-    <h1>Heading</h1>
-    <p>
-    <span>
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet animi blanditiis cumque dolores dolorum enim
-      error est eum expedita, laboriosam laudantium minima natus necessitatibus numquam placeat quas rem sequi, ut.
-    </span>
-    <span>
-      A amet consectetur dolorem eligendi explicabo magnam neque possimus repellat vero vitae. Cupiditate eius hic odio,
-      possimus praesentium qui quo similique voluptates. Assumenda consequuntur libero omnis porro quibusdam repudiandae
-      veniam.</span>
-    </p>
-    <button core-overlay-toggle>OK</button>
+      <!--max-width: 80%;-->
+      <!--background: white;-->
+      <!--padding:30px 42px;-->
+      <!--outline: 1px solid rgba(0,0,0,0.2);-->
+      <!--box-shadow: 0 4px 16px rgba(0,0,0,0.2);-->
+    <!--}-->
+  <!--</style>-->
+  <div class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+          <h4 class="modal-title">Modal title</h4>
+        </div>
+        <div class="modal-body">
+          <p>One fine body&hellip;</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
   </div>
 </core-overlay>
 

@@ -38,6 +38,28 @@
     "mark-down": "~0.5.2",
     "roboto-fontface": "~0.2.0",
     "moment": "~2.7.0",
-    "bs-modal": "EatYourSpinach/bs-modal#master"
+    "bs-modal": "EatYourSpinach/bs-modal#master",
+    "x-tag-tooltip": "x-tag/tooltip#master",
+    "polymer-flex-layout": "PolymerLabs/polymer-flex-layout#master",
+    "sampler-scaffold": "Polymer/sampler-scaffold#master",
+    "paper-dialog": "Polymer/paper-dialog#master",
+    "paper-button": "Polymer/paper-button#master"
+  },
+  "resolutions": {
+    "core-icon-button": "master",
+    "core-icons": "master",
+    "core-item": "master",
+    "core-media-query": "master",
+    "core-menu": "master",
+    "core-meta": "master",
+    "core-selection": "master",
+    "core-selector": "master",
+    "core-toolbar": "master",
+    "platform": "~0.3.3",
+    "polymer": "~0.3.3",
+    "core-component-page": "master",
+    "core-overlay": "master",
+    "core-transition": "master",
+    "font-roboto": "~0.3.3"
   }
 }

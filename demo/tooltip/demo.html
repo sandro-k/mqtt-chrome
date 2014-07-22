@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <title>Tooltip demo</title>
+
+  <script src="../../bower_components/platform/platform.js"></script>
+
+  <link rel="import" href="../../bower_components/core-tooltip/core-tooltip.html"/>
+  <!--<link rel="import" href="../../bower_components/core-layout/core-layout.html"/>-->
+  <style>
+     article {
+       margin-left: 200px;
+     }
+  </style>
+</head>
+<body unresolved>
+
+
+<article onclick="this.classList.toggle('on');">
+
+  <core-tooltip label="I'm a tooltip" show="false" narrow>
+    <span>Hover over me.</span>
+
+    <div tip>
+      <div>
+        <button>HI</button>
+        <img src="https://pbs.twimg.com/profile_images/378800000548263523/c110b0a4c3e3e4d3dcce1d2020f3eded.jpeg">
+      </div>
+    </div>
+
+  </core-tooltip>
+
+</article>
+
+</body>
+</html>
