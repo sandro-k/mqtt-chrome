@@ -2,9 +2,99 @@
 <html>
 <head lang="en">
   <meta charset="UTF-8">
-  <title></title>
+  <title>Toast demo</title>
+  <script src="../../bower_components/platform/platform.js"></script>
+  <link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
+  <link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html"/>
 </head>
 <body>
+
+<polymer-element name="demo-tag">
+  <!-- outermost template defines the element's shadow DOM -->
+  <template>
+    <input type="text" value="{{toastText}}"/>
+    <button on-click="{{makeToast}}">makeToast</button>
+
+    <button on-click="{{show}}">show</button>
+    <paper-dialog id="dialog" heading='Heading' transition="paper-dialog-transition-center" backdrop>
+      <input type="text" value="{{toastText2}}"/>
+      <button dismissive raisedbutton on-click="{{delete}}">
+        toast
+      </button>
+    </paper-dialog>
+
+  </template>
+
+
+
+  <script>
+
+
+    Polymer('demo-tag', {
+
+      toastText: '',
+
+      create: function () {
+
+      },
+
+      makeToast: function () {
+        this.fire("toast", {text: this.toastText});
+      },
+
+      show: function () {
+        this.$.dialog.toggle();
+      },
+
+      delete: function (){
+        this.fire("toast", {text: this.toastText2});
+      },
+
+      ready: function () {
+        this.toastText2 = 'aaaaAAAaaa';
+        this.toastText = 'wooowooow';
+      }
+
+    });
+  </script>
+</polymer-element>
+
+<polymer-element name="demo-tag2">
+  <template>
+    <div id="container"></div>
+  </template>
+  <script>
+    Polymer('demo-tag2', {
+
+
+      ready: function () {
+        this.toastText = "Just a text";
+
+        this.container = this.$.container;
+
+        var self = this;
+
+        document.addEventListener("toast", function (e, detail, sender) {
+          console.log(this);
+          var toast = new Toast();
+          toast.duration = 1000000;
+          toast.text = e.detail.text;
+          self.container.appendChild(toast);
+          toast.show();
+        });
+      }
+
+    });
+  </script>
+</polymer-element>
+
+
+<demo-tag></demo-tag>
+<demo-tag2></demo-tag2>
+
+
+
+
 
 </body>
 </html>
