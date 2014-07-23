@@ -4,12 +4,17 @@
 <link rel="import" href="../../bower_components/core-overlay/core-overlay.html"/>
 <link rel="import" href="../../bower_components/core-icon/core-icon.html"/>
 <link rel="import" href="../../bower_components/core-icons/core-icons.html"/>
+<link rel="import" href="../../bower_components/core-icons/iconsets/av-icons.html"/>
 <link rel="import" href="../../bower_components/core-toolbar/core-toolbar.html"/>
 <link rel="import" href="../../bower_components/core-icon-button/core-icon-button.html">
+<link rel="import" href="../../bower_components/core-tooltip/core-tooltip.html">
 
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../bower_components/paper-dialog/paper-dialog-transition.html">
 <link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../../bower_components/paper-radio-button/paper-radio-button.html">
+<link rel="import" href="../../bower_components/paper-radio-group/paper-radio-group.html">
 
 <link rel="import" href="../changeover-icon/changeover-icon.html"/>
 
@@ -28,8 +33,11 @@
         max-height: 260px;
         overflow-y: scroll;
       }
-    </style>
 
+      paper-button {
+        margin-right: 8px;
+      }
+    </style>
 
 
 
@@ -38,11 +46,8 @@
         <div class="col-xs-6 col-lg-9">
           <h3>"/{{topic}}"</h3>
         </div>
+
         <div class="col-xs-6 col-lg-3 options">
-
-
-
-
 
           <template if="{{ messages.length > 0}}">
 
@@ -70,16 +75,18 @@
           </template>
 
 
+
+
           <core-icon
               class="pull-right"
               on-click="{{settings}}"
               icon="settings"></core-icon>
 
           <core-icon
-              id="deleteSub"
-              icon="delete"
               class="pull-right"
-              on-click="{{hendelUnsubscribe}}"></core-icon>
+              on-click="{{pause}}"
+              icon="av:pause"></core-icon>
+
 
             <span class="pull-right">
               <span class="badge">Messages: {{sumUnRead}}/{{messages.length}}</span>
@@ -163,18 +170,141 @@
     </core-overlay>
 
 
-    <paper-dialog id="subscriptionOptions" heading="Dialog" transition="paper-dialog-transition-center">
-      <p>Lorem ipsum dolor sit amet, doming noster at quo, nostrud lucilius rationibus ea duo. Vim no mucius dolores. No bonorum voluptatum vis, has iudicabit consectetuer ne. Nullam sensibus vim id, et quo graeci perpetua.</p>
+    <paper-dialog id="subscriptionOptions" heading='Subscription - /{{topic}}' transition="paper-dialog-transition-center" backdrop>
+      <style>
+      body {
+        background-color: #f9f9f9;
+        font-family: RobotoDraft, 'Helvetica Neue', Helvetica, Arial;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        -webkit-tap-highlight-color: rgba(0,0,0,0);
+        -webkit-touch-callout: none;
+      }
 
-      <p>Id qui scripta laboramus dissentiet, verterem partiendo vim at. Stet dissentiet ut mei. Iriure facilis eloquentiam pro eu, nec an esse inciderint. In meliore abhorreant sea. Eros nostro ocurreret at nec. Cu per regione persecuti.</p>
 
-      <p>Lorem ipsum dolor sit amet, doming noster at quo, nostrud lucilius rationibus ea duo. Vim no mucius dolores. No bonorum voluptatum vis, has iudicabit consectetuer ne. Nullam sensibus vim id, et quo graeci perpetua.</p>
+      /* FAB */
+      .fab {
+        position: relative;
+        display: inline-block;
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        color: #fff;
+        overflow: hidden;
+        transition: box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        transition-delay: 0.2s;
+        box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+      }
 
-      <paper-button label="More Info..." dismissive></paper-button>
-      <paper-button label="Decline" affirmative></paper-button>
-      <paper-button label="Accept" affirmative autofocus></paper-button>
+      .redbutton:hover {
+        background-color: #d23f31;
+      }
 
+      .fab.blue {
+        background-color: #4285f4;
+      }
+
+      .greenbutton:hover {
+        background-color: #0f9d58;
+      }
+
+      .fab:active {
+        box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2);
+        transition-delay: 0s;
+      }
+
+
+        .menu-buttons {
+          position: absolute;
+          top: -24px!important;
+          right: -24px!important;
+          left: auto!important;
+        }
+
+      :host /deep/ #icon {
+                     margin: 12px;
+                   }
+      </style>
+      <hr/>
+      <div>
+        <span><strong>Topic:</strong></span>
+        <span class="badge">/{{topic}}</span>
+      </div>
+
+
+      <div>
+        <span><strong>Quality of Service:</strong></span>
+
+        <style>
+          core-tooltip:focus {
+            outline: none;
+          }
+
+          .item.core-selected span {
+            background: lightgreen;
+          }
+          .item.core-selected {
+            background: lightgreen;
+          }
+          .item {
+            padding: 8px;
+            background: #eee;
+            border: 1px 0px 1px 0px solid #222222;
+
+          }
+          .item:first-child {
+            border-top-left-radius: 5px;
+            border-bottom-left-radius: 5px;
+            /*border-right: solid #222222;*/
+          }
+          .item:last-child {
+            border-top-right-radius: 5px;
+            border-bottom-right-radius: 5px;
+            /*border-left: solid #222222;*/
+          }
+        </style>
+
+
+
+        <core-selector selected="{{options_shadow.qos}}" itemsSelector="span[data-item]">
+          <core-tooltip class="item" label="At most once"  position="top">
+            <span data-item label="0">0</span>
+          </core-tooltip>
+
+          <core-tooltip class="item" label="At least once"  position="top">
+          <span data-item label="1">1</span>
+            </core-tooltip>
+
+          <core-tooltip class="item" label="Exactly once" position="top">
+            <span data-item label="2">2</span>
+          </core-tooltip>
+
+        </core-selector>
+      </div>
+
+      <hr/>
+
+      <div><span><strong>MessageID:</strong></span>
+
+      <span>{{options.messageId}}</span>
+
+
+      </div>
+
+      <paper-button class="redbutton" label="Delete" icon="delete" dismissive raisedbutton on-click="{{deleteSub}}">
+      </paper-button>
+
+      <paper-button class="greenbutton" label="Save" icon="save" affirmative autofocus raisedbutton on-click="{{saveSub}}"></paper-button>
+
+
+      <paper-fab dismissive icon="close" class="menu-buttons blue fab blue"></paper-fab>
+
+
+      </paper-ripple>
     </paper-dialog>
+
 
 
   </template>
@@ -189,9 +319,10 @@
        */
       options: {
         qos: 0,
-        dup: false,
         messageId: null
       },
+
+      options_shadow: {},
 
       /**
        *
@@ -199,6 +330,13 @@
       topicID: '',
 
       topic : '',
+
+
+
+      observe: {
+        'options.qos': 'qosChanged',
+        'options_shadow.qos' : 'qosChanged'
+      },
 
       created: function () {
         console.debug("created:");
@@ -211,6 +349,8 @@
         this.sumUnRead = 0;
         this.isOpen = false;
         this.removeDialog = false;
+
+        this.options_shadow = {qos: this.options.qos, messageId: this.options.messageId};
       },
 
       ready: function () {
@@ -240,17 +380,30 @@
         this.$.subscriptionOptions.toggle();
       },
 
+      pause: function () {
+        console.log("pause")
+        this.fire('pause', {topic: this.topic, connectionID: this.connectionID, source: this});
+      },
+
+      qosChanged: function () {
+        console.log("qosChanged: %s", this.options.qos);
+        console.log("OldQos: %s", this.options_shadow.qos);
+      },
+
+      deleteSub: function () {
+        console.log("deleteSub");
+//        this.$.subscriptionOptions.toggle();
+        this.$.subscriptionOptions.opened = false;
+        this.asyncFire('unsubscribe', {topic: this.topic, connectionID: this.connectionID, source: this});
+      },
+
+      saveSub: function () {
+        console.log("saveSub");
+        this.fire('changeSub', {topic: this.topic, connectionID: this.connectionID, source: this});
+      },
+
+
       hendelUnsubscribe: function () {
-        this.removeDialog = !this.removeDialog;
-
-
-
-//        $(this.$.deleteSub).popover({animation:true, content:elem, html:true});
-//        $(this.$.deleteSub).hide();
-//        $(this.$.deleteSub).addClass("mooo");
-//        $(this.$.myModal).show()
-
-
 
 //        this.fire('unsubscribe', {topic: this.topic, connectionID: this.connectionID, source: this});
         console.log("hendelUnsubscribe");

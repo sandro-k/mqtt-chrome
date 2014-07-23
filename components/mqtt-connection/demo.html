@@ -4,7 +4,15 @@
   <meta charset="UTF-8">
   <title>mqtt connection demo</title>
   <script src="../../bower_components/platform/platform.js"></script>
+  <!--<link rel="stylesheet" href="../../bower_components/roboto-fontface/roboto-fontface.css">-->
+  <link rel="import" href="../../bower_components/font-roboto/roboto.html">
+  <link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
   <link rel="import" href="mqtt-connection.html">
+  <style>
+    body {
+      font-family: RobotoDraft, 'Helvetica Neue', Helvetica, Arial;
+    }
+  </style>
 </head>
 <body unresolved>
 
@@ -39,6 +47,8 @@
       <h2>extra</h2>
     </div>
 
+
+    <paper-toast id="toast"></paper-toast>
   </template>
 
 
@@ -61,6 +71,16 @@
         this.mqttCon = new MqttConnection();
         this.mqttCon.test = "test!!";
         this.$.content.appendChild(this.mqttCon);
+
+        this.toast = this.$.toast;
+
+
+        var self = this;
+
+        document.addEventListener("toast", function (e, detail, sender) {
+          self.toast.text = "HI I am a Toast";
+          self.toast.show();
+        });
       },
 
       sendMessage: function () {
@@ -68,8 +88,8 @@
         this.mqttCon.publish(this.messageTopic, this.messagePayload);
       },
       createSubscription: function () {
-//        this.mqttCon.subscribe(this.subscriptionTopic);
-          this.mqttCon.subscribe(this.subscriptionTopic, null, this.$.extra);
+        this.mqttCon.subscribe(this.subscriptionTopic);
+//          this.mqttCon.subscribe(this.subscriptionTopic, null, this.$.extra);
       },
 
       createConnection: function () {
@@ -81,6 +101,8 @@
 </polymer-element>
 
 <demo-tag></demo-tag>
+
+
 
 
 <!--<script>-->

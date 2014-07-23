@@ -132,17 +132,34 @@
           // start listening to view events
           var self = this;
           this.subscriptions[topic].addEventListener("unsubscribe", function (e, detail, sender) {
-            console.log("Hi");
+            self.asyncFire('toast', {text: "test"});
+            console.log(self.unsubscribe);
+            self.unsubscribe("presence")
           });
+
+          this.subscriptions[topic].addEventListener("saveSub", function (e, detail, sender) {
+            console.log("Hi");
+            console.log(this);
+          });
+
+          this.subscriptions[topic].addEventListener("pause", function (e, detail, sender) {
+            console.log("Hi");
+            console.log(this);
+          });
+
           // setting the view topic
           this.subscriptions[topic].topic = topic;
 
+
+
           // adding MqttSubscription to DOM
           if (opt_target !== undefined) {
+            this.subscriptions[topic].target = opt_target;
             // if an extra targetID is supplied the view is appended to that
 //            document.getElementById(opt_target).appendChild(this.subscriptions[topic]);
               opt_target.appendChild(this.subscriptions[topic]);
           } else {
+            this.subscriptions[topic].target = this.content;
             // otherwise the subscription view will be appended to the content area
             this.content.appendChild(this.subscriptions[topic]);
           }
@@ -151,9 +168,22 @@
         },
 
         unsubscribe: function (topic) {
+
+          console.log(this);
+
           if (this.subscriptions[topic] !== undefined) {
+            // unsubscribe
             this.client.unsubscribe(topic);
+
+            // remove from DOM
+            this.subscriptions[topic].target.removeChild(this.subscriptions[topic]);
+
+            // delete reference
             delete this.subscriptions[topic];
+
+
+
+
           } else {
             console.error("Subscription to %s doesn't exists, can't unsubscribe", topic);
           }
