@@ -1,10 +1,160 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-  <meta charset="UTF-8">
-  <title></title>
-</head>
-<body>
+<link rel="import" href="../../bower_components/polymer/polymer.html"/>
 
-</body>
-</html>
+
+<link rel="import" href="../../bower_components/core-scaffold/core-scaffold.html">
+<link rel="import" href="../../bower_components/core-header-panel/core-header-panel.html">
+<link rel="import" href="../../bower_components/core-menu/core-menu.html">
+<link rel="import" href="../../bower_components/core-item/core-item.html">
+<link rel="import" href="../../bower_components/polymer/layout.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-radio-button/paper-radio-button.html">
+<link rel="import" href="../../bower_components/paper-radio-group/paper-radio-group.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+
+<!--remove all stylesheets below just to have auto complete -->
+<link rel="stylesheet" href="../../css/build/layout.css"/>
+
+<polymer-element name="mqtt-connection-ui" constructo="Mqttlense">
+  <!-- outermost template defines the element's shadow DOM -->
+  <template>
+    <link rel="stylesheet" href="../../css/build/layout.css"/>
+    <style>
+      #wrapper {
+        /*padding: 4px 8px;*/
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+      }
+
+      header {
+        border-bottom: 1px dotted #e5e5e5;
+        background-color: #7694c6;
+      }
+
+      #content {
+        border-top: 4px solid #7694c6;
+      }
+
+      .min-width-300 {
+        min-width: 300px;
+      }
+
+      .min-width-200 {
+        min-width: 200px;
+      }
+
+      .min-width-250 {
+        min-width: 250px;
+      }
+
+      .min-width-100 {
+        min-width: 100px;
+      }
+
+      paper-input {
+        border-right: 4px solid transparent;
+        /*margin-left: 4px;*/
+        /*margin-right: 4px;*/
+      }
+
+      .blue {
+        background: cornflowerblue;
+      }
+
+      footer {
+        border-top: 1px dotted #7694c6;
+        margin-top: 12px ;
+        padding-top: 12px ;
+      }
+    </style>
+
+    <div id="wrapper">
+      <header layout horizontal>
+        <div flex>
+          <h1>Add a new Connection</h1>
+        </div>
+        <core-icon icon="close" on-click="{{close}}"></core-icon>
+      </header>
+      <div id="content">
+        <div layout horizontal wrap>
+          <paper-input label="Connection name" type="text" class="min-width-300" floatingLabel flex three></paper-input>
+          <input label="Connection color" type="color" class="min-width-300" flex/>
+        </div>
+        <div layout horizontal wrap>
+          <paper-input label="Hostname" type="text" class="min-width-300" floatingLabel flex three></paper-input>
+          <paper-input label="Port" type="text" class="min-width-300" floatingLabel flex></paper-input>
+        </div>
+        <div layout horizontal center>
+          <paper-input label="Client ID" type="text" class="min-width-250" floatingLabel flex three></paper-input>
+          <paper-button label="Generate a random ID" on-click="{{randomID}}" class="blue" raisedbutton></paper-button>
+        </div>
+        <div layout horizontal wrap center>
+          <div class="min-width-100" flex>
+            <h3>Session</h3>
+            <paper-radio-button label="Clean session"></paper-radio-button>
+          </div>
+          <div class="min-width-100" flex>
+            <h3>SSL</h3>
+            <paper-radio-button label="Use SSL"></paper-radio-button>
+          </div>
+          <div flex>
+            <h2>Keep Alive</h2>
+            <div class="input-group">
+              <input class="form-control" data-toggle="tooltip" id="keepAliveInput" placeholder="Enter keep alive time" title="" value="30" data-original-title="Keep alive in seconds.">
+              <span class="input-group-addon">seconds</span>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+
+      <footer layout horizontal>
+        <paper-button class="redbutton" label="Delete" icon="delete" raisedbutton on-click="{{deleteSub}}" dismissive>
+        </paper-button>
+
+        <div flex>
+          <!--just a spacer-->
+        </div>
+
+
+        <paper-button class="greenbutton" label="Save" icon="save" on-click="{{saveSub}}" affirmative autofocus
+                      raisedbutton></paper-button>
+
+      </footer>
+    </div>
+
+
+  </template>
+
+
+  <script>
+    Polymer('mqtt-connection-ui', {
+
+      created: function () {
+        console.log("created");
+      },
+      ready: function () {
+        console.log("ready");
+
+      },
+      attached: function () {
+        console.log("attached");
+      },
+      domReady: function () {
+        console.log("domReady");
+      },
+      detached: function () {
+        console.log("detached");
+      },
+      attributeChanged: function (attrName, oldVal, newVal) {
+        //var newVal = this.getAttribute(attrName);
+        console.log(attrName, 'old: ' + oldVal, 'new:', newVal);
+      },
+      randomID: function () {
+        console.log("randomID");
+      },
+    });
+  </script>
+</polymer-element>

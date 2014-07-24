@@ -1,10 +1,100 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-  <meta charset="UTF-8">
-  <title></title>
-</head>
-<body>
+<link rel="import" href="../../bower_components/polymer/polymer.html"/>
 
-</body>
-</html>
+
+<link rel="import" href="../../bower_components/core-scaffold/core-scaffold.html">
+<link rel="import" href="../../bower_components/core-header-panel/core-header-panel.html">
+<link rel="import" href="../../bower_components/core-menu/core-menu.html">
+<link rel="import" href="../../bower_components/core-item/core-item.html">
+
+<polymer-element name="mqtt-lense" constructo="Mqttlense">
+  <!-- outermost template defines the element's shadow DOM -->
+  <template>
+    <style>
+      body {
+        font-family: sans-serif;
+      }
+      .toolbar {
+        background-color: #526E9C; color: #fff;
+      }
+    </style>
+
+    <link rel="stylesheet" href="../../css/build/layout.css"/>
+
+    <core-scaffold>
+
+      <core-header-panel
+          navigation
+          flex
+          hidden?="{{!leftMenu}}"
+          mode="seamed">
+
+        <core-toolbar
+            class="toolbar">
+
+          {{appName}}
+
+        </core-toolbar>
+
+        <core-menu
+            theme="core-light-theme"
+            hidden?="{{!leftMenu}}">
+
+          <core-item
+              icon="settings"
+              label="item1"></core-item>
+
+
+
+        </core-menu>
+
+      </core-header-panel>
+
+      <div tool>{{breadcrump}}</div>
+
+      <div>
+        Content goes here...
+        <button on-click="{{leftMenuToggle}}">Toggle</button>
+      </div>
+
+    </core-scaffold>
+
+
+  </template>
+
+
+  <script>
+    Polymer('mqtt-lense', {
+
+      leftMenu: true,
+      appName: "MQTTlense",
+      breadcrump: "Subscriptions",
+
+      created: function () {
+        console.log("created");
+      },
+      ready: function () {
+        console.log("ready");
+
+      },
+      attached: function () {
+        console.log("attached");
+      },
+      domReady: function () {
+        console.log("domReady");
+      },
+      detached: function () {
+        console.log("detached");
+      },
+      attributeChanged: function (attrName, oldVal, newVal) {
+        //var newVal = this.getAttribute(attrName);
+        console.log(attrName, 'old: ' + oldVal, 'new:', newVal);
+      },
+      // functions
+      leftMenuToggle: function () {
+        console.log("leftMenuToggle");
+        this.leftMenu = !this.leftMenu;
+      }
+
+    });
+  </script>
+</polymer-element>
