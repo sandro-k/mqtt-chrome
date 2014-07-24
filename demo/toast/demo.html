@@ -9,23 +9,54 @@
 </head>
 <body>
 
-<polymer-element name="demo-tag">
-  <!-- outermost template defines the element's shadow DOM -->
+<polymer-element name="demo-tag2">
   <template>
-    <input type="text" value="{{toastText}}"/>
-    <button on-click="{{makeToast}}">makeToast</button>
 
     <button on-click="{{show}}">show</button>
+
     <paper-dialog id="dialog" heading='Heading' transition="paper-dialog-transition-center" backdrop>
-      <input type="text" value="{{toastText2}}"/>
+      <input type="text" value="{{toastText}}"/>
       <button dismissive raisedbutton on-click="{{delete}}">
         toast
       </button>
     </paper-dialog>
 
+
   </template>
+  <script>
+    Polymer('demo-tag2', {
 
+      ready: function () {
+        this.toastText = "Demo-Tag2";
+      },
 
+      show: function () {
+        this.$.dialog.toggle();
+      },
+
+      delete: function (){
+        this.fire("toast", {text: this.toastText});
+        var backdrop = this.$.dialog.$.overlay.scrim;
+        backdrop.parentNode.removeChild(backdrop);
+        this.parentNode.removeChild(this);
+      }
+
+    });
+  </script>
+</polymer-element>
+
+<polymer-element name="demo-tag">
+  <!-- outermost template defines the element's shadow DOM -->
+  <template>
+    <input type="text" value="{{toastText}}"/>
+    <button on-click="{{makeToast}}">makeToast</button>
+    <button on-click="{{addDemo2}}">add Demo2</button>
+
+    <demo-tag2></demo-tag2>
+
+    <paper-toast id="toast"></paper-toast>
+
+  </template>
 
   <script>
 
@@ -42,45 +73,24 @@
         this.fire("toast", {text: this.toastText});
       },
 
-      show: function () {
-        this.$.dialog.toggle();
+      addDemo2: function () {
+        var demotag2 = document.createElement('demo-tag2');
+        this.shadowRoot.appendChild(demotag2);
       },
 
-      delete: function (){
-        this.fire("toast", {text: this.toastText2});
-      },
 
       ready: function () {
-        this.toastText2 = 'aaaaAAAaaa';
         this.toastText = 'wooowooow';
-      }
-
-    });
-  </script>
-</polymer-element>
-
-<polymer-element name="demo-tag2">
-  <template>
-    <div id="container"></div>
-  </template>
-  <script>
-    Polymer('demo-tag2', {
 
 
-      ready: function () {
-        this.toastText = "Just a text";
-
-        this.container = this.$.container;
-
+        this.toast = this.$.toast;
         var self = this;
 
         document.addEventListener("toast", function (e, detail, sender) {
           console.log(this);
-          var toast = new Toast();
-          toast.duration = 1000000;
-          toast.text = e.detail.text;
-          self.container.appendChild(toast);
-          toast.show();
+          self.toast.text = e.detail.text;
+
+          self.toast.show();
         });
       }
 
@@ -89,8 +99,8 @@
 </polymer-element>
 
 
+
 <demo-tag></demo-tag>
-<demo-tag2></demo-tag2>
 
 
 

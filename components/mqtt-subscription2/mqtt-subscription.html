@@ -293,13 +293,13 @@
 
       </div>
 
-      <paper-button class="redbutton" label="Delete" icon="delete" dismissive raisedbutton on-click="{{deleteSub}}">
+      <paper-button class="redbutton" label="Delete" icon="delete" raisedbutton on-click="{{deleteSub}}" dismissive>
       </paper-button>
 
-      <paper-button class="greenbutton" label="Save" icon="save" affirmative autofocus raisedbutton on-click="{{saveSub}}"></paper-button>
+      <paper-button class="greenbutton" label="Save" icon="save" on-click="{{saveSub}}" affirmative autofocus raisedbutton></paper-button>
 
 
-      <paper-fab dismissive icon="close" class="menu-buttons blue fab blue"></paper-fab>
+      <paper-fab icon="close" class="menu-buttons blue fab" dismissive ></paper-fab>
 
 
       </paper-ripple>
@@ -392,14 +392,31 @@
 
       deleteSub: function () {
         console.log("deleteSub");
-//        this.$.subscriptionOptions.toggle();
-        this.$.subscriptionOptions.opened = false;
-        this.asyncFire('unsubscribe', {topic: this.topic, connectionID: this.connectionID, source: this});
+        this.fire('unsubscribe', {topic: this.topic, connectionID: this.connectionID, source: this});
       },
 
       saveSub: function () {
         console.log("saveSub");
-        this.fire('changeSub', {topic: this.topic, connectionID: this.connectionID, source: this});
+        //this.fire('changeSub', {topic: this.topic, connectionID: this.connectionID, source: this});
+      },
+
+      removeFromDOM: function () {
+        console.log("removeFromDOM");
+        console.log(this.$.subscriptionOptions.opened);
+//        this.tmp = this.$.subscriptionOptions;
+
+//        this.tmp.$.overlay.completeBackdrop();
+//        console.log(this.tmp);
+//        this.tmp.remove();
+
+//        while (this.$.subscriptionOptions.opened) {
+//
+//        }
+
+        var backdrop = this.$.subscriptionOptions.$.overlay.scrim;
+        backdrop.parentNode.removeChild(backdrop);
+
+        this.parentNode.removeChild(this);
       },
 
 

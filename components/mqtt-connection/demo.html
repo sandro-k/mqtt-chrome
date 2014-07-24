@@ -19,6 +19,12 @@
 <polymer-element name="demo-tag">
   <!-- outermost template defines the element's shadow DOM -->
   <template>
+    <style>
+      paper-toast[status="ok"] {
+        background: lightgreen;
+        color: #000000;
+      }
+    </style>
     <h1>Create a connection</h1>
     Broker URL: <input value="{{brokerUrl}}" a>
     <button on-tap="{{createConnection}}" >create connection</button>
@@ -48,7 +54,7 @@
     </div>
 
 
-    <paper-toast id="toast"></paper-toast>
+    <paper-toast id="toast" status="{{toaststatus}}"></paper-toast>
   </template>
 
 
@@ -56,7 +62,9 @@
   <script>
     Polymer('demo-tag', {
 
-      create: function () {
+      toaststatus: '',
+
+          create: function () {
 
       },
 
@@ -78,7 +86,12 @@
         var self = this;
 
         document.addEventListener("toast", function (e, detail, sender) {
-          self.toast.text = "HI I am a Toast";
+          self.toast.text = e.detail.text;
+          if (e.detail.status) {
+            self.toaststatus  = e.detail.status;
+          } else {
+            self.toaststatus  = "";
+          }
           self.toast.show();
         });
       },

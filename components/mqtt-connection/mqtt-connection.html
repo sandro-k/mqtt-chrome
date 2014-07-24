@@ -132,8 +132,9 @@
           // start listening to view events
           var self = this;
           this.subscriptions[topic].addEventListener("unsubscribe", function (e, detail, sender) {
-            self.asyncFire('toast', {text: "test"});
-            console.log(self.unsubscribe);
+            self.asyncFire('toast', {text: "Removed subscription to "+ e.detail.topic});
+//            console.log(self.unsubscribe);
+            // TODO put real topic into unsubscribe
             self.unsubscribe("presence")
           });
 
@@ -176,7 +177,8 @@
             this.client.unsubscribe(topic);
 
             // remove from DOM
-            this.subscriptions[topic].target.removeChild(this.subscriptions[topic]);
+            this.subscriptions[topic].removeFromDOM();
+//            this.subscriptions[topic].target.removeChild(this.subscriptions[topic]);
 
             // delete reference
             delete this.subscriptions[topic];
@@ -248,6 +250,8 @@
             console.log(arguments);
             self.onMessage(topic, message, object);
           });
+
+          self.asyncFire("toast", {text: "Connection established to: "+ serverUrl, status: "ok"});
         }
 
       });
