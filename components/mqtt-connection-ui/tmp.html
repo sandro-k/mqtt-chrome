@@ -1,0 +1,61 @@
+<div id="wrapper">
+  <header class="modal-header" layout horizontal>
+    <div flex>
+      <h1>Add a new Connection</h1>
+    </div>
+    <core-icon icon="close" on-click="{{close}}"></core-icon>
+  </header>
+  <div id="content">
+    <div class="modal-topic">
+      <h4>Connection Details</h4>
+    </div>
+    <div layout horizontal wrap center>
+      <paper-input label="Connection name" type="text" class="min-width-300" floatingLabel flex two></paper-input>
+      <div flex>
+        <h5>Connection color</h5>
+        <input label="Connection color" type="color" class="min-width-300" flex/>
+      </div>
+    </div>
+    <div layout horizontal wrap>
+      <paper-input label="Hostname" type="text" class="min-width-300" floatingLabel flex three></paper-input>
+      <paper-input label="Port" type="text" class="min-width-300" floatingLabel flex></paper-input>
+    </div>
+    <div layout horizontal center>
+      <paper-input label="Client ID" type="text" class="min-width-250" floatingLabel flex three></paper-input>
+      <paper-button label="Generate a random ID" on-click="{{randomID}}" class="blue" raisedbutton></paper-button>
+    </div>
+    <div layout horizontal wrap center>
+      <div class="min-width-100" flex>
+        <h3>Session</h3>
+        <paper-radio-button label="Clean session"></paper-radio-button>
+      </div>
+      <div class="min-width-100" flex>
+        <h3>SSL</h3>
+        <paper-radio-button label="Use SSL"></paper-radio-button>
+      </div>
+      <div flex>
+        <h2>Keep Alive</h2>
+        <div class="input-group">
+          <input class="form-control" data-toggle="tooltip" id="keepAliveInput" placeholder="Enter keep alive time" title="" value="30" data-original-title="Keep alive in seconds.">
+          <span class="input-group-addon">seconds</span>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+
+  <footer layout horizontal>
+    <paper-button class="redbutton" label="Delete" icon="delete" raisedbutton on-click="{{deleteSub}}" dismissive>
+    </paper-button>
+
+    <div flex>
+      <!--just a spacer-->
+    </div>
+
+
+    <paper-button class="greenbutton" label="Save" icon="save" on-click="{{saveSub}}" affirmative autofocus
+                  raisedbutton></paper-button>
+
+  </footer>
+</div>

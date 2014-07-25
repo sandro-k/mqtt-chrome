@@ -22,13 +22,17 @@
         console.debug("ready");
       },
       toogle: function () {
+        // had a typo
+        this.toggle();
+      },
+      toggle: function () {
         console.debug("toogle");
-         if (this.icon === this.down) {
-           this.icon = this.up;
-         } else {
-           this.icon = this.down;
-         }
-         this.status != this.status;
+        if (this.icon === this.down) {
+          this.icon = this.up;
+        } else {
+          this.icon = this.down;
+        }
+        this.status != this.status;
       }
 
     });
