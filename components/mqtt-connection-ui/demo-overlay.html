@@ -1,10 +1,73 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
+<!doctype html>
+<html lang="en">
+<head>
   <meta charset="UTF-8">
-  <title></title>
+  <title>Document</title>
+  <script src="../../bower_components/platform/platform.js"></script>
+  <link rel="import" href="../../bower_components/core-overlay/core-overlay.html"/>
+  <link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html"/>
+  <link rel="import" href="../../bower_components/paper-button/paper-button.html"/>
+  <link rel="import" href="mqtt-connection-ui.html"/>
+  <style>
+    #overlay2 {
+      max-width: 80%;
+      margin: 0 auto;
+    }
+  </style>
+  <style>
+    paper-dialog /deep/ p  {
+      background: #ffff00!important;
+    }
+
+    paper-dialog /deep/ div {
+             background: red;
+           }
+  </style>
 </head>
 <body>
+
+<button onclick="document.getElementById('overlay').toggle()">show</button>
+<button onclick="document.getElementById('overlay2').toggle()">show2</button>
+<button onclick="document.getElementById('overlay3').toggle()">show3</button>
+
+
+<core-overlay id="overlay" backdrop>
+  <mqtt-connection-ui id="newMqttConnection"></mqtt-connection-ui>
+</core-overlay>
+
+
+<paper-dialog id="overlay2" transition="paper-dialog-transition-center" backdrop layered>
+  <style>
+    /* reset padding form dialog */
+    :host /deep/ #main { padding: 0; }
+    :host /deep/ paper-dialog {
+      border-top-left-radius: 5px;
+      border-top-right-radius: 5px;
+      border-bottom-left-radius: 5px;
+      border-bottom-right-radius: 5px;
+                 }
+
+  </style>
+  <mqtt-connection-ui id="newMqttConnection"></mqtt-connection-ui>
+
+  <paper-button class="redbutton" label="Delete" icon="delete" raisedbutton on-click="{{deleteSub}}" dismissive>
+  </paper-button>
+
+
+  <paper-button class="greenbutton" label="Save" icon="save" on-click="{{saveSub}}" affirmative autofocus
+                raisedbutton></paper-button>
+</paper-dialog>
+
+<paper-dialog id="overlay3" transition="paper-dialog-transition-center" backdrop layered>
+  <style>
+   :host /deep/ #main {
+                  background: pink;
+     padding: 0;
+                }
+  </style>
+<p>I am not red (under native shadow dom).</p>
+</paper-dialog>
+
 
 </body>
 </html>
