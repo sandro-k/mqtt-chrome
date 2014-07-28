@@ -853,11 +853,14 @@ $modal-border-radius: 5px;
   width: 100%;
 }
 
+#generateRandomId {
+  margin-top: 25px;
+  line-height: 1.45;
+  overflow-wrap: break-word;
+}
+
 @media all and (min-width: 768px) {
-  #generateRandomId {
-    margin-top: 25px;
-    line-height: 1.45;
-  }
+
 }
 
 #notifications {

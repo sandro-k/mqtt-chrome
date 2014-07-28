@@ -5968,10 +5968,11 @@ h2 {
 #generateRandomId {
   width: 100%; }
 
-@media all and (min-width: 768px) {
-  #generateRandomId {
-    margin-top: 25px;
-    line-height: 1.45; } }
+#generateRandomId {
+  margin-top: 25px;
+  line-height: 1.45;
+  overflow-wrap: break-word; }
+
 #notifications {
   margin-top: 8px; }
 
