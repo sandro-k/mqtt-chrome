@@ -7,6 +7,7 @@
   <!--<link rel="stylesheet" href="../../bower_components/roboto-fontface/roboto-fontface.css">-->
   <link rel="import" href="../../bower_components/font-roboto/roboto.html">
   <link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
+  <link rel="import" href="../../components/mqtt-connection-ui/mqtt-connection-ui.html">
   <link rel="import" href="mqtt-connection.html">
   <style>
     body {
@@ -28,6 +29,7 @@
     <h1>Create a connection</h1>
     Broker URL: <input value="{{brokerUrl}}" a>
     <button on-tap="{{createConnection}}" >create connection</button>
+    <button on-tap="{{createConnection2}}" >create connection2</button>
 
     <span>Connected: {{connected}}</span>
 
@@ -77,7 +79,6 @@
         this.subscriptionTopic = this.messageTopic;
 
         this.mqttCon = new MqttConnection();
-        this.mqttCon.test = "test!!";
         this.$.content.appendChild(this.mqttCon);
 
         this.toast = this.$.toast;
@@ -106,9 +107,50 @@
       },
 
       createConnection: function () {
-        this.mqttCon.createClient(this.brokerUrl);
+        this.mqttCon.brokerURL = this.brokerUrl;
+        this.mqttCon.createClient();
         this.connected = true;
-      }
+      },
+
+      createConnection2: function () {
+
+       var self = this;
+       var values = {
+         "ID":"",
+         "connectionName":"eclipse",
+         "connectionColor":"#ff7d69",
+         "hostname":"iot.eclipse.org",
+         "hostPort":1883,
+         "clientID":"7ILDuLmcWUyTiLJvDhvMg7XZxyPh0PaM",
+         "cleanSession":true,
+         "useSSL":true,
+         "keepAlive":120,
+         "username":"Sandro",
+         "password":"test",
+         "passwordHashFunction":true,
+         "lastWillTopic":"topic",
+         "lastWillMessage":"message",
+         "lastWillQoS":0,
+         "lastWillRetained":true,
+         "autoConnect":true};
+
+
+        var newConnectionUI = new MqttConnectionUi();
+
+//        newConnectionUI.addElementListener('domReady', function () {
+//          newConnectionUI.load(values);
+//        });
+        newConnectionUI.connectionName = "test";
+        newConnectionUI.load(values)
+
+        newConnectionUI.addEventListener("newMqttConnection", function(e) {
+          console.log(e.detail);
+
+        });
+       this.shadowRoot.appendChild(newConnectionUI);
+
+       newConnectionUI.toggle();
+      },
     });
   </script>
 </polymer-element>

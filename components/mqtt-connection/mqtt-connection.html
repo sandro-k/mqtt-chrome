@@ -19,74 +19,76 @@
 
       Polymer("mqtt-connection", {
 
-        /**
-         * If `autoConnect` is set the element will try to automatically connect to the MQTT-Broker
-         * note that `brokerURL` needs to be set as well
-         *
-         * @attribute autoConnect
-         * @type boolean
-         * @default false
-         */
-        autoConnect: false,
+        publish: {
+          /**
+           * If `autoConnect` is set the element will try to automatically connect to the MQTT-Broker
+           * note that `brokerURL` needs to be set as well
+           *
+           * @attribute autoConnect
+           * @type boolean
+           * @default false
+           */
+          autoConnect: false,
 
-        /**
-         * The URL of the MQTT-Broker the connection is made to.
-         * Login credentials can be given inline like `ws://[USER:PASSWORD@]broker.mqttdashboard.com:[PORT]`
-         * or set via `user`, `password` and `port`
-         *
-         * @attribute brokerURL
-         * @type string
-         * @default ''
-         *
-         */
-        brokerURL: '',
+          /**
+           * The URL of the MQTT-Broker the connection is made to.
+           * Login credentials can be given inline like `ws://[USER:PASSWORD@]broker.mqttdashboard.com:[PORT]`
+           * or set via `user`, `password` and `port`
+           *
+           * @attribute brokerURL
+           * @type string
+           * @default ''
+           *
+           */
+          brokerURL: '',
 
-        /**
-         * The username that will be used to authenticate with the MQTT-Broker
-         *
-         * @attribute user
-         * @type string
-         * @default ''
-         */
-        user: '',
+          /**
+           * The username that will be used to authenticate with the MQTT-Broker
+           *
+           * @attribute user
+           * @type string
+           * @default ''
+           */
+          user: '',
 
-        /**
-         * The password that will be used to authenticate the `user` at the MQTT-Broker
-         *
-         * @attribute password
-         * @type string
-         * @default ''
-         */
-        password: '',
+          /**
+           * The password that will be used to authenticate the `user` at the MQTT-Broker
+           *
+           * @attribute password
+           * @type string
+           * @default ''
+           */
+          password: '',
 
-        /**
-         * The port the connection is made with
-         *
-         * @attribute port
-         * @type number [1..2^16-1]
-         */
-         port: 1883,
+          /**
+           * The port the connection is made with
+           *
+           * @attribute port
+           * @type number [1..2^16-1]
+           */
+          port: 1883,
 
-        /**
-         * A unique client ID to identify the MQTT-client at the broker (23 byte string)
-         * @default ''
-         */
+          /**
+           * A unique client ID to identify the MQTT-client at the broker (23 byte string)
+           * @default ''
+           */
 
-        clientID: '',
+          clientID: '',
 
 
-        /**
-         * Use a clean session
-         *
-         */
-        cleanSession: true,
+          /**
+           * Use a clean session
+           *
+           */
+          cleanSession: true,
 
-        /**
-         * Use SSL
-         */
-        ssl: false,
+          /**
+           * Use SSL
+           */
+          ssl: false,
 
-        keepAlive: 120,
+          keepAlive: 120,
+        },
 
         observe: {
 //          'messages.changed': 'messagesChanged'
@@ -240,9 +242,9 @@
           this.client.end();
         },
 
-        createClient: function (serverUrl) {
+        createClient: function () {
           var that = this;
-          this.client = mows.createClient(serverUrl);
+          this.client = mows.createClient(this.brokerURL);
           // pass an optional 'ws://localhost:port' here.
           // save reference to this element to reroute messages
           var self = this;
@@ -251,7 +253,7 @@
             self.onMessage(topic, message, object);
           });
 
-          self.asyncFire("toast", {text: "Connection established to: "+ serverUrl, status: "ok"});
+          self.asyncFire("toast", {text: "Connection established to: "+ this.brokerURL, status: "ok"});
         }
 
       });

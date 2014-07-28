@@ -31,7 +31,7 @@
 
 
 
-<polymer-element name="mqtt-connection-ui" attributes="connectionName, keepAlive, autoConnect" constructor="Mqttlense">
+<polymer-element name="mqtt-connection-ui" attributes="connectionName, keepAlive, autoConnect" constructor="MqttConnectionUi">
   <!-- outermost template defines the element's shadow DOM -->
   <template>
     <!--<link rel="stylesheet" href="tinyscrollbar/tinyscrollbar.css" type="text/css" media="screen"/>-->
@@ -128,7 +128,7 @@
 
    <div id="wrapper" class="{{{ narrow : narrow } | tokenList }}">
     <div class="modal-header">
-      <button type="button" class="close" aria-hidden="true" dismissive>&times;</button>
+      <button type="button" class="close" on-click="{{close}}">&times;</button>
       <h2 class="modal-title" id="newConnectionLabel">Add a new Connection</h2>
     </div>
     <div class="modal-body">
@@ -165,7 +165,7 @@
                   <input class="form-control"
                          data-toggle="tooltip"
                          id="hostnameInput"
-                         value="{{host}}"
+                         value="{{hostname}}"
                          placeholder="e.g. iot.eclipse.org" title=""
                          data-original-title="Use any MQTT broker.">
                   </div>
@@ -296,7 +296,7 @@
                     id="passwordInput"
                     placeholder="Enter password"
                     type="password"
-                    value="password">
+                    value="{{password}}">
               </div>
             </div>
           </div>
@@ -360,7 +360,7 @@
                   <textarea
                       class="form-control"
                       id="lastWillMessageInput"
-                      value="{{lastWillValue}}"
+                      value="{{lastWillMessage}}"
                             placeholder="Enter last-will message" rows="3"></textarea>
                 </div>
               </div>
@@ -403,7 +403,7 @@
     <footer layout horizontal>
 
 
-      <paper-button class="redbutton" label="Cancel" icon="delete" raisedbutton on-click="{{deleteSub}}" dismissive>
+      <paper-button class="redbutton" label="Cancel" icon="delete" raisedbutton on-click="{{close}}">
       </paper-button>
 
 
@@ -411,7 +411,7 @@
           <!--just a spacer-->
         </div>
 
-      <paper-button class="greenbutton" label="Create connection" icon="save" on-click="{{saveSub}}" affirmative autofocus
+      <paper-button class="greenbutton" label="Create connection" icon="save" on-click="{{save}}" affirmative autofocus
                     raisedbutton></paper-button>
 
     </footer>
@@ -426,141 +426,161 @@
     Polymer('mqtt-connection-ui', {
 
 
-      /**
-       * A human readable name for the connection
-       *
-       * @attribute connectionName
-       * @type string
-       * @default ''
-       */
-      connectionName: '',
+      publish: {
+        /**
+         * A ID to identify the connection
+         * @attribute ID
+         * @type string
+         * @default ''
+         */
+        ID: '',
 
-      /**
-       * The base color for the connection
-       * @attribute connectionColor
-       * @type string (hex)
-       * @default '#ff7d69'
-       */
-      connectionColor: '#ff7d69',
+        /**
+         * A human readable name for the connection
+         * @attribute connectionName
+         * @type string
+         * @default ''
+         */
+        connectionName: '',
 
-
-      /**
-       * The brokers hostname or ip-address
-       * @attribute host
-       * @type string
-       * @default ''
-       */
-      host: '',
-
-      /**
-       * The port the connection is made with
-       * @attibute hostPort
-       * @type integer
-       * @default 1883
-       */
-      hostPort: 1883,
-
-      /**
-       * A unique client ID to identify the client at the broker
-       * @attribute clientID
-       * @type string
-       * @default ''
-       */
-      clientID: '',
+        /**
+         * The base color for the connection
+         * @attribute connectionColor
+         * @type string (hex)
+         * @default '#ff7d69'
+         */
+        connectionColor: '#ff7d69',
 
 
-      /**
-       * Start a clean session
-       * @attribute cleanSession
-       * @type boolean
-       * @default true
-       */
-      cleanSession: true,
+        /**
+         * The brokers hostname or ip-address
+         * @attribute host
+         * @type string
+         * @default ''
+         */
+        hostname: '',
 
-      /**
-       * Use SSL for to encrypt the connection
-       * @attrubute useSSL
-       * @type boolean
-       * @default false
-       */
-      useSSL: false,
+        /**
+         * The port the connection is made with
+         * @attibute hostPort
+         * @type integer
+         * @default 1883
+         */
+        hostPort: 1883,
 
-      /**
-       * Seconds that the connection is kept alive in seconds
-       * @attribute keepAlive
-       * @type integer
-       * @default 120
-       */
-      keepAlive: 120,
-
-
-      /**
-       * The username that is user to authenticate the connection with
-       * @attribute username
-       * @type string
-       * @default ''
-       */
-      username: '',
-
-      /**
-       * The password that is used to authenticate the user with
-       * @attribute password
-       * @type string
-       * @default ''
-       */
-      password: '',
-
-      /**
-       *
-       *
-       */
-      passwordHashFunction: true,
-
-      /**
-       * The topic the last will will be published at
-       * @attribute lastWillTopic
-       * @type string
-       * @default ''
-       */
-      lastWillTopic: '',
-
-      /**
-       * The last will message that will be published at `lastWillTopic`
-       * @attribute lastWillMessage
-       * @type  string
-       * @default ''
-       */
-      lastWillMessage: '',
-
-      /**
-       * The QoS the last will will be published with
-       * @attribute lastWillQoS
-       * @type integer (0|1|2)
-       * @default 0
-       */
-      lastWillQoS: 0,
+        /**
+         * A unique client ID to identify the client at the broker
+         * @attribute clientID
+         * @type string
+         * @default ''
+         */
+        clientID: '',
 
 
-      /**
-       * @attribute lastWillRetained
-       * @type boolean
-       * @default false
-       */
-      lastWillRetained: false,
+        /**
+         * Start a clean session
+         * @attribute cleanSession
+         * @type boolean
+         * @default true
+         */
+        cleanSession: true,
+
+        /**
+         * Use SSL for to encrypt the connection
+         * @attrubute useSSL
+         * @type boolean
+         * @default false
+         */
+        useSSL: false,
+
+        /**
+         * Seconds that the connection is kept alive in seconds
+         * @attribute keepAlive
+         * @type integer
+         * @default 120
+         */
+        keepAlive: 120,
 
 
-      /**
-       * @attribute autoConnect
-       * @type boolean
-       * @default false
-       */
-      autoConnect: false,
+        /**
+         * The username that is user to authenticate the connection with
+         * @attribute username
+         * @type string
+         * @default ''
+         */
+        username: '',
+
+        /**
+         * The password that is used to authenticate the user with
+         * @attribute password
+         * @type string
+         * @default ''
+         */
+        password: '',
+
+        /**
+         *
+         *
+         */
+        passwordHashFunction: true,
+
+        /**
+         * The topic the last will will be published at
+         * @attribute lastWillTopic
+         * @type string
+         * @default ''
+         */
+        lastWillTopic: '',
+
+        /**
+         * The last will message that will be published at `lastWillTopic`
+         * @attribute lastWillMessage
+         * @type  string
+         * @default ''
+         */
+        lastWillMessage: '',
+
+        /**
+         * The QoS the last will will be published with
+         * @attribute lastWillQoS
+         * @type integer (0|1|2)
+         * @default 0
+         */
+        lastWillQoS: 0,
 
 
-      /**
-       *
-       */
-      narrowQuery: 'max-width: 680px',
+        /**
+         * @attribute lastWillRetained
+         * @type boolean
+         * @default false
+         */
+        lastWillRetained: false,
+
+
+        /**
+         * @attribute autoConnect
+         * @type boolean
+         * @default false
+         */
+        autoConnect: false,
+
+        /**
+         * The host object that will create the MQTT connection
+         * @attribute host
+         * @type object
+         * @default {}
+         */
+        host: {},
+
+
+        /**
+         *
+         */
+        narrowQuery: 'max-width: 680px',
+
+      },
+
+
 
 
 
@@ -621,6 +641,34 @@
 
       lastWillQoSChanged: function () {
         console.log("lastWillQoSChanged: %s", this.lastWillQoS);
+      },
+
+      load: function (values) {
+        console.log(JSON.stringify(values));
+
+          for (var property in this.publish) {
+            if (values[property]) {
+              this[property] = values[property];
+            }
+          }
+      },
+
+
+      close: function (){
+        this.$.overlay.toggle();
+      },
+
+      save: function () {
+        console.log("%s", "save");
+        var values = {};
+        for (var property in this.publish) {
+          values[property]  = this[property];
+          console.log("%s: %s",property, this[property]);
+        }
+        console.log(JSON.stringify(values));
+
+        this.asyncFire('newMqttConnection', values);
+        this.$.overlay.toggle();
       },
 
       randomString: function (length) {
