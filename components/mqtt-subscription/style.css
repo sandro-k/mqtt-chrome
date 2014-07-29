@@ -5409,9 +5409,9 @@ h2 {
       padding: 20px 0px;
       font-size: 28px;
       line-height: 22px; }
-  .header .config a {
+  .header .config[on-click] {
     color: #ffffff; }
-    .header .config a :hover {
+    .header .config[on-click] :hover {
       -webkit-transform: rotate(30deg); }
 
 .footer {

@@ -291,20 +291,12 @@ h2 {
       line-height: 22px;
     }
   }
-  .config {
-    a {
+  .config[on-click] {
       color: #ffffff;
-      //      border: 1px solid #000000;
-
       :hover {
         -webkit-transform: rotate(30deg);
-        //        transform: rotate(60deg);
-        //        color: #c4ebfc;
-        //        font-size: 30px;
-        //        background: #ffffff;
-        //        border: 1px solid #ffffff;
+
       }
-    }
   }
 }
 

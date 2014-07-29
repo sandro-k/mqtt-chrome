@@ -5,6 +5,12 @@
 <link rel="import" href="../../bower_components/core-header-panel/core-header-panel.html">
 <link rel="import" href="../../bower_components/core-menu/core-menu.html">
 <link rel="import" href="../../bower_components/core-item/core-item.html">
+<link rel="import" href="../../bower_components/core-icon-button/core-icon-button.html">
+
+<!--custom components-->
+<link rel="import" href="../../components/mqtt-connection/mqtt-connection.html">
+<link rel="import" href="../../components/mqtt-connection-ui/mqtt-connection-ui.html">
+<link rel="import" href="../../components/changeover-icon/changeover-icon.html">
 
 <polymer-element name="mqtt-lense" constructo="Mqttlense">
   <!-- outermost template defines the element's shadow DOM -->
@@ -13,51 +19,412 @@
       body {
         font-family: sans-serif;
       }
-      .toolbar {
-        background-color: #526E9C; color: #fff;
+      .menu-buttons {
+        margin-left: 16px;
       }
     </style>
 
     <link rel="stylesheet" href="../../css/build/layout.css"/>
 
-    <core-scaffold>
-
-      <core-header-panel
-          navigation
-          flex
-          hidden?="{{!leftMenu}}"
-          mode="seamed">
-
-        <core-toolbar
-            class="toolbar">
-
-          {{appName}}
-
-        </core-toolbar>
-
-        <core-menu
-            theme="core-light-theme"
-            hidden?="{{!leftMenu}}">
-
-          <core-item
-              icon="settings"
-              label="item1"></core-item>
+    <!--git hub-->
+    <a href="https://github.com/sandro-k/mqtt-chrome">
+      <img class="github"
+           src="../../img/github.png"
+           alt="Fork me on GitHub">
+    </a>
 
 
+    <!--header-->
+    <div id="header">
+      <header class="header bg-blue gradient">
+        <div class="header-wrapper">
 
-        </core-menu>
+          <div class="row">
 
-      </core-header-panel>
+            <div class="col-xs-8 col-sm-10">
+              <h1 class="app-name"><span class="glyphicon glyphicon-search"></span> {{appName}}<span>{{appSubname}}</span></h1>
+            </div>
 
-      <div tool>{{breadcrump}}</div>
+            <div class="col-xs-4 col-sm-2">
+              <h1 on-click="{{config}}" class="config-icon pull-right config extra-margin">
+                <span class="glyphicon glyphicon-cog"></span>
+              </h1>
+            </div>
 
+          </div>
+        </div>
+      </header>
+    </div>
+
+    <!--/header-->
+    <!--main-->
+    <div class="container-fluid" layout horizontal>
+      <!--menu-->
       <div>
-        Content goes here...
-        <button on-click="{{leftMenuToggle}}">Toggle</button>
+         <div layout horizontal center>
+           <div flex>
+             <h1>Connections</h1>
+           </div>
+           <div class="menu-buttons">
+             <core-icon icon="add" on-click="{{addConnection}}"></core-icon>
+             <changeover-icon icon="expand-less" down="expand-more" up="expand-less" on-click="{{connectionListCollapse}}" status="false"></changeover-icon>
+           </div>
+         </div>
+
+
+          <!--items-->
+          <div>
+              <core-collapse id="connectionListCollapse" target="{{$.connectionList}}" opened></core-collapse>
+              <ul id="connectionList">
+                <li>AAA</li>
+                <li>BBB</li>
+                <li>CCC</li>
+                <li>DDD</li>
+                <li>EEE</li>
+              </ul>
+          </div>
       </div>
 
-    </core-scaffold>
 
+
+
+
+      <!--menu end-->
+      <!--content-->
+      <div flex>
+        Content
+      </div>
+      <!--content end-->
+    </div>
+
+
+    <div class="container-fluid">
+    <div class="row">
+    <!--connections start-->
+    <div class="col-xs-12 col-sm-3 col-lg-2 left-sidebar">
+      <div class="col-xs-12 noleft-padding connections-wrapper" data-position="left">
+        <aside class="aside connections">
+          <div class="row bg-white border-dark-grey">
+            <div class="col-xs-7  menu-head-headline">
+              <div class="">
+                <h1>Connections</h1>
+              </div>
+            </div>
+
+            <div class="col-xs-5 menu-head-icon">
+              <div>
+                <div class="pull-right" data-toggle="tooltip"
+                     data-placement="top"
+                     title="Add a new connection">
+
+                  <i class="fa fa-plus fa-2x glyphicon-btn"
+                     data-toggle="modal"
+                     data-target="#newConnection"></i>
+                </div>
+                <div class="pull-right"
+                     data-toggle="tooltip"
+                     data-placement="top"
+                     title="Minimize connections">
+
+                  <i class="fa fa-angle-double-up fa-2x glyphicon-btn"
+                     data-toggle="collapse"
+                     data-target="#connectionNav"
+                     data-up="fa-angle-double-down"
+                     data-down="fa-angle-double-up"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ul id="connectionNav" class="nav collapse in">
+            <li class="connection-1">
+              <a href="#">
+                <div class="row">
+                  <div class="col-xs-6 col-sm-12 col-lg-6">
+                    test.mosquitto.org
+                  </div>
+                  <div class="col-xs-6 col-sm-12 col-lg-6">
+                    <span class="badge">disconnected</span>
+                  </div>
+                </div>
+              </a>
+            </li>
+            <li class="connection-2">
+              <a href="#">
+                <div class="row">
+                  <div class="col-xs-6 col-sm-12 col-lg-6">
+                    dev.rabbitmq.com
+                  </div>
+                  <div class="col-xs-6 col-sm-12 col-lg-6">
+                    <span class="badge">connected</span>
+                  </div>
+                </div>
+              </a>
+            </li>
+            <li class="connection-3">
+              <a href="#">
+                <div class="row">
+                  <div class="col-xs-6 col-sm-12 col-lg-6">
+                    m2m.eclipse.org
+                  </div>
+                  <div class="col-xs-6 col-sm-12 col-lg-6">
+                    <span class="badge">connected</span>
+                  </div>
+                </div>
+              </a>
+            </li>
+          </ul>
+        </aside>
+      </div>
+      <!--connections end-->
+
+      <!--notifications-->
+      <div id="notifications" class="col-xs-12 noleft-padding menu-right-wrapper">
+        <aside class="aside menu-left">
+          <div class="row bg-white border-dark-grey notifications-header">
+            <div class="col-xs-8 col-sm-8 menu-head-headline">
+              <h1>Notifications</h1>
+            </div>
+            <div class="col-xs-4 col-sm-4 menu-head-icon">
+
+              <div class="pull-right"
+                   data-toggle="tooltip"
+                   data-placement="top"
+                   title="Minimize notifications">
+
+                <!--<span class="glyphicon pull-right toggle-message glyphicon-chevron-up"-->
+                <!--data-target=".message-555"-->
+                <!--data-up="glyphicon-chevron-up"-->
+                <!--data-down="glyphicon-chevron-down"></span>-->
+
+                <i class="fa fa-angle-double-up fa-2x glyphicon-btn"
+                   data-toggle="collapse"
+                   data-target=".notifications-content"
+                   data-up="fa-angle-double-down"
+                   data-down="fa-angle-double-up"></i>
+              </div>
+
+            </div>
+          </div>
+          <div class="notifications-content collapse in">
+            <div class="row fail">
+              <div class="col-xs-11">
+                <p>Disconnected from <span class="connection-1 badge">test.mosquitto.org</span></p>
+              </div>
+              <div class="col-xs-1">
+                <span class="glyphicon glyphicon-remove-circle"></span>
+                <!--<span class="badge">fail</span>-->
+              </div>
+            </div>
+            <div class="row ok">
+              <div class="col-xs-11">
+                Connected with <span class="connection-2 badge">dev.rabbitmq.com</span>
+              </div>
+              <div class="col-xs-1">
+                <span class="glyphicon glyphicon-ok"></span>
+              </div>
+            </div>
+            <div class="row ok">
+              <div class="col-xs-11">
+                Connected with <span class="connection-3 badge">m2m.eclipse.org</span>
+              </div>
+              <div class="col-xs-1">
+                <span class="glyphicon glyphicon-ok"></span>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
+      <!--notifications end-->
+    </div>
+    <!--content-->
+    <div class="col-xs-12 col-sm-9 col-lg-10 content-wrapper" data-size="0">
+      <section class="main">
+        <div class="row bg-white">
+          <div class="col-sm-1 hidden-xs menu-head-icon">
+            <div class="pull-left toggle-menu"
+                 data-up="fa-expand"
+                 data-down="fa-compress"
+                 data-target=".left-sidebar"
+                 data-icon-class=".fa">
+
+              <!--<span class="glyphicon glyphicon-resize-full rot-45" data-toggle="tooltip" data-placement="top"-->
+              <!--title="Minimize sidebar"></span>-->
+
+              <i class="fa fa-expand fa-2x"
+                 data-toggle="tooltip"
+                 data-placement="top"
+                 data-title-up="Maximize environment"
+                 data-title-down="Minimize environment"
+                 title="Maximize environment.."
+                 data-up="fa-expand"
+                 data-down="fa-compress"></i>
+            </div>
+
+            <!--<h1 class="toggle-menu pull-left icon-left" -->
+            <!--data-target=".left-sidebar"-->
+            <!--data-up="glyphicon-resize-full" -->
+            <!--data-down="glyphicon-resize-small">-->
+            <!--<span class="glyphicon glyphicon-resize-full rot-45" data-toggle="tooltip" data-placement="top"-->
+            <!--title="Minimize sidebar"></span>-->
+            <!--</h1>-->
+          </div>
+          <div class="col-xs-11 head">
+            <h1>Demo environment</h1>
+          </div>
+
+        </div>
+
+
+        <!--connection 1-->
+        <div class="row connection connection-1">
+          <div class="col-xs-10"><h2>test.mosquitto.org - Subscriptions</h2></div>
+          <div class="col-xs-2 subscription-header">
+            <div class="pull-right">
+              <div class="row">
+                <div class="col-xs-6">
+                  <div data-toggle="tooltip"
+                       data-placement="top"
+                       data-container="body"
+                       title="Pause all subscriptions for test.mosquitto.org ">
+                    <i class="fa fa-2x fa-pause fa no-top-padding glyphicon-btn"></i>
+                  </div>
+                </div>
+                <div class="col-xs-6">
+                  <div data-toggle="tooltip"
+                       data-placement="top"
+                       data-container="body"
+                       title="Add a new subscriptions to test.mosquitto.org ">
+                    <i class="fa fa-2x fa-plus fa no-top-padding glyphicon-btn"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row connection connection-1 sub">
+          <div class="col-xs-6 col-sm-6">
+            <h3>topic/name/#</h3>
+          </div>
+          <div class="col-xs-6 col-sm-6 options">
+            <span class="glyphicon glyphicon-chevron-down pull-right"></span>
+            <span class="glyphicon glyphicon-cog pull-right"></span>
+            <span class="pull-right"><span class="badge">Messages: 0/0</span></span>
+          </div>
+        </div>
+        <div class="connection connection-1 sub last expanded">
+          <div class="row">
+            <div class="col-xs-6 col-lg-9">
+              <h3>test/#</h3>
+            </div>
+            <div class="col-xs-6 col-lg-3 options">
+                    <span class="glyphicon glyphicon-chevron-down pull-right toggle-message" data-target=".message-333"
+                          data-up="glyphicon-chevron-up" data-down="glyphicon-chevron-down"></span>
+              <span class="glyphicon glyphicon-cog pull-right"></span>
+              <span class="pull-right"><span class="badge">Messages: 1/2</span></span>
+            </div>
+          </div>
+          <div class="row table-header message-333 hidden-init">
+            <div class="hidden-xs col-sm-2 col-lg-1"><h4>Date</h4></div>
+            <div class="col-xs-5 col-sm-4 col-lg-2"><h4>Topic</h4></div>
+            <div class="col-xs-7 col-sm-6 col-lg-9"><h4>Message</h4></div>
+          </div>
+          <div class="row message message-333 hidden-init">
+            <div class="hidden-xs col-sm-2 col-lg-1">18:00</div>
+            <div class="col-xs-5 col-sm-4 col-lg-2">test/hello</div>
+            <div class="col-xs-7 col-sm-6 col-lg-9">world</div>
+          </div>
+
+          <div class="row message message-444">
+            <div class="hidden-xs col-sm-2 col-lg-1">18:45</div>
+            <div class="col-xs-5  col-sm-4 col-lg-2">test/cat/att/home</div>
+            <div class="col-xs-7 col-sm-6 col-lg-9">
+              <div id="jsonExample">
+                <!--<span class="badge">Collapse <i class="fa glyphicon-btn fa-angle-double-down collapsed" data-toggle="collapse" data-target="#connectionNav" data-up="fa-angle-double-down" data-down="fa-angle-double-up"></i> </span>-->
+
+              </div>
+            </div>
+          </div>
+
+
+          <div class="row message message-333 hidden-init">
+            <div class="hidden-xs col-sm-2 col-lg-1">18:30</div>
+            <div class="col-xs-5  col-sm-4 col-lg-2">test/cat/att/home/room/basement/veryLongMessage</div>
+            <div class="col-xs-7 col-sm-6 col-lg-9">Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+              Accusamus alias
+              architecto consequuntur, deleniti eligendi illum impedit neque numquam obcaecati omnis
+              soluta totam
+              vel, veritatis. Assumenda eum explicabo fugiat harum repellendus.
+
+            </div>
+          </div>
+        </div>
+        <!--connection 2 end-->
+
+        <!--connection 2-->
+        <mqtt-subscription></mqtt-subscription>
+        <!--connection 2 end-->
+        <!--connection 3 start-->
+        <div class="row connection connection-3 connected">
+          <div class="col-xs-10"><h2>m2m.eclipse.org - Subscriptions</h2></div>
+          <div class="col-xs-2">
+            <h2 class="pull-right">
+                    <span class="glyphicon glyphicon-plus pull-right no-top-padding glyphicon-btn" data-toggle="modal"
+                          data-target="#addSubscription"></span>
+            </h2>
+          </div>
+        </div>
+        <div class="row connection connection-3 sub">
+          <div class="col-xs-6 col-sm-6">
+            <h3>topic/name/#</h3>
+          </div>
+          <div class="col-xs-6 col-sm-6 options">
+            <span class="glyphicon glyphicon-chevron-down pull-right"></span>
+            <span class="glyphicon glyphicon-cog pull-right"></span>
+            <span class="pull-right"><span class="badge">Messages: 0/0</span></span>
+          </div>
+        </div>
+        <div class="connection connection-3 sub last expanded">
+          <div class="row">
+            <div class="col-xs-6 col-lg-9">
+              <h3>test/#</h3>
+            </div>
+            <div class="col-xs-6 col-lg-3 options">
+                    <span class="glyphicon glyphicon-chevron-down pull-right toggle-message" data-target=".message-555"
+                          data-up="glyphicon-chevron-up" data-down="glyphicon-chevron-down"></span>
+              <span class="glyphicon glyphicon-cog pull-right"></span>
+              <span class="pull-right"><span class="badge">Messages: 1/2</span></span>
+            </div>
+          </div>
+          <div class="row table-header message-555 hidden-init">
+            <div class="hidden-xs col-sm-2 col-lg-1"><h4>Date</h4></div>
+            <div class="col-xs-5 col-sm-4 col-lg-2"><h4>Topic</h4></div>
+            <div class="col-xs-7 col-sm-6 col-lg-9"><h4>Message</h4></div>
+          </div>
+          <div class="row message message-555 hidden-init">
+            <div class="hidden-xs col-sm-2 col-lg-1">18:00</div>
+            <div class="col-xs-5 col-sm-4 col-lg-2">test/hello</div>
+            <div class="col-xs-7 col-sm-6 col-lg-9">world</div>
+          </div>
+          <div class="row message message-555 hidden-init">
+            <div class="hidden-xs col-sm-2 col-lg-1">18:30</div>
+            <div class="col-xs-5  col-sm-4 col-lg-2">test/cat/att/home/room/basement/veryLongMessage</div>
+            <div class="col-xs-7 col-sm-6 col-lg-9">Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+              Accusamus alias
+              architecto consequuntur, deleniti eligendi illum impedit neque numquam obcaecati omnis
+              soluta totam
+              vel, veritatis. Assumenda eum explicabo fugiat harum repellendus.
+
+
+            </div>
+          </div>
+        </div>
+        <!--connection 3 start-->
+
+      </section>
+    </div>
+    <!--content end-->
+    </div>
+    </div>
 
   </template>
 
@@ -65,9 +432,12 @@
   <script>
     Polymer('mqtt-lense', {
 
-      leftMenu: true,
-      appName: "MQTTlense",
-      breadcrump: "Subscriptions",
+      publish: {
+        leftMenu: true,
+        appName: "MQTT",
+        appSubname: "lense",
+        breadcrump: "Subscriptions",
+      },
 
       created: function () {
         console.log("created");
@@ -93,7 +463,22 @@
       leftMenuToggle: function () {
         console.log("leftMenuToggle");
         this.leftMenu = !this.leftMenu;
-      }
+      },
+
+
+      config: function () {
+        // TODO(sandro-k) show settings
+      },
+
+      addConnection: function () {
+      // TODO(sandro-k) add connection
+      },
+
+      connectionListCollapse: function () {
+        this.$.connectionListCollapse.toggle();
+      },
+
+
 
     });
   </script>

@@ -11,12 +11,16 @@
 
   <script>
     Polymer('changeover-icon', {
+      publish: {
+        icon : '',
+        status : false,
+        up : '',
+        down : ''
+      },
+
       created: function () {
         console.debug("created:");
-        this.icon = '';
-        this.status = false;
-        this.up = '';
-        this.down = '';
+
       },
       ready: function () {
         console.debug("ready");
