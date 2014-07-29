@@ -119,7 +119,7 @@
 
 
 
-    <core-overlay id="subscriptionOptions" layered transition="core-transition-top" backdrop>
+    <core-overlay id="subscriptionOptions"  transition="core-transition-top" backdrop layered>
       <style no-shim>
         #options-wrapper {
           background: #ffffff;
@@ -358,7 +358,6 @@
       },
 
       domReady: function () {
-        this.settings();
       },
 
       handelopen: function (event, detail, sender) {
@@ -414,7 +413,11 @@
 //        }
 
         var backdrop = this.$.subscriptionOptions.$.overlay.scrim;
-        backdrop.parentNode.removeChild(backdrop);
+
+        // the backdrop exists if the settings were opened first
+        if (backdrop && backdrop.parentNode) {
+          backdrop.parentNode.removeChild(backdrop);
+        }
 
         this.parentNode.removeChild(this);
       },

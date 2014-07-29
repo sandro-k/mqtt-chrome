@@ -88,10 +88,12 @@
           ssl: false,
 
           keepAlive: 120,
+
+          connected: false
         },
 
         observe: {
-//          'messages.changed': 'messagesChanged'
+          'client.connected': 'connectionChanged'
         },
 
         created: function () {
@@ -99,8 +101,6 @@
 
           this.that = this;
           this.messages = {};
-//          this.messages.changed = false;
-          this.client = {};
           this.that = {};
           this.subscriptions = {};
 
@@ -121,32 +121,93 @@
         subscribe: function (topic, opt_options, opt_target) {
           console.debug("Subscribing to: \"%s\'", topic);
 
+          var alreadyInDom = false;
           if (this.subscriptions[topic] !== undefined) {
             console.error("Subscription to %s already exists", topic);
-            return;
+            alreadyInDom = true;
+//            return;
           }
 
           // actually subscribing to the topic
           this.client.subscribe(topic);
 
-          // creating the View
-          this.subscriptions[topic] = new MqttSubscription();
+          if (!alreadyInDom) {
+            // creating the View
+            this.subscriptions[topic] = new MqttSubscription();
+          }
+
           // start listening to view events
           var self = this;
           this.subscriptions[topic].addEventListener("unsubscribe", function (e, detail, sender) {
             self.asyncFire('toast', {text: "Removed subscription to "+ e.detail.topic});
 //            console.log(self.unsubscribe);
             // TODO put real topic into unsubscribe
+            console.log("BLUB");
             self.unsubscribe("presence")
           });
 
           this.subscriptions[topic].addEventListener("saveSub", function (e, detail, sender) {
-            console.log("Hi");
+            // TODO(sandro-k) handel event
             console.log(this);
           });
 
           this.subscriptions[topic].addEventListener("pause", function (e, detail, sender) {
-            console.log("Hi");
+            // TODO(sandro-k) handel event
+            console.log(this);
+          });
+
+          // setting the view topic
+          this.subscriptions[topic].topic = topic;
+
+
+          if (!alreadyInDom) {
+            // adding MqttSubscription to DOM
+            if (opt_target !== undefined) {
+              this.subscriptions[topic].target = opt_target;
+              // if an extra targetID is supplied the view is appended to that
+//            document.getElementById(opt_target).appendChild(this.subscriptions[topic]);
+              opt_target.appendChild(this.subscriptions[topic]);
+            } else {
+              this.subscriptions[topic].target = this.content;
+              // otherwise the subscription view will be appended to the content area
+              this.content.appendChild(this.subscriptions[topic]);
+            }
+          }
+
+
+          console.log(this.subscriptions[topic]);
+        },
+
+        reSubscribe: function (topic) {
+          console.debug("Subscribing to: \"%s\'", topic);
+
+          var alreadyInDom = false;
+          if (this.subscriptions[topic] == undefined) {
+            console.error("Can not resubscribe to %s, subscription doesn't exist ", topic);
+            return;
+          }
+
+          // actually subscribing to the topic
+          this.client.subscribe(topic);
+
+
+          // start listening to view events
+          var self = this;
+          this.subscriptions[topic].addEventListener("unsubscribe", function (e, detail, sender) {
+            self.asyncFire('toast', {text: "Removed subscription to "+ e.detail.topic});
+//            console.log(self.unsubscribe);
+            // TODO put real topic into unsubscribe
+            console.log("BLUB");
+            self.unsubscribe("presence")
+          });
+
+          this.subscriptions[topic].addEventListener("saveSub", function (e, detail, sender) {
+            // TODO(sandro-k) handel event
+            console.log(this);
+          });
+
+          this.subscriptions[topic].addEventListener("pause", function (e, detail, sender) {
+            // TODO(sandro-k) handel event
             console.log(this);
           });
 
@@ -155,17 +216,7 @@
 
 
 
-          // adding MqttSubscription to DOM
-          if (opt_target !== undefined) {
-            this.subscriptions[topic].target = opt_target;
-            // if an extra targetID is supplied the view is appended to that
-//            document.getElementById(opt_target).appendChild(this.subscriptions[topic]);
-              opt_target.appendChild(this.subscriptions[topic]);
-          } else {
-            this.subscriptions[topic].target = this.content;
-            // otherwise the subscription view will be appended to the content area
-            this.content.appendChild(this.subscriptions[topic]);
-          }
+
 
           console.log(this.subscriptions[topic]);
         },
@@ -206,24 +257,51 @@
         },
 
         onMessage: function (topic, payload, object) {
-          console.log("onMessage: %s", payload);
+          console.log("onMessage %s: %s", topic, payload);
 
+          // add a timestamp to the message as it has none
           object.timestamp = Date.now();
+          if (this.subscriptions[topic]) {
+            // add message to viewModel
+            this.subscriptions[topic].addMessage(object);
+          } else {
+            var self = this;
+            _.each(_.keys(this.subscriptions), function (key) {
+                if(key.indexOf('+') > -1){
+                  var sub = key.substring(0,key.indexOf('+'));
+                  console.log(sub);
+                  console.log(key);
+                  console.log(topic);
+
+                  if (topic.indexOf(sub) > -1) {
+                    // need to check if last char is '/' is zero or one and last char is '/'
+                    // if the topic is aa/bb and the subscription is to aa/+
+                    // topic.substring(key.indexOf('+')) will be bb and match(/\//g) will count the
+                    // occurrences of '/'
+                    // if no '/' is present [] will assure that the .length attrubte is valid
+                    var substring = topic.substring(key.indexOf('+'));
+                    var count = (substring.match(/\//g) || [] ).length;
+                    if (count == 0){
+                      self.subscriptions[key].addMessage(object);
+                    } else if (count == 1 && (substring.slice(-1) == '/' ) ){
+                      self.subscriptions[key].addMessage(object);
+                    }
 
 
-          // add message to viewModel
-          this.subscriptions[topic].addMessage(object);
-
-//          this.messages2.push(object);
-//
-//          if (this.messages.hasOwnProperty(topic)) {
-//            this.messages[topic].push(object);
-//          } else {
-//            this.messages[topic] = [object];
-//          }
-
-//          this.messages.changed = !this.messages.changed;
-
+                  }
+                } else if (key.indexOf('#') > -1){
+                  var sub = key.substring(0,key.indexOf('#'));
+                  console.log(sub);
+                  console.log(key);
+                  console.log(topic);
+                  if (topic.indexOf(sub) > -1) {
+                    self.subscriptions[key].addMessage(object);
+                  }
+                } else {
+                  console.error("Received message to subscription we don't have: %s, %s, %s", topic, payload, object)
+                }
+            });
+          }
         },
 
         messagesChanged: function () {
@@ -242,9 +320,49 @@
           this.client.end();
         },
 
+        connect: function () {
+             if (!this.client) {
+               this.createClient();
+             } else {
+               this.client.connect();
+             }
+        },
+
+        disconnect: function () {
+          if (this.client) {
+//            this.client.disconnect();
+            this.client.end();
+            this.client.end();
+            console.log(this.client);
+          }
+        },
+
+        reconnect: function () {
+          // need to use a private method to reconnect otherwise we have to recreate the connection
+          this.client._reconnect()
+          var self = this;
+          _.each(this.subscriptions, function(item) {
+            self.reSubscribe( item.topic );
+          });
+
+        },
+
         createClient: function () {
           var that = this;
-          this.client = mows.createClient(this.brokerURL);
+
+          var options = { clean: true,
+            encoding: "utf8",
+            keepalive: 60,
+            protocolId: "MQIsdp",
+            protocolVersion: 3,
+            reconnectPeriod: 1000};
+
+          this.client = mows.createClient(this.brokerURL, this.port, options);
+
+          console.log("ConnecteD: %s", this.client.connected)
+
+          this.connected = this.client.connected;
+          console.debug( this.client );
           // pass an optional 'ws://localhost:port' here.
           // save reference to this element to reroute messages
           var self = this;
@@ -254,7 +372,18 @@
           });
 
           self.asyncFire("toast", {text: "Connection established to: "+ this.brokerURL, status: "ok"});
+        },
+
+
+        /**
+         * ##### WATCHES ####
+         */
+
+        connectionChanged: function (oldValue, newValue){
+          console.log("Old: %s, new: %s", oldValue, newValue);
+          this.connected = newValue;
         }
+
 
       });
   </script>

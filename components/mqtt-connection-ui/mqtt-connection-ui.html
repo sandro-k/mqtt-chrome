@@ -44,7 +44,7 @@
       #wrapper {
         /*padding: 4px 8px;*/
         position: static;
-        top: auto;
+        top: 50px;
         width: 80%!important;
         max-width: 800px!important;;
         border-top-left-radius: 5px;
@@ -52,14 +52,15 @@
         border-bottom-left-radius: 5px;
         border-bottom-right-radius: 5px;
         background: #ffffff;
-
         overflow: auto;
-        /*overflow-y: scroll;*/
       }
 
       #wrapper.narrow {
         width: 100%!important;
-        left: 0;
+        left: 0!important;
+        top: 0!important;
+        height: 100vh;
+        max-height: 100vh!important;
       }
 
       header {
@@ -150,7 +151,7 @@
             </div>
             <div class="col-sm-4">
               <div class="form-group">
-                <label for="connectionColor">Color scheme</label>
+                <label for="connectionColor">Connection color scheme</label>
                 <input type="color" id="connectionColor" class="form-control"
                        value="{{connectionColor}}" size="7">
               </div>
@@ -199,7 +200,7 @@
             <div class="col-xs-5 col-sm-4">
               <div class="btn btn-primary"
                    id="generateRandomId"
-                   on-click="{{randomID}}">Generate a random ID</div>
+                   on-click="{{randomID}}"><span class="visible-xs">Generate ID</span><span class="hidden-xs">Generate a random ID</span></div>
             </div>
           </div>
           <div class="row">
@@ -580,43 +581,41 @@
 
       },
 
-
-
-
-
-
-
-
-
+      /**
+       * #############
+       * Live cycle
+       * #############
+       */
       created: function () {
-        console.log("created");
+        console.debug("created");
       },
       ready: function () {
-        console.log("ready");
+        console.debug("ready");
 
       },
       attached: function () {
-        console.log("attached");
+        console.debug("attached");
       },
       domReady: function () {
-        var scrollbar;
-        console.log("domReady");
-
-
+        console.debug("domReady");
       },
       detached: function () {
-        console.log("detached");
+        console.debug("detached");
       },
-      attributeChanged: function (attrName, oldVal, newVal) {
-        //var newVal = this.getAttribute(attrName);
-        console.log(attrName, 'old: ' + oldVal, 'new:', newVal);
-      },
+
+
+      /**
+       * #############
+       * Element functions
+       * #############
+       */
+
       toggle: function () {
         this.$.overlay.toggle();
 
       },
       randomID: function () {
-        console.log("randomID");
+        console.debug("randomID");
         this.clientID = this.randomString(32);
       },
       togglelastWill: function () {
@@ -628,24 +627,14 @@
         this.$.lastWillContainerCollapse.toggle();
         this.$.togglelastWillIcon.toogle()
       },
-      connectionNameChanged: function () {
-        console.log("ConnectionName: %s", this.connectionName);
-      },
-      connectionColorChanged: function () {
-        console.log("connectionColorChanged: %s", this.connectionColor);
-      },
 
-      cleanSessionChanged: function () {
-        console.log("cleanSessionChanged: %s", this.cleanSession);
-      },
 
-      lastWillQoSChanged: function () {
-        console.log("lastWillQoSChanged: %s", this.lastWillQoS);
-      },
-
+      /**
+       * Loads properties
+       * @param values
+       */
       load: function (values) {
         console.log(JSON.stringify(values));
-
           for (var property in this.publish) {
             if (values[property]) {
               this[property] = values[property];
@@ -658,8 +647,11 @@
         this.$.overlay.toggle();
       },
 
+      /**
+       * Fires a `newMqttConnection` event
+       */
       save: function () {
-        console.log("%s", "save");
+        console.debug("%s", "save");
         var values = {};
         for (var property in this.publish) {
           values[property]  = this[property];
@@ -671,8 +663,18 @@
         this.$.overlay.toggle();
       },
 
-      randomString: function (length) {
+      /**
+       * #############
+       * Helper functions
+       * #############
+       */
 
+      /**
+       * Generates a random string
+        * @param length the length of the random string
+       * @returns {string} the random string of length `length`
+       */
+      randomString: function (length) {
       var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
       var randomString = '';
       for (var i=0; i<length; i++) {
