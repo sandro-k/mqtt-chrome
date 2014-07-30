@@ -127,6 +127,7 @@
 
       connect: function () {
         this.mqttCon.brokerURL = this.brokerUrl;
+        this.mqttCon.port = 8080;
         this.mqttCon.connect();
       },
 
@@ -177,8 +178,9 @@
         newConnectionUI.addEventListener("newMqttConnection", function(e) {
           console.log(e.detail);
           var conValues = e.detail;
-          self.mqttCon.brokerURL =  conValues.hostname+":"+conValues.hostPort;
           self.mqttCon.createClient();
+          self.mqttCon.brokerURL =  conValues.hostname+":"+conValues.hostPort;
+
           self.connected = true;
 
         });

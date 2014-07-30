@@ -1,0 +1,54 @@
+@import "variables";
+
+
+#menu {
+  // margin
+  margin-right: $margin*2;
+
+  // padding
+  padding-left: $margin;
+  padding-right: $margin;
+
+}
+
+.menu-buttons {
+    margin-left: $margin*4;
+    &.left {
+      margin: {
+       left: 0;
+       right: $margin*2;
+      }
+    }
+    &.right {
+      right: 0;
+      left: $margin*2;
+    }
+}
+
+#subscriptions {
+  .item {
+    margin-bottom: $margin*4;
+  }
+}
+
+#connectionList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+
+
+#menu {
+  background: #c0c0c0;
+}
+
+#content {
+  background: #c0c0c0;
+  h1 {
+    color: #626267;
+  }
+}
+#content .header {
+//  background: yellow;
+}

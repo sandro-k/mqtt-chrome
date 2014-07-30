@@ -430,11 +430,11 @@
       publish: {
         /**
          * A ID to identify the connection
-         * @attribute ID
+         * @attribute connectionID
          * @type string
          * @default ''
          */
-        ID: '',
+        connectionID: '',
 
         /**
          * A human readable name for the connection
@@ -598,6 +598,8 @@
       },
       domReady: function () {
         console.debug("domReady");
+        this.connectionID = this.randomString(32)
+        console.debug(this.connectionID);
       },
       detached: function () {
         console.debug("detached");
@@ -645,6 +647,7 @@
 
       close: function (){
         this.$.overlay.toggle();
+        this.asyncFire('cancelNewMqttConnection');
       },
 
       /**
@@ -655,9 +658,9 @@
         var values = {};
         for (var property in this.publish) {
           values[property]  = this[property];
-          console.log("%s: %s",property, this[property]);
+//          console.log("%s: %s",property, this[property]);
         }
-        console.log(JSON.stringify(values));
+//        console.log(JSON.stringify(values));
 
         this.asyncFire('newMqttConnection', values);
         this.$.overlay.toggle();
