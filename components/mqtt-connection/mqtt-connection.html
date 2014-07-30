@@ -9,7 +9,7 @@
 <script src="../../node_modules/mows/mows.js"></script>
 <script src="../../bower_components/underscore/underscore.js"></script>
 
-<polymer-element name="mqtt-connection" attributes="messages, publish, createClient, autoConnect, brokerURL, user, password, port, clientID" constructor="MqttConnection">
+<polymer-element name="mqtt-connection" attributes="messages, publish, createClient, autoConnect, hostname, user, password, port, clientID" constructor="MqttConnection">
 
   <template>
     <div id="container"></div>
@@ -22,7 +22,7 @@
         publish: {
           /**
            * If `autoConnect` is set the element will try to automatically connect to the MQTT-Broker
-           * note that `brokerURL` needs to be set as well
+           * note that `hostname` needs to be set as well
            *
            * @attribute autoConnect
            * @type boolean
@@ -35,12 +35,12 @@
            * Login credentials can be given inline like `ws://[USER:PASSWORD@]broker.mqttdashboard.com:[PORT]`
            * or set via `user`, `password` and `port`
            *
-           * @attribute brokerURL
+           * @attribute hostname
            * @type string
            * @default ''
            *
            */
-          brokerURL: '',
+          hostname: '',
 
           /**
            * The username that will be used to authenticate with the MQTT-Broker
@@ -365,7 +365,7 @@
             protocolVersion: 3,
             reconnectPeriod: 1000};
 
-          this.client = mows.createClient(this.port, this.brokerURL, options);
+          this.client = mows.createClient(this.port, this.hostname, options);
 
           console.log("ConnecteD: %s", this.client.connected)
 
@@ -379,7 +379,7 @@
             self.onMessage(topic, message, object);
           });
 
-          self.asyncFire("toast", {text: "Connection established to: "+ this.brokerURL, status: "ok"});
+          self.asyncFire("toast", {text: "Connection established to: "+ this.hostname, status: "ok"});
         },
 
 

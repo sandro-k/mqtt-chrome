@@ -73,19 +73,24 @@
       <!--menu-->
       <core-collapse id="menuCollapse" target="{{$.menu}}" opened horizontal></core-collapse>
       <div id="menu">
-         <div layout horizontal center>
+         <div class="header right" layout horizontal center>
            <div flex>
              <h1>Connections</h1>
            </div>
            <div class="menu-buttons">
              <core-icon icon="add" on-click="{{addConnection}}"></core-icon>
-             <changeover-icon icon="expand-less" down="expand-more" up="expand-less" on-click="{{connectionListCollapse}}" status="false"></changeover-icon>
+             <changeover-icon
+                 class="test"
+                 icon="expand-less"
+                 down="expand-more"
+                 up="expand-less"
+                 on-click="{{connectionListCollapse}}"
+                 status="false"
+                 disabled?="{{mqttConnections.length == 0}}"></changeover-icon>
            </div>
          </div>
-
-
           <!--items-->
-          <div>
+          <div class="items">
               <core-collapse id="connectionListCollapse" target="{{$.connectionList}}" opened></core-collapse>
               <ul id="connectionList">
                 <template repeat="{{ connection in mqttConnections }}">
@@ -104,7 +109,7 @@
       <!--menu end-->
       <!--content-->
       <div id="content" flex>
-        <div class="header" layout horizontal center>
+        <div class="header left" layout horizontal center>
           <div class="menu-buttons left">
             <changeover-icon icon="chevron-left" down="chevron-right" up="chevron-left" on-click="{{menuCollapse}}" status="false"></changeover-icon>
           </div>
@@ -119,7 +124,7 @@
         <template repeat="{{connection in mqttConnections}}">
           <div class="header" layout horizontal center>
             <div flex>
-              {{connection.name}} - Subscriptions
+              <h2>{{connection.name}} - Subscriptions</h2>
             </div>
             <div class="menu-buttons right">
               <core-icon icon="add" on-click="{{addSubscription}}"></core-icon>
@@ -271,7 +276,7 @@
           var conValues = e.detail;
           var mqttCon = new MqttConnection();
 
-          mqttCon.brokerURL =  conValues.hostname;
+          mqttCon.hostname =  conValues.hostname;
           mqttCon.port = conValues.hostPort;
           mqttCon.name = conValues.connectionName;
           mqttCon.clientID = conValues.clientID;

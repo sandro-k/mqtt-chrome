@@ -29,7 +29,7 @@
 
 
     <h1>Create a connection</h1>
-    Broker URL: <input value="{{brokerUrl}}" a>
+    Broker URL: <input value="{{hostname}}" a>
     <button on-tap="{{connect}}" >create connection</button>
     <button on-tap="{{createConnection2}}" >create connection2</button>
     <button on-tap="{{disconnect}}" disabled?="{{!connected}}">disconnect</button>
@@ -88,7 +88,7 @@
         //ws:broker.mqttdashboard.com:8000
         this.defaultServer = "ws://test.mosquitto.org:8080/mqtt";
 //        this.defaultServer = "ws:broker.mqttdashboard.com:8000";
-        this.brokerUrl =  this.defaultServer;
+        this.hostname =  this.defaultServer;
         this.messagePayload = "Hello World";
         this.messageTopic = "presence";
         this.subscriptionTopic = this.messageTopic;
@@ -126,7 +126,7 @@
       },
 
       connect: function () {
-        this.mqttCon.brokerURL = this.brokerUrl;
+        this.mqttCon.hostname = this.hostname;
         this.mqttCon.port = 8080;
         this.mqttCon.connect();
       },
@@ -179,7 +179,7 @@
           console.log(e.detail);
           var conValues = e.detail;
           self.mqttCon.createClient();
-          self.mqttCon.brokerURL =  conValues.hostname+":"+conValues.hostPort;
+          self.mqttCon.hostname =  conValues.hostname+":"+conValues.hostPort;
 
           self.connected = true;
 
