@@ -1,0 +1,205 @@
+<core-overlay id="addNewSubscription" backdrop>
+<style>
+  .page-header {
+    margin: 0 0 20px 0;
+  }
+
+  #wrapper {
+    /*padding: 4px 8px;*/
+    position: static;
+    top: 50px;
+    width: 80%!important;
+    max-width: 800px!important;;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    background: #ffffff;
+    overflow: auto;
+  }
+
+  #wrapper.narrow {
+    width: 100%!important;
+    left: 0!important;
+    top: 0!important;
+    height: 100vh;
+    max-height: 100vh!important;
+  }
+
+  header {
+    border-bottom: 1px dotted #e5e5e5;
+    background-color: #7694c6;
+
+  }
+
+  header h1 {
+    color: white;
+  }
+
+  #content {
+    border-top: 4px solid #7694c6;
+  }
+
+  .min-width-300 {
+    min-width: 300px;
+  }
+
+  .min-width-200 {
+    min-width: 200px;
+  }
+
+  .min-width-250 {
+    min-width: 250px;
+  }
+
+  .min-width-100 {
+    min-width: 100px;
+  }
+
+  paper-input {
+    border-right: 4px solid transparent;
+    /*margin-left: 4px;*/
+    /*margin-right: 4px;*/
+  }
+
+  .blue {
+    background: cornflowerblue;
+  }
+
+  footer {
+    border-top: 1px dotted #7694c6;
+    margin: 12px ;
+    padding-top: 12px ;
+  }
+
+  .modal-topic {
+    border-bottom: 1px dotted #EEEEEE;
+    margin-bottom: 8px;
+  }
+
+  .redbutton:hover {
+    background: lightcoral;
+  }
+  .greenbutton:hover {
+    background: lightgreen;
+  }
+</style>
+
+<!-- Modal -->
+<div class="modal" id="addSubscription{{id}}" data-id="{{id}}" tabindex="-1" role="dialog" aria-labelledby="addSubscriptionLabel"
+     aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h2 class="modal-title" id="addSubscriptionLabel">Add new subscription to {{name}}</h2>
+      </div>
+      <div class="modal-body">
+        <div class="general-wrapper">
+          <div class="row general-had">
+            <div class="col-sm-12">
+              <h3>
+                General
+              </h3>
+            </div>
+          </div>
+          <div class="general-body">
+            <div class="row">
+              <div class="col-sm-12">
+                <form role="form">
+                  <div class="form-group">
+                    <label for="subscribeTopic">
+                      <h4>Subscribe to Topic</h4>
+                    </label>
+                    <input type="topic" class="form-control" id="subscribeTopic"
+                           placeholder="Topic">
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-sm-9">
+                <h4>Request Quality of Serrvice (QoS)</h4>
+              </div>
+              <div class="col-sm-3">
+                <div class="btn-group pull-right">
+                  <!--at most once-->
+                  <button type="button" class="btn btn-default active" data-toggle="tooltip"
+                          data-placement="top" title="at most once">1
+                  </button>
+                  <!--at least once-->
+                  <button type="button" class="btn btn-default" data-toggle="tooltip"
+                          data-placement="top" title="at least once">2
+                  </button>
+                  <!--exactly once-->
+                  <button type="button" class="btn btn-default" data-toggle="tooltip"
+                          data-placement="top" title="exactly once">3
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="advanced-wrapper">
+          <div class="row advanced">
+            <div class="col-sm-12">
+              <h3>Advanced
+                <small>- limit expected values of a certain topic</small>
+                                <span data-toggle="collapse" data-parent="#accordion" href="#collapseOne"
+                                      class="glyphicon glyphicon-chevron-down pull-right right-spacing"></span></h3>
+            </div>
+          </div>
+          <div id="collapseOne" class="advanced-body collapse">
+            <div class="row">
+              <form class="form-horizontal" role="form">
+                <div class="form-group">
+                  <label for="inputEmail3" class="col-sm-2 control-label"><h4>Condition</h4></label>
+
+                  <div class="col-sm-8">
+                    <!--<input type="email" class="form-control" id="inputEmail3" placeholder="Email">-->
+                    <select class="form-control" id="inputEmail3">
+                      <optgroup label="General">
+                        <option>
+                          Payload is element of list
+                        </option>
+                        <option>
+                          Payload is in Range
+                        </option>
+                        <option value="">
+                          Payload is of type
+                        </option>
+                        <option value="">
+                          Expecting #n messages in a certain time frame
+                        </option>
+                      </optgroup>
+                      <optgroup label="Custom">
+                        <option value="">
+                          Custom filter 1
+                        </option>
+                        <option value="">
+                          Custom filter 2
+                        </option>
+                      </optgroup>
+
+
+                    </select>
+                  </div>
+                  <button type="button" class="col-sm-1 btn btn-primary">Add</button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary save-button" id="addSubscription">Add subscription</button>
+      </div>
+    </div>
+  </div>
+</div>
+</core-overlay>
