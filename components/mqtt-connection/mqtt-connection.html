@@ -9,7 +9,7 @@
 <script src="../../node_modules/mows/mows.js"></script>
 <script src="../../bower_components/underscore/underscore.js"></script>
 
-<polymer-element name="mqtt-connection" attributes="messages, publish, createClient, autoConnect, hostname, user, password, port, clientID" constructor="MqttConnection">
+<polymer-element name="mqtt-connection" attributes="messages, publish, createClient, autoConnect, hostname, user, password, clientID" constructor="MqttConnection">
 
   <template>
     <div id="container"></div>
@@ -42,14 +42,16 @@
            */
           hostname: '',
 
+
           /**
-           * The username that will be used to authenticate with the MQTT-Broker
-           *
-           * @attribute user
+           * The username that is user to authenticate the connection with
+           * @attribute username
            * @type string
            * @default ''
            */
-          user: '',
+          username: '',
+
+
 
           /**
            * The password that will be used to authenticate the `user` at the MQTT-Broker
@@ -60,42 +62,159 @@
            */
           password: '',
 
+
+          /**
+           *
+           *
+           */
+          passwordHashFunction: true,
+
+
           /**
            * The port the connection is made with
-           *
-           * @attribute port
+           * @attibute hostPort
            * @type number [1..2^16-1]
+           * @default 1883
            */
-          port: 1883,
+          hostPort: 1883,
+
 
           /**
-           * A unique client ID to identify the MQTT-client at the broker (23 byte string)
+           * A unique client ID to identify the client at the broker
+           * @attribute clientID
+           * @type string
            * @default ''
            */
-
           clientID: '',
 
 
           /**
-           * Use a clean session
-           *
+           * Start a clean session
+           * @attribute cleanSession
+           * @type boolean
+           * @default true
            */
           cleanSession: true,
 
-          /**
-           * Use SSL
-           */
-          ssl: false,
 
+          /**
+           * Use SSL for to encrypt the connection
+           * @attrubute useSSL
+           * @type boolean
+           * @default false
+           */
+          useSSL: false,
+
+
+          /**
+           * Seconds that the connection is kept alive in seconds
+           * @attribute keepAlive
+           * @type integer
+           * @default 120
+           */
           keepAlive: 120,
 
+          /**
+           * The topic the last will will be published at
+           * @attribute lastWillTopic
+           * @type string
+           * @default ''
+           */
+          lastWillTopic: '',
+
+          /**
+           * The last will message that will be published at `lastWillTopic`
+           * @attribute lastWillMessage
+           * @type  string
+           * @default ''
+           */
+          lastWillMessage: '',
+
+          /**
+           * The QoS the last will will be published with
+           * @attribute lastWillQoS
+           * @type integer (0|1|2)
+           * @default 0
+           */
+          lastWillQoS: 0,
+
+
+          /**
+           * @attribute lastWillRetained
+           * @type boolean
+           * @default false
+           */
+          lastWillRetained: false,
+
+
+          /**
+           * @attribute autoConnect
+           * @type boolean
+           * @default false
+           */
+          autoConnect: true,
+
+
+          /**
+           * A flag that indicates whether or not the connection is connected
+           * @attribute connected
+           * @type boolean
+           * @default false
+           */
           connected: false,
 
-          subscriptions: [],
 
-          name: '',
+          /**
+           * A object that holds all `mqtt-subscription` elements each subscription is stored at subscriptions.topic
+           * @attribute subscriptions
+           * @type object
+           * @default {}
+           */
+          subscriptions: {},
 
-          connectionID: '55',
+
+          /**
+           * A human readable name for the connection
+           * @attribute connectionName
+           * @type string
+           * @default ''
+           */
+          connectionName: '',
+
+
+          /**
+           * A ID to identify the connection
+           * @attribute connectionID
+           * @type string
+           * @default ''
+           */
+          connectionID: '',
+
+          /**
+           * A human readable name for the connection
+           * @attribute connectionName
+           * @type string
+           * @default ''
+           */
+          connectionName: '',
+
+
+          /**
+           * The base color for the connection
+           * @attribute connectionColor
+           * @type string (hex)
+           * @default ''
+           */
+          connectionColor: '',
+
+
+          /**
+           * The color shema of this connection
+           * @attribute connectionColors
+           * @type array [0..4]
+           * @default []
+           */
+          connectionColors: [],
         },
 
         observe: {
@@ -110,6 +229,7 @@
           this.that = {};
           this.subscriptions = {};
           this.subscriptions.keys = [];
+          this.connectionColors = [];
 
         },
         ready: function () {
@@ -141,6 +261,7 @@
           if (!alreadyInDom) {
             // creating the View
             this.subscriptions[topic] = new MqttSubscription();
+            this.subscriptions[topic].connectionID = this.connectionID;
             this.subscriptions.keys.push(topic);
           }
 
@@ -260,7 +381,7 @@
 
         },
 
-        publish: function (topic, message) {
+        mqttPublish: function (topic, message) {
           this.client.publish(topic, message);
         },
 
@@ -365,7 +486,7 @@
             protocolVersion: 3,
             reconnectPeriod: 1000};
 
-          this.client = mows.createClient(this.port, this.hostname, options);
+          this.client = mows.createClient(this.hostPort, this.hostname, options);
 
           console.log("ConnecteD: %s", this.client.connected)
 
@@ -384,13 +505,82 @@
 
 
         /**
-         * ##### WATCHES ####
+         * ##### WATCHES #####
          */
 
         connectionChanged: function (oldValue, newValue){
           console.log("Old: %s, new: %s", oldValue, newValue);
           this.connected = newValue;
+        },
+
+        connectionColorChanged: function() {
+          this.connectionColors[0] = this.connectionColor;
+//          this.connectionColors[1] = this.lightenDarkenColor(this.connectionColor, 10);
+//          this.connectionColors[2] = this.lightenDarkenColor(this.connectionColor, 20);
+//          this.connectionColors[3] = this.lightenDarkenColor(this.connectionColor, 30);
+//          this.connectionColors[4] = this.lightenDarkenColor(this.connectionColor, 40);
+          for (var i = 1; i< 10; i++) {
+            this.connectionColors[i] = this.shadeColor2(this.connectionColor, 0.10*i);
+//            console.log(0.10*i);
+          }
+//          this.connectionColors[1] = this.shadeColor2(this.connectionColor, 0.10);
+//          this.connectionColors[2] = this.shadeColor2(this.connectionColor, 0.20);
+//          this.connectionColors[3] = this.shadeColor2(this.connectionColor, 0.30);
+//          this.connectionColors[4] = this.shadeColor2(this.connectionColor, 0.40);
+//          this.connectionColors[5] = this.shadeColor2(this.connectionColor, 0.50);
+//          this.connectionColors[6] = this.shadeColor2(this.connectionColor, 0.60);
+//          this.connectionColors[7] = this.shadeColor2(this.connectionColor, 0.70);
+//          this.connectionColors[8] = this.shadeColor2(this.connectionColor, 0.80);
+//          this.connectionColors[9] = this.shadeColor2(this.connectionColor, 0.90);
+
+//          console.log(this.connectionColors);
+        },
+
+        /**
+         * ##### HELPER FUNCTIONS #####
+         */
+
+        /**
+         * A helper function to lighten or darken colors
+         * from (http://css-tricks.com/snippets/javascript/lighten-darken-color/)
+         * @param col the color without or without the datsh (#)
+         * @param amt how mutch the color should be lightend or darkend [-100, +100]
+         * @returns {string} the color in hex with the dash (#)
+         */
+        lightenDarkenColor: function (col, amt) {
+
+        var usePound = true;
+
+        if (col[0] == "#") {
+          col = col.slice(1);
+          usePound = true;
         }
+
+        var num = parseInt(col,16);
+
+        var r = (num >> 16) + amt;
+
+        if (r > 255) r = 255;
+        else if  (r < 0) r = 0;
+
+        var b = ((num >> 8) & 0x00FF) + amt;
+
+        if (b > 255) b = 255;
+        else if  (b < 0) b = 0;
+
+        var g = (num & 0x0000FF) + amt;
+
+        if (g > 255) g = 255;
+        else if (g < 0) g = 0;
+
+          //        return (usePound?"#":"") + (g | (b << 8) | (r << 16)).toString(16);
+        return (usePound?"#":"") + String("000000" + (g | (b << 8) | (r << 16)).toString(16)).slice(-6);
+      },
+
+      shadeColor2: function (color, percent) {
+        var f=parseInt(color.slice(1),16),t=percent<0?0:255,p=percent<0?percent*-1:percent,R=f>>16,G=f>>8&0x00FF,B=f&0x0000FF;
+        return "#"+(0x1000000+(Math.round((t-R)*p)+R)*0x10000+(Math.round((t-G)*p)+G)*0x100+(Math.round((t-B)*p)+B)).toString(16).slice(1);
+      }
 
 
       });

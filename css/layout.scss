@@ -256,17 +256,15 @@ h2 {
 
 .header {
   margin-top: 0;
-  margin-bottom: $margin*3;
-  padding-top: $margin;
-  padding-bottom: $margin;
+//  margin-bottom: $margin*3;
+//  padding-top: $margin;
+//  padding-bottom: $margin;
   padding-left: 0;
   h1 {
     font-size: 24px;
     color: #ffffff;
   }
   .header-wrapper {
-    border-bottom: 1px dotted #e5e5e5;
-    border-top: 1px dotted #e5e5e5;
     .app-name {
       height: 67px;
       padding: 14px 0px;
@@ -294,8 +292,9 @@ h2 {
   .config[on-click] {
       color: #ffffff;
       :hover {
-        -webkit-transform: rotate(30deg);
+//        -webkit-transform: rotate(30deg);
 
+        text-shadow: 0px 0px 5px rgba(68, 54, 133, 0.46);
       }
   }
 }
@@ -667,10 +666,9 @@ $debug: false;
 $modal-border-radius: 5px;
 /* MODAL */
 .modal-header {
-  @extend .bg-blue;
+//  @extend .bg-blue;
   border-top-left-radius: $modal-border-radius;
   border-top-right-radius: $modal-border-radius;
-  color: #ffffff;
   border-bottom: 1px dotted #e5e5e5;
   // all headings get white font color
   @include headings {
@@ -714,7 +712,7 @@ $modal-border-radius: 5px;
 }
 
 .modal-body {
-  border-top: $margin solid $blue;
+//  border-top: $margin solid $blue;
 }
 
 .modal-title {

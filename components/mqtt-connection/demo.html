@@ -114,7 +114,7 @@
 
       sendMessage: function () {
         console.log("sendMessage");
-        this.mqttCon.publish(this.messageTopic, this.messagePayload);
+        this.mqttCon.mqttPublish(this.messageTopic, this.messagePayload);
       },
       createSubscription: function () {
         this.mqttCon.subscribe(this.subscriptionTopic);
@@ -127,7 +127,7 @@
 
       connect: function () {
         this.mqttCon.hostname = this.hostname;
-        this.mqttCon.port = 8080;
+        this.mqttCon.hostPort = 8080;
         this.mqttCon.connect();
       },
 

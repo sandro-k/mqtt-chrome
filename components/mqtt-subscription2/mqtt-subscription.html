@@ -41,7 +41,11 @@
 
 
 
-    <div class="connection connection-{{connectionID}} sub expanded">
+    <!--<div class="{{connectionID}} zero border">-->
+      <!--HI-->
+    <!--</div>-->
+
+    <div class="connection {{connectionID}} bg nine border zero sub expanded">
       <div class="row">
         <div class="col-xs-6 col-lg-9">
           <h3>"{{topic}}"</h3>
@@ -49,30 +53,20 @@
 
         <div class="col-xs-6 col-lg-3 options">
 
-          <template if="{{ messages.length > 0}}">
+
 
             <changeover-icon icon="arrow-drop-down"
                              up="arrow-drop-up"
                              class="pull-right"
                              on-click="{{handelopen}}"
-                             data-target="{{connectionID}}{{message.ID}}"
+                             disabled?="{{ messages.length < 1 }}"
                              down="arrow-drop-down"></changeover-icon>
 
 
 
-          </template>
-
-          <template if="{{ messages.length < 1}}">
-
-            <changeover-icon icon="arrow-drop-down"
-                             up="arrow-drop-up"
-                             class="pull-right off"
-                             on-click="{{handelopen}}"
-                             data-target="{{connectionID}}{{message.ID}}"
-                             down="arrow-drop-down"></changeover-icon>
 
 
-          </template>
+
 
 
 
@@ -94,7 +88,7 @@
         </div>
       </div>
 
-      <core-collapse id="{{connectionID}}{{message.ID}}">
+      <core-collapse id="messages">
         <template if="{{ messages.length > 0 }}">
           <div class="row table-header message-{{message.ID}}">
             <div class="hidden-xs col-sm-2 col-lg-1"><h4>Date</h4></div>
@@ -345,7 +339,7 @@
         this.message = { ID: 1 };
         this.messages = [];
         // todo change
-        this.connectionID = "1";
+//        this.connectionID = "1";
         this.sumUnRead = 0;
         this.isOpen = false;
         this.removeDialog = false;
@@ -362,7 +356,9 @@
 
       handelopen: function (event, detail, sender) {
         // this will toggle the collapse at data-target
-        this.$[sender.attributes['data-target'].value].toggle()
+
+        sender.templateInstance.model.$.messages.toggle();
+//        this.$[sender.attributes['data-target'].value].toggle()
         this.sumUnRead = 0;
         this.isOpen = !this.isOpen;
       },

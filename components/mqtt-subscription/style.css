@@ -5379,39 +5379,33 @@ h2 {
 
 .header {
   margin-top: 0;
-  margin-bottom: 12px;
-  padding-top: 4px;
-  padding-bottom: 4px;
   padding-left: 0; }
   .header h1 {
     font-size: 24px;
     color: #ffffff; }
-  .header .header-wrapper {
-    border-bottom: 1px dotted #e5e5e5;
-    border-top: 1px dotted #e5e5e5; }
-    .header .header-wrapper .app-name {
-      height: 67px;
-      padding: 14px 0px;
-      font-size: 32px;
-      line-height: 22px; }
-      .header .header-wrapper .app-name .glyphicon {
-        margin-left: 4px;
-        top: 4px;
-        left: 4px;
-        -webkit-transform: rotate(67deg); }
-      .header .header-wrapper .app-name span.subline {
-        font-size: 26px;
-        position: relative;
-        top: 4px; }
-    .header .header-wrapper .config-icon {
-      height: 67px;
-      padding: 20px 0px;
-      font-size: 28px;
-      line-height: 22px; }
+  .header .header-wrapper .app-name {
+    height: 67px;
+    padding: 14px 0px;
+    font-size: 32px;
+    line-height: 22px; }
+    .header .header-wrapper .app-name .glyphicon {
+      margin-left: 4px;
+      top: 4px;
+      left: 4px;
+      -webkit-transform: rotate(67deg); }
+    .header .header-wrapper .app-name span.subline {
+      font-size: 26px;
+      position: relative;
+      top: 4px; }
+  .header .header-wrapper .config-icon {
+    height: 67px;
+    padding: 20px 0px;
+    font-size: 28px;
+    line-height: 22px; }
   .header .config[on-click] {
     color: #ffffff; }
     .header .config[on-click] :hover {
-      -webkit-transform: rotate(30deg); }
+      text-shadow: 0px 0px 5px rgba(68, 54, 133, 0.46); }
 
 .footer {
   position: absolute;
@@ -5503,7 +5497,7 @@ h2 {
 .bg-white {
   background-color: #ffffff; }
 
-.bg-blue, .modal-header {
+.bg-blue {
   background-color: #7694c6; }
 
 .nav li:last-child {
@@ -5859,7 +5853,6 @@ h2 {
 .modal-header {
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
-  color: #ffffff;
   border-bottom: 1px dotted #e5e5e5; }
   .modal-header h1, .modal-header h2, .modal-header h3
   h4, .modal-header h5, .modal-header h6 {
@@ -5886,9 +5879,6 @@ h2 {
 
 .fa {
   color: #333; }
-
-.modal-body {
-  border-top: 4px solid #7694c6; }
 
 .modal-title {
   color: #ffffff;

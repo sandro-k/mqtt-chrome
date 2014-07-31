@@ -36,6 +36,7 @@
   <template>
     <!--<link rel="stylesheet" href="tinyscrollbar/tinyscrollbar.css" type="text/css" media="screen"/>-->
     <link rel="stylesheet" href="../../css/build/layout.css"/>
+    <link rel="stylesheet" href="../mqtt-lense/css/main.css"/>
     <style>
       .page-header {
         margin: 0 0 20px 0;
@@ -115,11 +116,13 @@
       }
 
       .redbutton:hover {
-        background: lightcoral;
+        background: #d9534f;
       }
       .greenbutton:hover {
-        background: lightgreen;
+        background: #5cb85c;
       }
+
+
     </style>
 
     <core-media-query query="{{narrowQuery}}" queryMatches="{{narrow}}"></core-media-query>
@@ -132,6 +135,14 @@
       <button type="button" class="close" on-click="{{close}}">&times;</button>
       <h2 class="modal-title" id="newConnectionLabel">Add a new Connection</h2>
     </div>
+    <div class="row" style="
+    height: 3px;
+    background: #443685;
+    border-bottom: 1px dotted #FFFFFF;"></div>
+    <div class="row paper-shadow-bottom-z-3" style="
+    height: 3px; background: #443685;
+    box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.46);"></div>
+
     <div class="modal-body">
       <div class="connection-wrapper">
         <!--Connection Details-->
@@ -448,9 +459,9 @@
          * The base color for the connection
          * @attribute connectionColor
          * @type string (hex)
-         * @default '#ff7d69'
+         * @default '#ccbb22'
          */
-        connectionColor: '#ff7d69',
+        connectionColor: '#ccbb22',
 
 
         /**
@@ -563,7 +574,7 @@
          * @type boolean
          * @default false
          */
-        autoConnect: false,
+        autoConnect: true,
 
         /**
          * The host object that will create the MQTT connection
@@ -573,11 +584,18 @@
          */
         host: {},
 
-
         /**
-         *
+         * The media query that is evaluated to trigger narrow mode
          */
         narrowQuery: 'max-width: 680px',
+
+        /**
+         * A flag that indicates whether the connection ui is in narrow mode or not
+         * @attribute narrow
+         * @type boolean
+         * @default false
+         */
+        narrow: false,
 
       },
 
@@ -598,7 +616,7 @@
       },
       domReady: function () {
         console.debug("domReady");
-        this.connectionID = this.randomString(32)
+        this.connectionID = "lens"+this.randomString(28)
         console.debug(this.connectionID);
       },
       detached: function () {

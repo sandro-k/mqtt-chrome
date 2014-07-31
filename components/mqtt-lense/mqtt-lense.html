@@ -6,6 +6,7 @@
 <link rel="import" href="../../bower_components/core-menu/core-menu.html">
 <link rel="import" href="../../bower_components/core-item/core-item.html">
 <link rel="import" href="../../bower_components/core-collapse/core-collapse.html">
+<link rel="import" href="../../bower_components/core-tooltip/core-tooltip.html">
 <link rel="import" href="../../bower_components/core-icon-button/core-icon-button.html">
 
 <!--custom components-->
@@ -21,8 +22,98 @@
       body {
         font-family: sans-serif;
       }
+      .test {
+        background: #ffff00;
+      }
 
     </style>
+
+    <template repeat="{{ connection in mqttConnections }}">
+      <style>
+        :host /deep/ .{{connection.connectionID}}.zero.bg  {
+
+          background: {{connection.connectionColors[0]}}!important;
+        }
+
+        :host /deep/ .{{connection.connectionID}}.zero.border  {
+          border-left: 3px solid {{connection.connectionColors[0]}}!important;
+          border-right: 1px solid {{connection.connectionColors[0]}}!important;
+          /*border-color: {{connection.connectionColors[0]}}!important;*/
+        }
+
+        :host /deep/ .{{connection.connectionID}}.one.bg   {
+
+        background: {{connection.connectionColors[1]}}!important;
+        }
+
+        :host /deep/ .{{connection.connectionID}}.two.bg   {
+
+        background: {{connection.connectionColors[2]}}!important;
+        }
+
+        :host /deep/ .{{connection.connectionID}}.three.bg   {
+
+        background: {{connection.connectionColors[3]}}!important;
+        }
+
+        :host /deep/ .{{connection.connectionID}}.four.bg   {
+
+        background: {{connection.connectionColors[4]}}!important;
+        }
+
+        :host /deep/ .{{connection.connectionID}}.five.bg   {
+
+        background: {{connection.connectionColors[5]}}!important;
+        }
+
+        :host /deep/ .{{connection.connectionID}}.six.bg   {
+
+        background: {{connection.connectionColors[6]}}!important;
+        }
+
+        :host /deep/ .{{connection.connectionID}}.seven.bg   {
+        background: {{connection.connectionColors[7]}}!important;
+        }
+
+        :host /deep/ .{{connection.connectionID}}.eight.bg   {
+        background: {{connection.connectionColors[8]}}!important;
+        }
+
+        :host /deep/ .{{connection.connectionID}}.nine.bg   {
+        background: {{connection.connectionColors[9]}}!important;
+        }
+
+        :host .test {
+        /*border-left: 3px solid {{connection.connectionColor}}!important;*/
+          /*background: red!important;*/
+        }
+      </style>
+
+      <!--<div class="{{connection.connectionID}} zero bg">-->
+        <!--zero-->
+      <!--</div>-->
+      <!--<div class="{{connection.connectionID}} one bg">-->
+        <!--one-->
+      <!--</div>-->
+      <!--<div class="{{connection.connectionID}} two bg">-->
+        <!--two-->
+      <!--</div>-->
+      <!--<div class="{{connection.connectionID}} three bg">-->
+        <!--three-->
+      <!--</div>-->
+      <!--<div class="{{connection.connectionID}} four bg">-->
+        <!--four-->
+      <!--</div>-->
+      <!--<div class="{{connection.connectionID}} five bg">-->
+        <!--five-->
+      <!--</div>-->
+      <!--<div class="{{connection.connectionID}} six bg">-->
+        <!--six-->
+      <!--</div>-->
+      <!--<div class="{{connection.connectionID}} seven bg">-->
+        <!--seven-->
+      <!--</div>-->
+    </template>
 
 
 
@@ -47,7 +138,7 @@
 
     <!--header-->
     <div id="header">
-      <header class="header bg-blue gradient">
+      <header class="header gradient">
         <div class="header-wrapper">
 
           <div class="row">
@@ -78,9 +169,25 @@
              <h1>Connections</h1>
            </div>
            <div layout horizontal center class="menu-buttons">
-             <core-icon icon="add" on-click="{{addConnection}}"></core-icon>
+
+             <core-tooltip show?="{{mqttConnections.length == 0}}" >
+               <style>
+                 :host /deep/ .polymer-tooltip {
+                  white-space: normal!important;
+                   line-height: 10px;
+                   z-index: 11;
+                   /*background-color: rgba(144,238,144, 0.8);*/
+                   /*border: 1px solid lightgreen;*/
+                   /*color: #000000;*/
+                   top: 18px;
+                 }
+
+               </style>
+               <strong tip>First add a connection</strong>
+               <core-icon icon="add" on-click="{{addConnection}}"></core-icon>
+             </core-tooltip>
+
              <changeover-icon
-                 class="test"
                  icon="expand-less"
                  down="expand-more"
                  up="expand-less"
@@ -89,14 +196,25 @@
                  disabled?="{{mqttConnections.length == 0}}"></changeover-icon>
            </div>
          </div>
+          <template if="{{mqttConnections.length == 0}}">
+            <div class="items helper right" layout horizontal center>
+              <!--<strong>First add a connection</strong>-->
+            </div>
+          </template>
           <!--items-->
           <div class="items">
               <core-collapse id="connectionListCollapse" target="{{$.connectionList}}" opened></core-collapse>
               <ul id="connectionList">
                 <template repeat="{{ connection in mqttConnections }}">
-                  <li>
-                    {{connection.name}} <span class="badge">{{connection.connected | connectedFilter}}</span>
+
+                  <li class="{{connection.connectionID}} five bg" layout horizontal center>
+                    <div flex>
+                      <span class="wraptext">{{connection.connectionName}}</span>
+                      <span class="badge {{connection.connectionID}} zero bg">{{connection.connected | connectedFilter}}</span>
+                    </div>
+                    <core-icon icon="settings" size="14" on-click="{{connectionSettings}}"></core-icon>
                   </li>
+
                 </template>
               </ul>
           </div>
@@ -122,18 +240,17 @@
 
         <div id="subscriptions">
         <template repeat="{{connection in mqttConnections}}">
-          <div class="header" layout horizontal center>
-            <div flex>
-              <h2>{{connection.name}} - Subscriptions</h2>
-            </div>
-            <div class="menu-buttons right">
-              <core-icon icon="add" on-click="{{addSubscription}}"></core-icon>
+          <div class="subheader {{connection.connectionID}} nine bg">
+            <div class="{{connection.connectionID}} zero border" layout horizontal center>
+              <div flex>
+                <h2>{{connection.connectionName}} - Subscriptions</h2>
+              </div>
+              <div class="menu-buttons right">
+                <core-icon icon="add" on-click="{{addSubscription}}"></core-icon>
+              </div>
             </div>
           </div>
-          <div layout horizontal center>
-            <h3>Subscribe to topic:</h3>
-            <input value="{{subscriptionTopic}}" flex>
-          </div>
+
           <div id="ID{{connection.connectionID}}" class="item">
 
 
@@ -154,6 +271,10 @@
               <!--</span>-->
             <!--</div>-->
             <!--</template>-->
+          </div>
+          <div layout horizontal center>
+            <h3>Subscribe to topic:</h3>
+            <input value="{{subscriptionTopic}}" flex>
           </div>
         </template>
         </div>
@@ -223,6 +344,7 @@
       },
       domReady: function () {
         console.log("domReady");
+        this.loadDummy();
       },
       detached: function () {
         console.log("detached");
@@ -242,12 +364,44 @@
         // TODO(sandro-k) show settings
       },
 
+      loadDummy: function () {
+        var values = {
+          "connectionID":"lensasasasasa",
+          "connectionName":"test.mosquitto",
+          "connectionColor":"#ccbb22",
+          "hostname":"ws://test.mosquitto.org/mqtt",
+          "hostPort":8080,
+          "clientID":"connectionID",
+          "cleanSession":true,
+          "useSSL":false,
+          "keepAlive":120,
+          "username":"Sandro",
+          "password":"test",
+          "passwordHashFunction":true,
+          "lastWillTopic":"topic",
+          "lastWillMessage":"message",
+          "lastWillQoS":0,
+          "lastWillRetained":true,
+          "autoConnect":true};
+
+
+        var mqttCon = new MqttConnection();
+
+        for (var property in mqttCon.publish) {
+          if (values[property]) {
+            mqttCon[property] = values[property];
+          }
+        }
+        mqttCon.createClient();
+        this.mqttConnections.push(mqttCon);
+      },
+
       addConnection: function () {
         var self = this;
         var values = {
           "ID":"",
           "connectionName":"test.mosquitto",
-          "connectionColor":"#ff7d69",
+          "connectionColor":"#ccbb22",
           "hostname":"ws://test.mosquitto.org/mqtt",
           "hostPort":8080,
           "clientID":"7ILDuLmcWUyTiLJvDhvMg7XZxyPh0PaM",
@@ -276,12 +430,11 @@
           var conValues = e.detail;
           var mqttCon = new MqttConnection();
 
-          mqttCon.hostname =  conValues.hostname;
-          mqttCon.port = conValues.hostPort;
-          mqttCon.name = conValues.connectionName;
-          mqttCon.clientID = conValues.clientID;
-          mqttCon.cleanSession = conValues.cleanSession;
-          mqttCon.connectionID = conValues.connectionID;
+          for (var property in mqttCon.publish) {
+            if (conValues[property]) {
+              mqttCon[property] = conValues[property];
+            }
+          }
 
           mqttCon.createClient();
 
@@ -329,6 +482,10 @@
         connection.subscribe(this.subscriptionTopic, {} , target);
 
 
+      },
+
+      connectionSettings: function (inEvent, inDetail ,inSender) {
+        console.error("TODO(sandro-k) open connection settings");
       },
 
       /**

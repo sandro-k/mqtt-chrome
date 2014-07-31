@@ -8,9 +8,41 @@ h1, h2, h3, h4, h5, h6 {
   color: $grey_dark_dark;
 }
 
-.header {
-  .app-name {
-    color: #ffffff;
+header {
+  &.header {
+    background: #ffffff;
+    .app-name {
+      color: $brand-primary!important;
+    }
+    margin-bottom: $margin*3;
+    padding-top: $margin;
+    padding-bottom: $margin;
+
+
+    .header-wrapper {
+      border-bottom: 1px dotted $brand-primary;
+      border-top: 1px dotted $brand-primary;
+    }
+    .config[on-click] {
+      color: $brand-primary;
+    }
+  }
+}
+
+.modal-header {
+//  color: $brand-primary;
+  h2 {
+    color: $brand-primary;
+  }
+  button {
+    color: $brand-primary;
+    &.close {
+      color: $brand-primary;
+      text-shadow: none;
+      &:hover {
+        text-shadow: 0px 0px 5px rgba(0, 0, 0, 0.46);
+      }
+    }
   }
 }
 
@@ -38,17 +70,50 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
+.subheader {
+//  border-left: 1px solid $grey_dark;
+//  border-right: 1px solid $grey_dark;
+//  border-bottom: 1px solid $grey_dark;
+  :first-child {
+    padding-left: $margin*0.5;
+  }
+}
+
 #menu {
   .header {
     background: #ffffff;
     padding-left: $margin*2;
   }
   .items {
-    padding-left: $margin*2;
+    //    padding-left: $margin*2;
+  }
+
+  #connectionList {
+    li {
+      background: lightgreen;
+      border-left: 1px solid $grey_dark;
+      border-right: 1px solid $grey_dark;
+//      border-top: 1px solid $grey_dark;
+      border-bottom: 1px solid $grey_dark;
+
+      padding: {
+        left: $margin*2;
+        top: $margin;
+        bottom: $margin;
+      }
+      core-icon {
+        margin-right: $margin ;
+        margin-left: $margin ;
+      }
+    }
   }
 }
 
 .menu-buttons {
-//  background-color: $grey-light;
-//  border: 1px solid $grey_dark_dark;
+  //  background-color: $grey-light;
+  //  border: 1px solid $grey_dark_dark;
+}
+
+.wraptext {
+  word-wrap: break-word;
 }
