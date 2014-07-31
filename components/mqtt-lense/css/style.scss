@@ -15,7 +15,6 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 
-
 .header {
   border-left: 1px solid $grey_dark;
   border-top: 1px solid $grey_dark;
@@ -47,4 +46,9 @@ h1, h2, h3, h4, h5, h6 {
   .items {
     padding-left: $margin*2;
   }
+}
+
+.menu-buttons {
+//  background-color: $grey-light;
+//  border: 1px solid $grey_dark_dark;
 }

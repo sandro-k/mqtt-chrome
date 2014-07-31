@@ -73,11 +73,11 @@
       <!--menu-->
       <core-collapse id="menuCollapse" target="{{$.menu}}" opened horizontal></core-collapse>
       <div id="menu">
-         <div class="header right" layout horizontal center>
+         <div class="header right" layout horizontal self-stretch>
            <div flex>
              <h1>Connections</h1>
            </div>
-           <div class="menu-buttons">
+           <div layout horizontal center class="menu-buttons">
              <core-icon icon="add" on-click="{{addConnection}}"></core-icon>
              <changeover-icon
                  class="test"
