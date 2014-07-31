@@ -160,7 +160,7 @@
 
     <!--/header-->
     <!--main-->
-    <div class="container-fluid" layout horizontal>
+    <div class="container-fluid" layout horizontal wrap>
       <!--menu-->
       <core-collapse id="menuCollapse" target="{{$.menu}}" opened horizontal></core-collapse>
       <div id="menu">
@@ -179,7 +179,7 @@
                    /*background-color: rgba(144,238,144, 0.8);*/
                    /*border: 1px solid lightgreen;*/
                    /*color: #000000;*/
-                   top: 18px;
+                   /*top: 18px;*/
                  }
 
                </style>
@@ -245,11 +245,21 @@
               <div flex>
                 <h2>{{connection.connectionName}} - Subscriptions</h2>
               </div>
+              <!--<div class="menu-buttons right">-->
+                  <!--<core-icon icon="add" on-click="{{addSubscription}}"></core-icon>-->
+              <!--</div>-->
+            </div>
+          </div>
+          <div class="subheader {{connection.connectionID}} nine bg">
+            <div class="{{connection.connectionID}} zero border space" layout horizontal center>
+              <h4>Subscribe to topic:</h4>
+              <input class="space-left" value="{{subscriptionTopic}}" flex>
               <div class="menu-buttons right">
                 <core-icon icon="add" on-click="{{addSubscription}}"></core-icon>
               </div>
             </div>
           </div>
+
 
           <div id="ID{{connection.connectionID}}" class="item">
 
@@ -271,10 +281,6 @@
               <!--</span>-->
             <!--</div>-->
             <!--</template>-->
-          </div>
-          <div layout horizontal center>
-            <h3>Subscribe to topic:</h3>
-            <input value="{{subscriptionTopic}}" flex>
           </div>
         </template>
         </div>
@@ -334,6 +340,7 @@
         this.users = {};
         this.users.keys = ['item'];
         this.users.item= ({"userFile": "file", name: "tt"});
+        this.subscriptionTopic = 'test';
       },
       ready: function () {
         console.log("ready");

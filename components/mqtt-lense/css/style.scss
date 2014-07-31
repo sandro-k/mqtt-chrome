@@ -117,3 +117,15 @@ header {
 .wraptext {
   word-wrap: break-word;
 }
+
+
+.space {
+  padding: {
+   top: $margin;
+   bottom: $margin;
+  }
+}
+
+.space-left {
+  padding-left: $margin;
+}
