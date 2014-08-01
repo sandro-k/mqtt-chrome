@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <script src="bower_components/platform/platform.js" log="bind,ready, watch"></script>
+  <title>MQTTinspect</title>
+  <!--custom components import start -->
+
+  <link rel="import" href="bower_components/font-roboto/roboto.html">
+  <link rel="import"
+        href="bower_components/core-header-panel/core-header-panel.html">
+
+  <link rel="import" href="bower_components/core-collapse/core-collapse.html"/>
+
+  <link rel="import" href="components/mqtt-subscription/mqtt-subscription.html"/>
+  <!--custom components import end -->
+
+  <!--favicon-->
+
+  <link rel="shortcut icon" type="image/x-icon" href="favicon"/>
+  <!-- Bootstrap -->
+  <!-- just for the glyphicons as the variable is currently set to the wrong path-->
+  <!--<link href="css/bootstrap.css" rel="stylesheet">-->
+
+  <!--code prety-->
+  <link rel="stylesheet" href="bower_components/google-code-prettify/src/prettify.css"/>
+
+  <!--color -->
+  <link rel="stylesheet" href="css/jquery.minicolors.css">
+  <!--custom css via scss-->
+  <link rel="stylesheet" href="css/build/global.css"/>
+  <link rel="stylesheet" href="css/build/fonts.css"/>
+  <link rel="stylesheet" href="css/build/layout.css"/>
+
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      background-color: #E5E5E5;
+      font-family: 'RobotoDraft', sans-serif;
+    }
+
+    core-header-panel {
+      height: 100%;
+    }
+
+    core-toolbar {
+      background: #03a9f4;
+      color: white;
+    }
+
+    paper-tabs {
+      width: 100%;
+    }
+
+    .container {
+      width: 80%;
+      margin: 50px auto;
+    }
+
+    @media (min-width: 481px) {
+      paper-tabs {
+        width: 200px;
+      }
+
+      .container {
+        width: 400px;
+      }
+    }
+  </style>
+  <script>
+    (function (i, s, o, g, r, a, m) {
+      i['GoogleAnalyticsObject'] = r;
+      i[r] = i[r] || function () {
+        (i[r].q = i[r].q || []).push(arguments)
+      }, i[r].l = 1 * new Date();
+      a = s.createElement(o),
+          m = s.getElementsByTagName(o)[0];
+      a.async = 1;
+      a.src = g;
+      m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+    ga('create', 'UA-52123449-1', 'madein-hamburg.de');
+    ga('send', 'pageview');
+
+  </script>
+</head>
+<!--unresolved will fade the body when the content is loaded-->
+<!--unresolved-->
+<body unresolved>
+
+
+
+
+<!--git hub-->
+<a href="https://github.com/sandro-k/mqtt-chrome">
+  <img class="github"
+       src="img/github.png"
+       alt="Fork me on GitHub">
+</a>
+
+<!--header-->
+<div id="header">
+  <!--will be filed from templated-->
+</div>
+
+<div class="container-fluid">
+<div class="row">
+<!--connections start-->
+<div class="col-xs-12 col-sm-3 col-lg-2 left-sidebar">
+  <div class="col-xs-12 noleft-padding connections-wrapper" data-position="left">
+    <aside class="aside connections">
+      <div class="row bg-white border-dark-grey">
+        <div class="col-xs-7  menu-head-headline">
+          <div class="">
+            <h1>Connections</h1>
+          </div>
+        </div>
+
+        <div class="col-xs-5 menu-head-icon">
+          <div>
+            <div class="pull-right" data-toggle="tooltip"
+                 data-placement="top"
+                 title="Add a new connection">
+
+              <i class="fa fa-plus fa-2x glyphicon-btn"
+                 data-toggle="modal"
+                 data-target="#newConnection"></i>
+            </div>
+            <div class="pull-right"
+                 data-toggle="tooltip"
+                 data-placement="top"
+                 title="Minimize connections">
+
+              <i class="fa fa-angle-double-up fa-2x glyphicon-btn"
+                 data-toggle="collapse"
+                 data-target="#connectionNav"
+                 data-up="fa-angle-double-down"
+                 data-down="fa-angle-double-up"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+      <ul id="connectionNav" class="nav collapse in">
+        <li class="connection-1">
+          <a href="#">
+            <div class="row">
+              <div class="col-xs-6 col-sm-12 col-lg-6">
+                test.mosquitto.org
+              </div>
+              <div class="col-xs-6 col-sm-12 col-lg-6">
+                <span class="badge">disconnected</span>
+              </div>
+            </div>
+          </a>
+        </li>
+        <li class="connection-2">
+          <a href="#">
+            <div class="row">
+              <div class="col-xs-6 col-sm-12 col-lg-6">
+                dev.rabbitmq.com
+              </div>
+              <div class="col-xs-6 col-sm-12 col-lg-6">
+                <span class="badge">connected</span>
+              </div>
+            </div>
+          </a>
+        </li>
+        <li class="connection-3">
+          <a href="#">
+            <div class="row">
+              <div class="col-xs-6 col-sm-12 col-lg-6">
+                m2m.eclipse.org
+              </div>
+              <div class="col-xs-6 col-sm-12 col-lg-6">
+                <span class="badge">connected</span>
+              </div>
+            </div>
+          </a>
+        </li>
+      </ul>
+    </aside>
+  </div>
+  <!--connections end-->
+
+  <!--notifications-->
+  <div id="notifications" class="col-xs-12 noleft-padding menu-right-wrapper">
+    <aside class="aside menu-left">
+      <div class="row bg-white border-dark-grey notifications-header">
+        <div class="col-xs-8 col-sm-8 menu-head-headline">
+          <h1>Notifications</h1>
+        </div>
+        <div class="col-xs-4 col-sm-4 menu-head-icon">
+
+          <div class="pull-right"
+               data-toggle="tooltip"
+               data-placement="top"
+               title="Minimize notifications">
+
+            <!--<span class="glyphicon pull-right toggle-message glyphicon-chevron-up"-->
+            <!--data-target=".message-555"-->
+            <!--data-up="glyphicon-chevron-up"-->
+            <!--data-down="glyphicon-chevron-down"></span>-->
+
+            <i class="fa fa-angle-double-up fa-2x glyphicon-btn"
+               data-toggle="collapse"
+               data-target=".notifications-content"
+               data-up="fa-angle-double-down"
+               data-down="fa-angle-double-up"></i>
+          </div>
+
+        </div>
+      </div>
+      <div class="notifications-content collapse in">
+        <div class="row fail">
+          <div class="col-xs-11">
+            <p>Disconnected from <span class="connection-1 badge">test.mosquitto.org</span></p>
+          </div>
+          <div class="col-xs-1">
+            <span class="glyphicon glyphicon-remove-circle"></span>
+            <!--<span class="badge">fail</span>-->
+          </div>
+        </div>
+        <div class="row ok">
+          <div class="col-xs-11">
+            Connected with <span class="connection-2 badge">dev.rabbitmq.com</span>
+          </div>
+          <div class="col-xs-1">
+            <span class="glyphicon glyphicon-ok"></span>
+          </div>
+        </div>
+        <div class="row ok">
+          <div class="col-xs-11">
+            Connected with <span class="connection-3 badge">m2m.eclipse.org</span>
+          </div>
+          <div class="col-xs-1">
+            <span class="glyphicon glyphicon-ok"></span>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+  <!--notifications end-->
+</div>
+<!--content-->
+<div class="col-xs-12 col-sm-9 col-lg-10 content-wrapper" data-size="0">
+<section class="main">
+<div class="row bg-white">
+  <div class="col-sm-1 hidden-xs menu-head-icon">
+    <div class="pull-left toggle-menu"
+         data-up="fa-expand"
+         data-down="fa-compress"
+         data-target=".left-sidebar"
+         data-icon-class=".fa">
+
+      <!--<span class="glyphicon glyphicon-resize-full rot-45" data-toggle="tooltip" data-placement="top"-->
+      <!--title="Minimize sidebar"></span>-->
+
+      <i class="fa fa-expand fa-2x"
+         data-toggle="tooltip"
+         data-placement="top"
+         data-title-up="Maximize environment"
+         data-title-down="Minimize environment"
+         title="Maximize environment.."
+         data-up="fa-expand"
+         data-down="fa-compress"></i>
+    </div>
+
+    <!--<h1 class="toggle-menu pull-left icon-left" -->
+    <!--data-target=".left-sidebar"-->
+    <!--data-up="glyphicon-resize-full" -->
+    <!--data-down="glyphicon-resize-small">-->
+    <!--<span class="glyphicon glyphicon-resize-full rot-45" data-toggle="tooltip" data-placement="top"-->
+    <!--title="Minimize sidebar"></span>-->
+    <!--</h1>-->
+  </div>
+  <div class="col-xs-11 head">
+    <h1>Demo environment</h1>
+  </div>
+
+</div>
+
+
+<!--connection 1-->
+<div class="row connection connection-1">
+  <div class="col-xs-10"><h2>test.mosquitto.org - Subscriptions</h2></div>
+  <div class="col-xs-2 subscription-header">
+    <div class="pull-right">
+      <div class="row">
+        <div class="col-xs-6">
+          <div data-toggle="tooltip"
+               data-placement="top"
+               data-container="body"
+               title="Pause all subscriptions for test.mosquitto.org ">
+            <i class="fa fa-2x fa-pause fa no-top-padding glyphicon-btn"></i>
+          </div>
+        </div>
+        <div class="col-xs-6">
+          <div data-toggle="tooltip"
+               data-placement="top"
+               data-container="body"
+               title="Add a new subscriptions to test.mosquitto.org ">
+            <i class="fa fa-2x fa-plus fa no-top-padding glyphicon-btn"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row connection connection-1 sub">
+  <div class="col-xs-6 col-sm-6">
+    <h3>topic/name/#</h3>
+  </div>
+  <div class="col-xs-6 col-sm-6 options">
+    <span class="glyphicon glyphicon-chevron-down pull-right"></span>
+    <span class="glyphicon glyphicon-cog pull-right"></span>
+    <span class="pull-right"><span class="badge">Messages: 0/0</span></span>
+  </div>
+</div>
+<div class="connection connection-1 sub last expanded">
+  <div class="row">
+    <div class="col-xs-6 col-lg-9">
+      <h3>test/#</h3>
+    </div>
+    <div class="col-xs-6 col-lg-3 options">
+                    <span class="glyphicon glyphicon-chevron-down pull-right toggle-message" data-target=".message-333"
+                          data-up="glyphicon-chevron-up" data-down="glyphicon-chevron-down"></span>
+      <span class="glyphicon glyphicon-cog pull-right"></span>
+      <span class="pull-right"><span class="badge">Messages: 1/2</span></span>
+    </div>
+  </div>
+  <div class="row table-header message-333 hidden-init">
+    <div class="hidden-xs col-sm-2 col-lg-1"><h4>Date</h4></div>
+    <div class="col-xs-5 col-sm-4 col-lg-2"><h4>Topic</h4></div>
+    <div class="col-xs-7 col-sm-6 col-lg-9"><h4>Message</h4></div>
+  </div>
+  <div class="row message message-333 hidden-init">
+    <div class="hidden-xs col-sm-2 col-lg-1">18:00</div>
+    <div class="col-xs-5 col-sm-4 col-lg-2">test/hello</div>
+    <div class="col-xs-7 col-sm-6 col-lg-9">world</div>
+  </div>
+
+  <div class="row message message-444">
+    <div class="hidden-xs col-sm-2 col-lg-1">18:45</div>
+    <div class="col-xs-5  col-sm-4 col-lg-2">test/cat/att/home</div>
+    <div class="col-xs-7 col-sm-6 col-lg-9">
+      <div id="jsonExample">
+        <!--<span class="badge">Collapse <i class="fa glyphicon-btn fa-angle-double-down collapsed" data-toggle="collapse" data-target="#connectionNav" data-up="fa-angle-double-down" data-down="fa-angle-double-up"></i> </span>-->
+
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row message message-333 hidden-init">
+    <div class="hidden-xs col-sm-2 col-lg-1">18:30</div>
+    <div class="col-xs-5  col-sm-4 col-lg-2">test/cat/att/home/room/basement/veryLongMessage</div>
+    <div class="col-xs-7 col-sm-6 col-lg-9">Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+      Accusamus alias
+      architecto consequuntur, deleniti eligendi illum impedit neque numquam obcaecati omnis
+      soluta totam
+      vel, veritatis. Assumenda eum explicabo fugiat harum repellendus.
+
+    </div>
+  </div>
+</div>
+<!--connection 2 end-->
+
+<!--connection 2-->
+<mqtt-subscription></mqtt-subscription>
+<!--connection 2 end-->
+<!--connection 3 start-->
+<div class="row connection connection-3 connected">
+  <div class="col-xs-10"><h2>m2m.eclipse.org - Subscriptions</h2></div>
+  <div class="col-xs-2">
+    <h2 class="pull-right">
+                    <span class="glyphicon glyphicon-plus pull-right no-top-padding glyphicon-btn" data-toggle="modal"
+                          data-target="#addSubscription"></span>
+    </h2>
+  </div>
+</div>
+<div class="row connection connection-3 sub">
+  <div class="col-xs-6 col-sm-6">
+    <h3>topic/name/#</h3>
+  </div>
+  <div class="col-xs-6 col-sm-6 options">
+    <span class="glyphicon glyphicon-chevron-down pull-right"></span>
+    <span class="glyphicon glyphicon-cog pull-right"></span>
+    <span class="pull-right"><span class="badge">Messages: 0/0</span></span>
+  </div>
+</div>
+<div class="connection connection-3 sub last expanded">
+  <div class="row">
+    <div class="col-xs-6 col-lg-9">
+      <h3>test/#</h3>
+    </div>
+    <div class="col-xs-6 col-lg-3 options">
+                    <span class="glyphicon glyphicon-chevron-down pull-right toggle-message" data-target=".message-555"
+                          data-up="glyphicon-chevron-up" data-down="glyphicon-chevron-down"></span>
+      <span class="glyphicon glyphicon-cog pull-right"></span>
+      <span class="pull-right"><span class="badge">Messages: 1/2</span></span>
+    </div>
+  </div>
+  <div class="row table-header message-555 hidden-init">
+    <div class="hidden-xs col-sm-2 col-lg-1"><h4>Date</h4></div>
+    <div class="col-xs-5 col-sm-4 col-lg-2"><h4>Topic</h4></div>
+    <div class="col-xs-7 col-sm-6 col-lg-9"><h4>Message</h4></div>
+  </div>
+  <div class="row message message-555 hidden-init">
+    <div class="hidden-xs col-sm-2 col-lg-1">18:00</div>
+    <div class="col-xs-5 col-sm-4 col-lg-2">test/hello</div>
+    <div class="col-xs-7 col-sm-6 col-lg-9">world</div>
+  </div>
+  <div class="row message message-555 hidden-init">
+    <div class="hidden-xs col-sm-2 col-lg-1">18:30</div>
+    <div class="col-xs-5  col-sm-4 col-lg-2">test/cat/att/home/room/basement/veryLongMessage</div>
+    <div class="col-xs-7 col-sm-6 col-lg-9">Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+      Accusamus alias
+      architecto consequuntur, deleniti eligendi illum impedit neque numquam obcaecati omnis
+      soluta totam
+      vel, veritatis. Assumenda eum explicabo fugiat harum repellendus.
+
+
+    </div>
+  </div>
+</div>
+<!--connection 3 start-->
+
+</section>
+</div>
+<!--content end-->
+</div>
+</div>
+
+<div class="modal fade" id="newConnection" tabindex="-1" role="dialog" aria-labelledby="newConnectionLabel"
+     aria-hidden="true">
+<div class="modal-dialog">
+<div class="modal-content">
+<div class="modal-header">
+  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+  <h2 class="modal-title" id="newConnectionLabel">Add a new Connection</h2>
+</div>
+<div class="modal-body">
+  <div class="connection-wrapper">
+    <!--Connection Details-->
+    <div>
+      <div class="page-header">
+        <h4>Connection Details</h4>
+      </div>
+      <div class="row">
+        <div class="col-sm-8">
+          <div class="form-group">
+            <label for="connectionName">Connection name</label>
+            <input class="form-control" data-toggle="tooltip" id="connectionName"
+                   placeholder="Eclipse MQTT">
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="form-group">
+            <label for="connectionColor">Color scheme</label>
+            <input type="text" id="connectionColor" class="form-control demo minicolors-input"
+                   value="#70c24a" size="7">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-8">
+          <div class="form-group">
+            <label for="hostnameInput">Hostname</label>
+            <input class="form-control" data-toggle="tooltip" id="hostnameInput"
+                   placeholder="e.g. iot.eclipse.org" title=""
+                   data-original-title="Use any MQTT broker.">
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="form-group">
+            <label for="portInput">Port</label>
+            <input class="form-control" id="portInput" placeholder="Enter port number"
+                   value="1883">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-8">
+          <div class="form-group">
+            <label for="clientIdInput">Client ID</label>
+            <input class="form-control" data-toggle="tooltip" id="clientIdInput"
+                   placeholder="Enter client ID" title=""
+                   data-original-title="MQTT client ID. 1-23 characters long.">
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="btn btn-primary" id="generateRandomId">Generate a random ID</div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-4">
+          <div class="form-group">
+            <label for="cleanSessionInput">Session</label>
+
+            <div class="checkbox">
+              <label data-toggle="tooltip" title=""
+                     data-original-title="Uncheck to preserve the list of subscriptions and to receive queued QOS 1 and 2 messages.">
+                <input checked="checked" id="cleanSessionInput" type="checkbox">
+                Clean Session
+
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="form-group">
+            <label for="useSslInput">SSL</label>
+
+            <div class="checkbox">
+              <label>
+                <input id="useSslInput" type="checkbox">
+                Use SSL
+
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="keepAliveInput">Keep Alive</label>
+
+            <div class="input-group">
+              <input class="form-control" data-toggle="tooltip" id="keepAliveInput"
+                     placeholder="Enter keep alive time" title="" value="30"
+                     data-original-title="Keep alive in seconds.">
+              <span class="input-group-addon">seconds</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--Credentials-->
+    <div>
+      <div class="page-header">
+        <h4>Credentials</h4>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="usernameInput">Username</label>
+            <input class="form-control" id="usernameInput" placeholder="Enter username">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="passwordInput">Password</label>
+            <input class="form-control" id="passwordInput" placeholder="Enter password"
+                   type="password">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="checkbox">
+            <label data-toggle="tooltip" title=""
+                   data-original-title="q.m2m.io requires passwords to be hashed.">
+              <input checked="checked" id="md5Input" type="checkbox">
+              Hash password with MD5
+
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--Last-Will-->
+
+    <div>
+      <div class="page-header">
+        <div class="row">
+          <div class="col-md-11">
+            <h4>Last-Will</h4>
+          </div>
+          <div class="col-md-1">
+            <!--lastWillContainer-->
+                                <span data-toggle="collapse" href="#lastWillContainer"
+                                      class="glyphicon glyphicon-chevron-down pull-right right-spacing collapsed"></span>
+          </div>
+        </div>
+
+      </div>
+      <div id="lastWillContainer" class="collapse">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="lastWillTopicInput">Last-Will Topic</label>
+              <input class="form-control" id="lastWillTopicInput"
+                     placeholder="Enter last-will topic">
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="lastWillMessageInput">Last-Will Message</label>
+              <textarea class="form-control" id="lastWillMessageInput"
+                        placeholder="Enter last-will message" rows="3"></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="lastWillQosInput">Last-Will QoS</label>
+              <select class="form-control" data-toggle="tooltip" id="lastWillQosInput">
+                <option>0 - at most once</option>
+                <option>1 - at least once</option>
+                <option>2 - exactly once</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-push-1 col-md-5">
+            <div class="form-group">
+              <label for="lastWillRetainInput">Last-Will Retain</label>
+
+              <div class="checkbox">
+                <label>
+                  <input id="lastWillRetainInput" type="checkbox">
+                  Retain
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+  <button type="button" class="btn btn-primary save-button" id="addConnection">Add connection</button>
+</div>
+</div>
+</div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="addSubscription" tabindex="-1" role="dialog" aria-labelledby="addSubscriptionLabel"
+     aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h2 class="modal-title" id="addSubscriptionLabel">Add new subscription to m2m.eclipse.org</h2>
+      </div>
+      <div class="modal-body">
+        <div class="general-wrapper">
+          <div class="row general-head">
+            <div class="col-sm-12">
+              <h3>
+                General
+              </h3>
+            </div>
+          </div>
+          <div class="general-body">
+            <div class="row">
+              <div class="col-sm-12">
+                <form role="form">
+                  <div class="form-group">
+                    <label for="subscribeTopic"><h4>Subscribe to Topic</h4></label>
+                    <input type="topic" class="form-control" id="subscribeTopic"
+                           placeholder="Topic">
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-sm-3">
+                <h4>Request QoS</h4>
+              </div>
+              <div class="col-sm-9">
+                <div class="btn-group pull-right">
+                  <!--at most once-->
+                  <button type="button" id="testid" class="btn btn-default active"
+                          data-toggle="tooltip"
+                          data-placement="top" title="at most once" data-container="body">0
+                  </button>
+                  <!--at least once-->
+                  <button type="button" class="btn btn-default" data-toggle="tooltip"
+                          data-placement="top" title="at least once" data-container="body">1
+                  </button>
+                  <!--exactly once-->
+                  <button type="button" class="btn btn-default" data-toggle="tooltip"
+                          data-placement="top" title="exactly once" data-container="body">2
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="advanced-wrapper">
+          <div class="row advanced">
+            <div class="col-sm-12">
+              <h3>Advanced
+                <small>- limit expected values of a certain topic</small>
+                                <span data-toggle="collapse" data-parent="#accordion" href="#collapseOne"
+                                      class="glyphicon glyphicon-chevron-down pull-right right-spacing"></span></h3>
+            </div>
+          </div>
+          <div id="collapseOne" class="advanced-body collapse">
+            <div class="row">
+              <form class="form-horizontal" role="form">
+                <div class="form-group">
+                  <label for="inputEmail3" class="col-sm-2 control-label"><h4>Condition</h4></label>
+
+                  <div class="col-sm-8">
+                    <!--<input type="email" class="form-control" id="inputEmail3" placeholder="Email">-->
+                    <select class="form-control" id="inputEmail3">
+                      <optgroup label="General">
+                        <option>
+                          Payload is element of list
+                        </option>
+                        <option>
+                          Payload is in Range
+                        </option>
+                        <option value="">
+                          Payload is of type
+                        </option>
+                        <option value="">
+                          Expecting #n messages in a certain time frame
+                        </option>
+                      </optgroup>
+                      <optgroup label="Custom">
+                        <option value="">
+                          Custom filter 1
+                        </option>
+                        <option value="">
+                          Custom filter 2
+                        </option>
+                      </optgroup>
+
+
+                    </select>
+                  </div>
+                  <button type="button" class="col-sm-1 btn btn-primary">Add</button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary">Add subscription</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!--footer-->
+<footer id="target">
+  TODO ADD MQTT LOGO, ECLIPSE AND PAHO
+
+
+
+
+</footer>
+
+ <!--import scripts-->
+<link rel="import" href="scripts.html"/>
+
+</body>
+</html>
