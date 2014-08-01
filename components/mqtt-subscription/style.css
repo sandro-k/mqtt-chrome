@@ -5487,7 +5487,7 @@ h2 {
 .github {
   position: fixed;
   bottom: 0;
-  right: 0;
+  left: 0;
   border: 0;
   z-index: 1000; }
 

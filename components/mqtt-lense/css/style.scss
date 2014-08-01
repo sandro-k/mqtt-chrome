@@ -8,6 +8,20 @@ h1, h2, h3, h4, h5, h6 {
   color: $grey_dark_dark;
 }
 
+strong {
+  color: $grey_dark_dark;
+}
+
+core-tooltip {
+  strong {
+    color: #ffffff;
+  }
+}
+
+.form-control {
+  color: $grey_dark_dark;
+}
+
 header {
   &.header {
     background: #ffffff;
@@ -76,6 +90,7 @@ header {
 //  border-bottom: 1px solid $grey_dark;
   :first-child {
     padding-left: $margin*0.5;
+    padding-right: $margin*0.5;
   }
 }
 
@@ -128,4 +143,25 @@ header {
 
 .space-left {
   padding-left: $margin;
+}
+
+.topicInput {
+//  max-width: 300px;
+}
+
+.form-header {
+  margin-bottom: $margin ;
+}
+
+.mr {
+  margin-right: $margin;
+}
+
+.ml {
+  margin-left: $margin;
+}
+
+.mlr {
+  margin-left: $margin;
+  margin-right: $margin;
 }

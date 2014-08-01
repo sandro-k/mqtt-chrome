@@ -62,15 +62,21 @@
                              disabled?="{{ messages.length < 1 }}"
                              down="arrow-drop-down"></changeover-icon>
 
-          <core-icon
-              class="pull-right"
-              on-click="{{settings}}"
-              icon="settings"></core-icon>
+
+          <!--<core-icon-->
+              <!--class="pull-right"-->
+              <!--on-click="{{settings}}"-->
+              <!--icon="settings"></core-icon>-->
 
           <core-icon
               class="pull-right"
-              on-click="{{pause}}"
-              icon="av:pause"></core-icon>
+              on-click="{{deleteSub}}"
+              icon="delete"></core-icon>
+
+          <!--<core-icon-->
+              <!--class="pull-right"-->
+              <!--on-click="{{pause}}"-->
+              <!--icon="av:pause"></core-icon>-->
 
 
             <span class="pull-right">
@@ -83,17 +89,19 @@
         <template if="{{ messages.length > 0 }}">
           <div class="row table-header message-{{message.ID}}">
             <div class="hidden-xs col-sm-2 col-lg-1"><h4>Date</h4></div>
-            <div class="col-xs-5 col-sm-4 col-lg-2"><h4>Topic</h4></div>
-            <div class="col-xs-7 col-sm-6 col-lg-9"><h4>Message</h4></div>
+            <div class="col-xs-5 col-sm-3 col-lg-2"><h4>Topic</h4></div>
+            <div class="col-xs-2 col-sm-2 col-lg-1"><h4>QoS</h4></div>
+            <div class="col-xs-6 col-sm-5 col-lg-8"><h4>Message</h4></div>
           </div>
         </template>
 
         <div id="message-warpper">
         <template repeat="{{message in messages}}">
           <div class="row message message-{{message.ID}}">
-            <div class="hidden-xs col-sm-2 col-lg-1">{{message.timestamp | moment }}</div>
-            <div class="col-xs-5 col-sm-4 col-lg-2">{{message.topic}}</div>
-            <div class="col-xs-7 col-sm-6 col-lg-9">{{message.payload}}</div>
+            <div class="hidden-xs col-sm-2 col-lg-1"><div>{{message.timestamp | moment }}</div></div>
+            <div class="col-xs-5 col-sm-3 col-lg-2"><span class="badge">{{message.topic}}</span></div>
+            <div class="col-xs-2 col-sm-2 col-lg-1"><span class="badge">QoS: {{message.qos}}</span></div>
+            <div class="col-xs-6 col-sm-5 col-lg-8">{{message.payload}}</div>
           </div>
         </template>
        </div>

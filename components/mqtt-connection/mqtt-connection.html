@@ -271,8 +271,7 @@
             self.asyncFire('toast', {text: "Removed subscription to "+ e.detail.topic});
 //            console.log(self.unsubscribe);
             // TODO put real topic into unsubscribe
-            console.log("BLUB");
-            self.unsubscribe("presence")
+            self.unsubscribe(e.detail.topic)
           });
 
           this.subscriptions[topic].addEventListener("saveSub", function (e, detail, sender) {
@@ -365,6 +364,10 @@
             // delete reference
             delete this.subscriptions[topic];
 
+            this.subscriptions.keys
+
+            this.subscriptions.keys = _.without(this.subscriptions.keys, topic);
+
 
 
 
@@ -381,8 +384,9 @@
 
         },
 
-        mqttPublish: function (topic, message) {
-          this.client.publish(topic, message);
+        mqttPublish: function (topic, message, opt_options, opt_callback) {
+          console.log('hi');
+          this.client.publish(topic, message, opt_options, opt_callback);
         },
 
         onMessage: function (topic, payload, object) {
@@ -485,7 +489,7 @@
             protocolId: "MQIsdp",
             protocolVersion: 3,
             reconnectPeriod: 1000};
-
+          console.log(this.hostPort);
           this.client = mows.createClient(this.hostPort, this.hostname, options);
 
           console.log("ConnecteD: %s", this.client.connected)

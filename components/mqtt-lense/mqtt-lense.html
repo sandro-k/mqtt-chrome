@@ -8,6 +8,9 @@
 <link rel="import" href="../../bower_components/core-collapse/core-collapse.html">
 <link rel="import" href="../../bower_components/core-tooltip/core-tooltip.html">
 <link rel="import" href="../../bower_components/core-icon-button/core-icon-button.html">
+<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
+
+
 
 <!--custom components-->
 <link rel="import" href="../../components/mqtt-connection/mqtt-connection.html">
@@ -26,6 +29,8 @@
         background: #ffff00;
       }
 
+
+
     </style>
 
     <template repeat="{{ connection in mqttConnections }}">
@@ -38,7 +43,6 @@
         :host /deep/ .{{connection.connectionID}}.zero.border  {
           border-left: 3px solid {{connection.connectionColors[0]}}!important;
           border-right: 1px solid {{connection.connectionColors[0]}}!important;
-          /*border-color: {{connection.connectionColors[0]}}!important;*/
         }
 
         :host /deep/ .{{connection.connectionID}}.one.bg   {
@@ -126,7 +130,7 @@
 
     <!--git hub-->
     <a href="https://github.com/sandro-k/mqtt-chrome">
-      <img class="github"
+      <img class="github rot-90"
            src="../../img/github.png"
            alt="Fork me on GitHub">
     </a>
@@ -160,7 +164,7 @@
 
     <!--/header-->
     <!--main-->
-    <div class="container-fluid" layout horizontal wrap>
+    <div class="container-fluid" layout horizontal wrap start>
       <!--menu-->
       <core-collapse id="menuCollapse" target="{{$.menu}}" opened horizontal></core-collapse>
       <div id="menu">
@@ -226,7 +230,7 @@
 
       <!--menu end-->
       <!--content-->
-      <div id="content" flex>
+      <div id="content" style="min-width: 200px" flex>
         <div class="header left" layout horizontal center>
           <div class="menu-buttons left">
             <changeover-icon icon="chevron-left" down="chevron-right" up="chevron-left" on-click="{{menuCollapse}}" status="false"></changeover-icon>
@@ -243,26 +247,150 @@
           <div class="subheader {{connection.connectionID}} nine bg">
             <div class="{{connection.connectionID}} zero border" layout horizontal center>
               <div flex>
-                <h2>{{connection.connectionName}} - Subscriptions</h2>
+                <h2>Connection: {{connection.connectionName}}</h2>
               </div>
               <!--<div class="menu-buttons right">-->
                   <!--<core-icon icon="add" on-click="{{addSubscription}}"></core-icon>-->
               <!--</div>-->
             </div>
           </div>
-          <div class="subheader {{connection.connectionID}} nine bg">
-            <div class="{{connection.connectionID}} zero border space" layout horizontal center>
-              <h4>Subscribe to topic:</h4>
-              <input class="space-left" value="{{subscriptionTopic}}" flex>
-              <div class="menu-buttons right">
-                <core-icon icon="add" on-click="{{addSubscription}}"></core-icon>
+
+
+
+        <div class="subheader {{connection.connectionID}} nine bg">
+          <div class="{{connection.connectionID}} zero border" layout horizontal center>
+            <div flex>
+              <h2>Subscribe</h2>
+            </div>
+            <div class="menu-buttons right">
+              <changeover-icon
+                  target="{{connection.connectionID}}"
+                  icon="expand-more"
+                  down="expand-less"
+                  up="expand-more"
+                  on-click="{{toogleSubscribe}}"></changeover-icon>
+
+            </div>
+          </div>
+          <core-collapse id="subscriptionCollapse{{connection.connectionID}}">
+            <div class="{{connection.connectionID}} zero border space" layout horizontal end wrap>
+              <div class="min-200 ml" flex five>
+                <div layout vertical>
+                  <strong class="form-header">Topic</strong>
+                  <input class="form-control space-left topicInput" value="{{subscriptionTopic}}" flex>
+                </div>
+              </div>
+              <div class="min-200 mlr" flex two>
+                <div layout vertical>
+                  <strong class="form-header">OoS</strong>
+                  <select class="form-control min-200" value="{{subscriptionTopicQoS}}">
+                    <option value="0">0 - at most once</option>
+                    <option value="1">1 - at least once</option>
+                    <option value="2">2 - exactly once</option>
+                  </select>
+                </div>
+              </div>
+              <div>
+                <div class="mr" layout vertical>
+                  <a class="btn btn-primary" on-click="{{addSubscription}}">Subscribe</a>
+                </div>
               </div>
             </div>
+          </core-collapse>
+        </div>
+
+
+        <div class="subheader {{connection.connectionID}} nine bg">
+          <div class="{{connection.connectionID}} zero border" layout horizontal center>
+              <div flex>
+                <h2>Publish</h2>
+              </div>
+              <div class="menu-buttons right">
+                <changeover-icon
+                    target="{{connection.connectionID}}"
+                    icon="expand-more"
+                    down="expand-less"
+                    up="expand-more"
+                    on-click="{{tooglePublish}}"></changeover-icon>
+
+              </div>
+            </div>
+            <core-collapse id="publishCollapse{{connection.connectionID}}">
+              <div class="{{connection.connectionID}} zero border space" layout horizontal end wrap>
+                <div class="min-200 ml" flex five>
+                  <div layout vertical>
+                    <strong class="form-header">Topic</strong>
+                    <input class="form-control space-left topicInput" value="{{publishTopic}}" flex>
+                  </div>
+                </div>
+                <div class="min-200 mlr" flex two>
+                  <div layout vertical>
+                    <strong class="form-header">OoS</strong>
+                    <select class="form-control min-200" value="{{publishTopicQoS}}">
+                      <option value="0">0 - at most once</option>
+                      <option value="1">1 - at least once</option>
+                      <option value="2">2 - exactly once</option>
+                    </select>
+                  </div>
+                </div>
+                <div>
+                  <div class="mr" layout vertical>
+                    <a class="btn btn-primary" on-click="{{mqttPublish}}">Publish</a>
+                  </div>
+                </div>
+              </div>
+              <div class="{{connection.connectionID}} zero border space" layout horizontal center>
+                <div flex>
+                  <div class="mr" layout vertical>
+                    <strong class="form-header">Message</strong>
+                    <textarea class="form-control mlr" rows="3" flex value="{{publishValue}}"></textarea>
+                  </div>
+                </div>
+              </div>
+            </core-collapse>
           </div>
 
 
-          <div id="ID{{connection.connectionID}}" class="item">
 
+
+          <!--<div class="subheader {{connection.connectionID}} nine bg">-->
+            <!--<div class="{{connection.connectionID}} zero border space" layout horizontal center>-->
+              <!--<h4>Topic:</h4>-->
+              <!--<div flex>-->
+                <!--<input class="form-control space-left topicInput" value="{{subscriptionTopic}}">-->
+              <!--</div>-->
+              <!--<div class="menu-buttons right">-->
+                <!--<core-icon icon="add" on-click="{{addSubscription}}"></core-icon>-->
+              <!--</div>-->
+            <!--</div>-->
+          <!--</div>-->
+
+          <!--<div class="subheader {{connection.connectionID}} nine bg">-->
+            <!--<div class="{{connection.connectionID}} zero border space" layout horizontal center>-->
+              <!--<h4>Publish:</h4>-->
+              <!--<div flex>-->
+                <!--<input class="form-control space-left topicInput" value="{{subscriptionTopic}}">-->
+              <!--</div>-->
+              <!--<div>-->
+                <!--<textarea class="form-control" rows="3"></textarea>-->
+              <!--</div>-->
+              <!--<div class="menu-buttons right">-->
+                <!--<button class="primary btn" on-click="{{mqttPublish}}">Publish</button>-->
+              <!--</div>-->
+            <!--</div>-->
+
+
+          <!--</div>-->
+
+
+          <div id="ID{{connection.connectionID}}" class="item">
+            <div class="subheader {{connection.connectionID}} nine bg">
+              <div class="{{connection.connectionID}} zero border" layout horizontal center>
+                <div flex>
+                  <h2>Subscriptions</h2>
+                </div>
+             </div>
+           </div>
 
 
             <!--{{connection.subscriptions.keys}}-->
@@ -318,7 +446,7 @@
 
 
 
-
+    <paper-toast id="toast" status="{{toaststatus}}"></paper-toast>
   </template>
 
 
@@ -330,21 +458,39 @@
         appName: "MQTT",
         appSubname: "lense",
         breadcrump: "Subscriptions",
+        publishTopicQoS: 0,
       },
 
       mqttConnections: [],
 
+      defaultConnectionColors: ['#ccbb22', '#77cc22', '#22cc33', '#22cc99', '#2233cc', '#7722cc', '#cc22bb' , '#cc2255'],
+      colorCounter: 1,
+
 
       created: function () {
         console.log("created");
-        this.users = {};
-        this.users.keys = ['item'];
-        this.users.item= ({"userFile": "file", name: "tt"});
+
         this.subscriptionTopic = 'test';
+        this.publishTopicQoS = 0;
+        this.publishTopic = 'test';
+        this.publishValue = "Just a test message!"
+
       },
       ready: function () {
         console.log("ready");
+        this.toast = this.$.toast;
+        var self = this;
 
+        document.addEventListener("toast", function (e, detail, sender) {
+          console.log("foo");
+          self.toast.text = e.detail.text;
+          if (e.detail.status) {
+            self.toaststatus  = e.detail.status;
+          } else {
+            self.toaststatus  = "";
+          }
+          self.toast.show();
+        });
       },
       attached: function () {
         console.log("attached");
@@ -352,6 +498,8 @@
       domReady: function () {
         console.log("domReady");
         this.loadDummy();
+
+//        this.asyncFire("toast", {text: "hi"});
       },
       detached: function () {
         console.log("detached");
@@ -374,10 +522,10 @@
       loadDummy: function () {
         var values = {
           "connectionID":"lensasasasasa",
-          "connectionName":"test.mosquitto",
-          "connectionColor":"#ccbb22",
-          "hostname":"ws://test.mosquitto.org/mqtt",
-          "hostPort":8080,
+          "connectionName":"broker.mqttdashboard.com",
+          "connectionColor":this.defaultConnectionColors[0],
+          "hostname":"ws://broker.mqttdashboard.com",
+          "hostPort":8000,
           "clientID":"connectionID",
           "cleanSession":true,
           "useSSL":false,
@@ -394,6 +542,10 @@
 
         var mqttCon = new MqttConnection();
 
+//        mqttCon.addEventListener("toast", this.toast);
+
+
+
         for (var property in mqttCon.publish) {
           if (values[property]) {
             mqttCon[property] = values[property];
@@ -407,10 +559,10 @@
         var self = this;
         var values = {
           "ID":"",
-          "connectionName":"test.mosquitto",
-          "connectionColor":"#ccbb22",
-          "hostname":"ws://test.mosquitto.org/mqtt",
-          "hostPort":8080,
+          "connectionName":"broker.mqttdashboard.com",
+          "connectionColor":this.defaultConnectionColors[this.colorCounter],
+          "hostname":"ws://broker.mqttdashboard.com",
+          "hostPort":8000,
           "clientID":"7ILDuLmcWUyTiLJvDhvMg7XZxyPh0PaM",
           "cleanSession":true,
           "useSSL":false,
@@ -423,6 +575,11 @@
           "lastWillQoS":0,
           "lastWillRetained":true,
           "autoConnect":true};
+
+        this.colorCounter++;
+        if (this.colorCounter >= this.defaultConnectionColors.length ) {
+          this.colorCounter = 0;
+        }
 
 
         // create modal
@@ -472,20 +629,20 @@
         this.$.connectionListCollapse.toggle();
       },
 
+      toast: function () {
+        console.error("TOAST");
+      },
+
       menuCollapse: function () {
         this.$.menuCollapse.toggle();
       },
 
       addSubscription: function (inEvent, inDetail ,inSender) {
-
-//        this.$.addNewSubscription.toggle();
-
         // polymer magic
         var connection = inSender.templateInstance.model.connection;
-//        connection.subscriptions.push({topic: "aaaaa"});
-//        connection.subscriptions['xxxx'] = ({topic: "aaaaa"});
+        // get the target
         var target = this.$.subscriptions.querySelector('#ID'+connection.connectionID);
-//        var target = this.$.subscriptions.querySelector('#test');
+        // subscribe
         connection.subscribe(this.subscriptionTopic, {} , target);
 
 
@@ -493,6 +650,34 @@
 
       connectionSettings: function (inEvent, inDetail ,inSender) {
         console.error("TODO(sandro-k) open connection settings");
+      },
+
+      toogleSubscribe: function (inEvent, inDetail ,inSender) {
+        // todo(sandro-k) unclean hack please fix
+        inSender.templateInstance.firstNode.parentNode.querySelector("#subscriptionCollapse"+ inSender.getAttribute("target")).toggle();
+      },
+
+      tooglePublish: function (inEvent, inDetail ,inSender) {
+        // todo(sandro-k) unclean hack please fix
+        inSender.templateInstance.firstNode.parentNode.querySelector("#publishCollapse" + inSender.getAttribute("target")).toggle();
+      },
+
+      mqttPublish: function (inEvent, inDetail ,inSender) {
+        var topic = this.publishTopic;
+        var qos = this.publishTopicQoS;
+        var message = this.publishValue;
+
+        var options = {
+          qos: qos,
+          retain: false
+        }
+
+        var self = this;
+        var connection = inSender.templateInstance.model.connection;
+        connection.mqttPublish(topic, message, options);
+
+
+
       },
 
       /**
