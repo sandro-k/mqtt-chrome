@@ -55,12 +55,12 @@
 
 
 
-            <changeover-icon icon="arrow-drop-down"
-                             up="arrow-drop-up"
+            <changeover-icon icon="arrow-drop-up"
+                             up="arrow-drop-down"
                              class="pull-right"
                              on-click="{{handelopen}}"
                              disabled?="{{ messages.length < 1 }}"
-                             down="arrow-drop-down"></changeover-icon>
+                             down="arrow-drop-up"></changeover-icon>
 
 
           <!--<core-icon-->
@@ -85,7 +85,7 @@
         </div>
       </div>
 
-      <core-collapse id="messages">
+      <core-collapse id="messages" opened>
         <template if="{{ messages.length > 0 }}">
           <div class="row table-header message-{{message.ID}}">
             <div class="hidden-xs col-sm-2 col-lg-1"><h4>Date</h4></div>
