@@ -125,6 +125,8 @@
     <!--<link rel="stylesheet" href="css/debug.css"/>-->
 
 
+
+
     <link rel="stylesheet" href="../../css/build/layout.css"/>
     <link rel="stylesheet" href="css/main.css"/>
 
@@ -152,9 +154,10 @@
             </div>
 
             <div class="col-xs-4 col-sm-2">
-              <h1 on-click="{{config}}" class="config-icon pull-right config extra-margin">
-                <span class="glyphicon glyphicon-cog"></span>
-              </h1>
+              <!--<h1 on-click="{{config}}" class="config-icon pull-right config extra-margin">-->
+                <!--<span class="glyphicon glyphicon-cog"></span>-->
+              <!--</h1>-->
+
             </div>
 
           </div>
@@ -167,18 +170,18 @@
     <div class="container-fluid" layout horizontal wrap start>
       <!--menu-->
       <core-collapse id="menuCollapse" target="{{$.menu}}" opened horizontal></core-collapse>
-      <div id="menu">
+      <div id="menu" style="overflow:initial!important">
          <div class="header right" layout horizontal self-stretch>
            <div flex>
              <h1>Connections</h1>
            </div>
            <div layout horizontal center class="menu-buttons">
 
-             <core-tooltip show?="{{mqttConnections.length == 0}}" >
+             <core-tooltip show?="{{mqttConnections.length == 0}}">
                <style>
                  :host /deep/ .polymer-tooltip {
-                  white-space: normal!important;
-                   line-height: 10px;
+                   /*white-space: normal!important;*/
+                   /*line-height: 10px;*/
                    z-index: 11;
                    /*background-color: rgba(144,238,144, 0.8);*/
                    /*border: 1px solid lightgreen;*/
@@ -191,6 +194,7 @@
                <core-icon icon="add" on-click="{{addConnection}}"></core-icon>
              </core-tooltip>
 
+
              <changeover-icon
                  icon="expand-less"
                  down="expand-more"
@@ -200,11 +204,6 @@
                  disabled?="{{mqttConnections.length == 0}}"></changeover-icon>
            </div>
          </div>
-          <template if="{{mqttConnections.length == 0}}">
-            <div class="items helper right" layout horizontal center>
-              <!--<strong>First add a connection</strong>-->
-            </div>
-          </template>
           <!--items-->
           <div class="items">
               <core-collapse id="connectionListCollapse" target="{{$.connectionList}}" opened></core-collapse>
@@ -216,7 +215,8 @@
                       <span class="wraptext">{{connection.connectionName}}</span>
                       <span class="badge {{connection.connectionID}} zero bg">{{connection.connected | connectedFilter}}</span>
                     </div>
-                    <core-icon icon="settings" size="14" on-click="{{connectionSettings}}"></core-icon>
+                    <!--<core-icon icon="settings" size="14" on-click="{{connectionSettings}}"></core-icon>-->
+                    <core-icon icon="delete"  on-click="{{removeConnection}}"></core-icon>
                   </li>
 
                 </template>
@@ -497,7 +497,7 @@
       },
       domReady: function () {
         console.log("domReady");
-        this.loadDummy();
+        //this.loadDummy();
 
 //        this.asyncFire("toast", {text: "hi"});
       },
@@ -678,6 +678,15 @@
 
 
 
+      },
+
+      removeConnection: function (inEvent, inDetail ,inSender) {
+        console.log(inSender);
+        var connection = inSender.templateInstance.model.connection;
+        console.log(connection);
+        connection.end();
+
+        this.mqttConnections = _.without(this.mqttConnections, connection);
       },
 
       /**
