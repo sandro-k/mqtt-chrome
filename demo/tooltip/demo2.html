@@ -2,9 +2,154 @@
 <html>
 <head lang="en">
   <meta charset="UTF-8">
-  <title></title>
+  <title>Tooltip demo</title>
+
+  <script src="../../bower_components/platform/platform.js"></script>
+
+  <link rel="import" href="../../bower_components/core-tooltip/core-tooltip.html"/>
+
+  <!--<style>-->
+    <!--#wrapper {-->
+      <!--width: 500px;-->
+      <!--margin: 200px auto;-->
+    <!--}-->
+
+    <!--core-tooltip /deep/ .polymer-tooltip {-->
+      <!--pointer-events: auto;-->
+      <!--background-color: #ffff00;-->
+                 <!--}-->
+  <!--</style>-->
 </head>
-<body>
+<body unresolved>
+<!--<div id="wrapper">-->
+  <!--<core-tooltip label='position="left"' position="left">-->
+    <!--<div>|||</div>-->
+    <!--<div tip>-->
+      <!--<button>position</button>-->
+    <!--</div>-->
+  <!--</core-tooltip>-->
+
+
+  <!--<core-tooltip label='position="top"' position="top">-->
+    <!--<div class="fakebutton">|||</div>-->
+    <!--<div tip>-->
+      <!--<button>position</button>-->
+    <!--</div>-->
+  <!--</core-tooltip>-->
+
+  <!--<core-tooltip label='position="bottom"' position="bottom">-->
+    <!--<div class="fakebutton">|||</div>-->
+    <!--<div tip>-->
+      <!--<button>position</button>-->
+    <!--</div>-->
+  <!--</core-tooltip>-->
+
+  <!--<core-tooltip label='position="top"' position="right">-->
+    <!--<div class="fakebutton">|||</div>-->
+    <!--<div tip>-->
+      <!--<button>position</button>-->
+    <!--</div>-->
+  <!--</core-tooltip>-->
+<!--</div>-->
+
+<polymer-element name="demo-tag">
+<template>
+  <style>
+    :host {
+      box-sizing: border-box;
+      display: block;
+    }
+    #wrapper {
+      margin-top: 200px;
+
+    }
+
+    core-tooltip {
+      margin: 50px;
+    }
+
+  core-tooltip /deep/ .polymer-tooltip {
+                        pointer-events: auto;
+                        background-color: #ffff00;
+                      }
+
+
+  </style>
+  <div id="wrapper" on-hover="{{hover}}" layout horizontal>
+
+    <div flex>
+
+    </div>
+    <div>
+      <core-tooltip label='position="left"' position="left" show>
+        <style>
+          :host {
+            background: blue!important;
+          }
+          :host ::content {
+            background: red!important;
+          }
+        </style>
+        <div>|||</div>
+        <div tip>
+          <button>position</button>
+        </div>
+      </core-tooltip>
+
+
+      <core-tooltip label='position="top"' position="top" show>
+        <div class="fakebutton">|||</div>
+        <div tip>
+          <button>position</button>
+        </div>
+      </core-tooltip>
+
+      <core-tooltip label='position="bottom"' position="bottom" show>
+        <div class="fakebutton">|||</div>
+        <div tip>
+          <button>position</button>
+        </div>
+      </core-tooltip>
+
+      <core-tooltip label='position="top"' position="right" show>
+        <div class="fakebutton">|||</div>
+        <div tip>
+          <button>position</button>
+        </div>
+      </core-tooltip>
+    </div>
+
+    <div flex>
+
+    </div>
+
+
+  </div>
+</template>
+<script>
+  Polymer('demo-tag', {
+
+    created: function () {
+
+    },
+
+
+
+
+    test: function (inEvent, inDetail ,inSender) {
+      console.log(inSender)
+      this.$.tooltip.setPosition();
+    },
+
+    hover: function () {
+      console.log("hover")
+    }
+  });
+</script>
+</polymer-element>
+
+<demo-tag></demo-tag>
+
 
 </body>
 </html>

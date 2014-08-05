@@ -7,31 +7,90 @@
   <script src="../../bower_components/platform/platform.js"></script>
 
   <link rel="import" href="../../bower_components/core-tooltip/core-tooltip.html"/>
+  <!--<link rel="import" href="../../bower_components/paper-button/paper-button.html"/>-->
   <!--<link rel="import" href="../../bower_components/core-layout/core-layout.html"/>-->
   <style>
-     article {
-       margin-left: 200px;
-     }
+    #wrapper {
+      width: 500px;
+      margin: 600px;
+    }
   </style>
 </head>
 <body unresolved>
 
 
-<article onclick="this.classList.toggle('on');">
 
-  <core-tooltip label="I'm a tooltip" show="false" narrow>
-    <span>Hover over me.</span>
 
-    <div tip>
+<polymer-element name="demo-tag">
+  <!-- outermost template defines the element's shadow DOM -->
+  <template>
+    <style>
+      :host /deep/ .polymer-tooltip {
+        pointer-events: auto;
+      }
+    </style>
+    <core-tooltip id="tooltip" label="I'm a tooltip" position="bottom">
       <div>
-        <button>HI</button>
-        <img src="https://pbs.twimg.com/profile_images/378800000548263523/c110b0a4c3e3e4d3dcce1d2020f3eded.jpeg">
+        Hover over me.
       </div>
-    </div>
+      <div tip>
+        <div>
+          <button on-click="{{test}}" autofocus>position</button>
+        </div>
+      </div>
+    </core-tooltip>
 
+    <button on-click="{{test}}" autofocus>position</button>
+
+  </template>
+
+
+
+  <script>
+    Polymer('demo-tag', {
+
+      created: function () {
+
+      },
+
+      ready: function () {
+
+      },
+
+      test: function (inEvent, inDetail ,inSender) {
+        console.log(inSender)
+        this.$.tooltip.setPosition();
+
+      }
+
+
+    });
+  </script>
+</polymer-element>
+
+
+
+
+
+<div id="wrapper">
+  <demo-tag></demo-tag>
+  <core-tooltip label="I'm a tooltip" position="bottom">
+    <div>
+      AAAA
+    </div>
   </core-tooltip>
 
-</article>
+  <core-tooltip label='position="left"' position="bottom">
+    <div class="fakebutton">|||</div>
+  </core-tooltip>
+</div>
+
+<script>
+  window.addEventListener('polymer-ready', function(e) {
+    console.log("polymer-ready");
+  });
+</script>
+
 
 </body>
 </html>

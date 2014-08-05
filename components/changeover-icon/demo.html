@@ -7,19 +7,64 @@
   <link rel="import" href="changeover-icon.html"/>
   <link rel="import" href="../../bower_components/core-icons/core-icons.html">
 </head>
-<body unresolved>
+<body fullbleed unresolved>
 
-<changeover-icon icon="arrow-drop-down"
-                 up="arrow-drop-up"
-                 on-click="test()"
 
-                 down="arrow-drop-down">
 
-</changeover-icon>
+
+<polymer-element name="demo-tag">
+  <template>
+    <template repeat="{{ icon in icons }}">
+
+      <changeover-icon icon="{{icon}}"
+                       up="{{icon}}"
+                       on-click="{{add}}"
+                       down="arrow-drop-down">
+        [[count]]
+                       </changeover-icon>
+
+    </template>
+  </template>
 <script>
-  var test = function(){
-    console.log("foo");
-  }
+  Polymer('demo-tag', {
+
+
+    publish: {
+      icons: []
+    },
+
+    observe: {
+      innerHTML: 'innerHTMLChanged'
+    },
+
+    created: function () {
+      this.icons = ['add'];
+      this.count = 0;
+    },
+
+    ready: function () {
+
+      console.log("ho");
+    },
+
+    add: function () {
+      this.icons.push('add');
+      this.iconInstances = this.shadowRoot.getElementsByTagName('changeover-icon');
+      this.count++;
+      console.log(this.iconInstances);
+    },
+
+    innerHTMLChanged: function () {
+      console.log("changed");
+    }
+  });
 </script>
+
+</polymer-element>
+
+<demo-tag>
+
+</demo-tag>
+
 </body>
 </html>

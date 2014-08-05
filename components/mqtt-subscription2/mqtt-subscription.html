@@ -28,16 +28,8 @@
   <template>
 
     <link rel="stylesheet" href="style.css"/>
-    <style>
-      #message-warpper {
-        max-height: 260px;
-        overflow-y: scroll;
-      }
+    <link rel="stylesheet" href="custom.css"/>
 
-      paper-button {
-        margin-right: 8px;
-      }
-    </style>
 
 
 
@@ -51,27 +43,8 @@
           <h3>"{{topic}}"</h3>
         </div>
 
-        <div class="col-xs-6 col-lg-3 options">
+        <div class="col-xs-6 col-lg-3 options" layout horizontal>
 
-
-
-            <changeover-icon icon="arrow-drop-up"
-                             up="arrow-drop-down"
-                             class="pull-right"
-                             on-click="{{handelopen}}"
-                             disabled?="{{ messages.length < 1 }}"
-                             down="arrow-drop-up"></changeover-icon>
-
-
-          <!--<core-icon-->
-              <!--class="pull-right"-->
-              <!--on-click="{{settings}}"-->
-              <!--icon="settings"></core-icon>-->
-
-          <core-icon
-              class="pull-right"
-              on-click="{{deleteSub}}"
-              icon="delete"></core-icon>
 
           <!--<core-icon-->
               <!--class="pull-right"-->
@@ -79,9 +52,31 @@
               <!--icon="av:pause"></core-icon>-->
 
 
-            <span class="pull-right">
+          <div flex></div>
+
+          <core-tooltip id="unsubscribeTooltip" position="top">
+            <core-icon
+                on-click="{{deleteSub}}"
+                icon="delete"></core-icon>
+            <div tip>
+              <button on-click="{{hendelUnsubscribe}}" dismiss>Cancel</button>
+              <button on-click="{{hendelUnsubscribe}}" confirme>Delete</button>
+            </div>
+          </core-tooltip>
+
+          <span>
               <span class="badge">Messages: {{sumUnRead}}/{{messages.length}}</span>
-            </span>
+          </span>
+
+
+          <changeover-icon icon="arrow-drop-up"
+                           up="arrow-drop-down"
+                           on-click="{{handelopen}}"
+                           disabled?="{{ messages.length < 1 }}"
+          down="arrow-drop-up"></changeover-icon>
+
+
+
         </div>
       </div>
 
@@ -384,9 +379,11 @@
         console.log("OldQos: %s", this.options_shadow.qos);
       },
 
-      deleteSub: function () {
+      deleteSub: function (inEvent, inDetail ,inSender) {
         console.log("deleteSub");
-        this.fire('unsubscribe', {topic: this.topic, connectionID: this.connectionID, source: this});
+        var model = inSender.templateInstance.model;
+        console.log(model);
+//        this.fire('unsubscribe', {topic: this.topic, connectionID: this.connectionID, source: this});
       },
 
       saveSub: function () {
@@ -417,12 +414,23 @@
         this.parentNode.removeChild(this);
       },
 
-
-      hendelUnsubscribe: function () {
-
-//        this.fire('unsubscribe', {topic: this.topic, connectionID: this.connectionID, source: this});
+      hendelUnsubscribe: function (inEvent, inDetail ,inSender) {
         console.log("hendelUnsubscribe");
+
+       if (inSender.hasAttribute('dismiss')){
+         this.$.unsubscribeTooltip.show = false;
+         this.$.unsubscribeTooltip.classList.remove('on');
+
+       } else if (inSender.hasAttribute('confirme')) {
+         this.fire('unsubscribe', {topic: this.topic, connectionID: this.connectionID, source: this});
+       } else {
+         this.$.unsubscribeTooltip.show = true;
+         this.$.unsubscribeTooltip.classList.add('on');
+       }
+
+
       },
+
 
       moment: function (value) {
         return moment(value).calendar();

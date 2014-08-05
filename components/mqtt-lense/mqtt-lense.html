@@ -481,6 +481,10 @@
         this.toast = this.$.toast;
         var self = this;
 
+        window.addEventListener('toast', function(e) {
+          console.log("toast");
+        });
+
         document.addEventListener("toast", function (e, detail, sender) {
           console.log("foo");
           self.toast.text = e.detail.text;
@@ -497,7 +501,7 @@
       },
       domReady: function () {
         console.log("domReady");
-        //this.loadDummy();
+        this.loadDummy();
 
 //        this.asyncFire("toast", {text: "hi"});
       },
