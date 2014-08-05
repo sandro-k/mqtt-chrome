@@ -91,6 +91,13 @@
         /*border-left: 3px solid {{connection.connectionColor}}!important;*/
           /*background: red!important;*/
         }
+
+
+        paper-toast {
+          z-index: 1001!important;
+        }
+
+
       </style>
 
       <!--<div class="{{connection.connectionID}} zero bg">-->
@@ -350,39 +357,6 @@
             </core-collapse>
           </div>
 
-
-
-
-          <!--<div class="subheader {{connection.connectionID}} nine bg">-->
-            <!--<div class="{{connection.connectionID}} zero border space" layout horizontal center>-->
-              <!--<h4>Topic:</h4>-->
-              <!--<div flex>-->
-                <!--<input class="form-control space-left topicInput" value="{{subscriptionTopic}}">-->
-              <!--</div>-->
-              <!--<div class="menu-buttons right">-->
-                <!--<core-icon icon="add" on-click="{{addSubscription}}"></core-icon>-->
-              <!--</div>-->
-            <!--</div>-->
-          <!--</div>-->
-
-          <!--<div class="subheader {{connection.connectionID}} nine bg">-->
-            <!--<div class="{{connection.connectionID}} zero border space" layout horizontal center>-->
-              <!--<h4>Publish:</h4>-->
-              <!--<div flex>-->
-                <!--<input class="form-control space-left topicInput" value="{{subscriptionTopic}}">-->
-              <!--</div>-->
-              <!--<div>-->
-                <!--<textarea class="form-control" rows="3"></textarea>-->
-              <!--</div>-->
-              <!--<div class="menu-buttons right">-->
-                <!--<button class="primary btn" on-click="{{mqttPublish}}">Publish</button>-->
-              <!--</div>-->
-            <!--</div>-->
-
-
-          <!--</div>-->
-
-
           <div id="ID{{connection.connectionID}}" class="item">
             <div class="subheader {{connection.connectionID}} nine bg">
               <div class="{{connection.connectionID}} zero border" layout horizontal center>
@@ -392,53 +366,10 @@
              </div>
            </div>
 
-
-            <!--{{connection.subscriptions.keys}}-->
-            <!--todo(sandro-k) every subscription should be rendered here-->
-            <!--<template repeat="{{ key in connection.subscriptions.keys }}">-->
-              <!--<template bind="{{ connection.subscriptions[key] as subscription }}">-->
-                <!--{{ subscription }}-->
-              <!--</template>-->
-            <!--</template>-->
-
-
-            <!--<template repeat="{{subscription in connection.subscriptions}}">-->
-            <!--<div>-->
-              <!--<span>-->
-                <!--{{subscription.topic}}-->
-              <!--</span>-->
-            <!--</div>-->
-            <!--</template>-->
           </div>
         </template>
         </div>
 
-        <!--<div id="subscriptions">-->
-          <!--<div class="item">-->
-            <!--<div class="head" layout horizontal center>-->
-              <!--<div flex>-->
-                <!--<h1>Subscription Name</h1>-->
-              <!--</div>-->
-              <!--<div class="menu-buttons right">-->
-                <!--<core-icon icon="add"></core-icon>-->
-              <!--</div>-->
-            <!--</div>-->
-            <!--<mqtt-subscription topic="aa/bb/cc"></mqtt-subscription>-->
-            <!--<mqtt-subscription topic="aa/bb/cc"></mqtt-subscription>-->
-          <!--</div>-->
-          <!--<div class="item">-->
-            <!--<div class="head" layout horizontal center>-->
-              <!--<div flex>-->
-                <!--<h1>Subscription Name</h1>-->
-              <!--</div>-->
-              <!--<div class="menu-buttons right">-->
-                <!--<core-icon icon="add"></core-icon>-->
-              <!--</div>-->
-            <!--</div>-->
-            <!--<mqtt-subscription topic="aa/bb/cc"></mqtt-subscription>-->
-            <!--<mqtt-subscription topic="aa/bb/cc"></mqtt-subscription>-->
-          <!--</div>-->
-        <!--</div>-->
       </div>
       <!--content end-->
     </div>
@@ -446,7 +377,8 @@
 
 
 
-    <paper-toast id="toast" status="{{toaststatus}}"></paper-toast>
+    <paper-toast duration="4000" id="toast" status="{{toaststatus}}"></paper-toast>
+
   </template>
 
 
@@ -480,30 +412,14 @@
         console.log("ready");
         this.toast = this.$.toast;
         var self = this;
-
-        window.addEventListener('toast', function(e) {
-          console.log("toast");
-        });
-
-        document.addEventListener("toast", function (e, detail, sender) {
-          console.log("foo");
-          self.toast.text = e.detail.text;
-          if (e.detail.status) {
-            self.toaststatus  = e.detail.status;
-          } else {
-            self.toaststatus  = "";
-          }
-          self.toast.show();
-        });
       },
       attached: function () {
         console.log("attached");
       },
       domReady: function () {
         console.log("domReady");
-        this.loadDummy();
+//        this.loadDummy();
 
-//        this.asyncFire("toast", {text: "hi"});
       },
       detached: function () {
         console.log("detached");
@@ -546,16 +462,20 @@
 
         var mqttCon = new MqttConnection();
 
-//        mqttCon.addEventListener("toast", this.toast);
-
-
 
         for (var property in mqttCon.publish) {
           if (values[property]) {
             mqttCon[property] = values[property];
           }
         }
+
         mqttCon.createClient();
+
+        var self = this;
+        mqttCon.addEventListener("toast", function (e, detail, sender) {
+          self.makeToast.apply(self, arguments);
+        });
+
         this.mqttConnections.push(mqttCon);
       },
 
@@ -609,13 +529,9 @@
           self.mqttConnections.push(mqttCon);
 
 
-          // todo add to menu and add subscription topic
-
-          // adding the connection to the left menu
-
-          // remove form shadowRoot not needed any more
-          // todo(sandro-k) removing the UI form dom causes the overlay to stay on the site fix this
-          //  self.shadowRoot.removeChild(newConnectionUI);
+          mqttCon.addEventListener("toast", function (e, detail, sender) {
+            self.makeToast.apply(self, arguments);
+          });
 
         });
 
@@ -633,8 +549,14 @@
         this.$.connectionListCollapse.toggle();
       },
 
-      toast: function () {
-        console.error("TOAST");
+      makeToast: function (e, detail, sender) {
+        this.toast.text = e.detail.text;
+        if (e.detail.status) {
+          this.toaststatus  = e.detail.status;
+        } else {
+          this.toaststatus  = "";
+        }
+        this.toast.show();
       },
 
       menuCollapse: function () {
@@ -678,7 +600,9 @@
 
         var self = this;
         var connection = inSender.templateInstance.model.connection;
-        connection.mqttPublish(topic, message, options);
+        connection.mqttPublish(topic, message, options, function() {
+          console.log("Callback");
+        });
 
 
 

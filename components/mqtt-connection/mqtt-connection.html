@@ -161,7 +161,7 @@
            * @type boolean
            * @default false
            */
-          connected: false,
+          connected: null,
 
 
           /**
@@ -372,7 +372,7 @@
 
 
           } else {
-            console.error("Subscription to %s doesn't exists, can't unsubscribe", topic);
+//            console.error("Subscription to %s doesn't exists, can't unsubscribe", topic);
           }
         },
 
@@ -385,12 +385,12 @@
         },
 
         mqttPublish: function (topic, message, opt_options, opt_callback) {
-          console.log('hi');
           this.client.publish(topic, message, opt_options, opt_callback);
+
         },
 
         onMessage: function (topic, payload, object) {
-          console.log("onMessage %s: %s", topic, payload);
+//          console.log("onMessage %s: %s", topic, payload);
 
           // add a timestamp to the message as it has none
           object.timestamp = Date.now();
@@ -402,9 +402,7 @@
             _.each(_.keys(this.subscriptions), function (key) {
                 if(key.indexOf('+') > -1){
                   var sub = key.substring(0,key.indexOf('+'));
-                  console.log(sub);
-                  console.log(key);
-                  console.log(topic);
+
 
                   if (topic.indexOf(sub) > -1) {
                     // need to check if last char is '/' is zero or one and last char is '/'
@@ -424,9 +422,7 @@
                   }
                 } else if (key.indexOf('#') > -1){
                   var sub = key.substring(0,key.indexOf('#'));
-                  console.log(sub);
-                  console.log(key);
-                  console.log(topic);
+
                   if (topic.indexOf(sub) > -1) {
                     self.subscriptions[key].addMessage(object);
                   }
@@ -438,12 +434,12 @@
         },
 
         messagesChanged: function () {
-          console.log("Messages: %s", JSON.stringify(this.messages));
+//          console.log("Messages: %s", JSON.stringify(this.messages));
         },
 
 
         domReady: function () {
-          console.log("domReady");
+//          console.log("domReady");
           // at this point all attributes of the element
           // should be loaded and we are save to act on settings
 
@@ -463,10 +459,8 @@
 
         disconnect: function () {
           if (this.client) {
-//            this.client.disconnect();
             this.client.end();
-            this.client.end();
-            console.log(this.client);
+//            console.log(this.client);
           }
         },
 
@@ -489,22 +483,31 @@
             protocolId: "MQIsdp",
             protocolVersion: 3,
             reconnectPeriod: 1000};
-          console.log(this.hostPort);
+//          console.log(this.hostPort);
           this.client = mows.createClient(this.hostPort, this.hostname, options);
 
-          console.log("ConnecteD: %s", this.client.connected)
+          this.client.on('connect', function(){
+            console.log('Client Connected');
+          });
+
+          this.client.on('error', function(e){
+            console.log('Client Error:', e);
+          });
+
+
+//          console.log("ConnecteD: %s", this.client.connected)
 
           this.connected = this.client.connected;
-          console.debug( this.client );
+//          console.debug( this.client );
           // pass an optional 'ws://localhost:port' here.
           // save reference to this element to reroute messages
           var self = this;
+
           this.client.on('message', function (topic, message, object) {
-            console.log(arguments);
+//            console.log(arguments);
             self.onMessage(topic, message, object);
           });
 
-          self.asyncFire("toast", {text: "Connection established to: "+ this.hostname, status: "ok"});
         },
 
 
@@ -515,27 +518,24 @@
         connectionChanged: function (oldValue, newValue){
           console.log("Old: %s, new: %s", oldValue, newValue);
           this.connected = newValue;
+
+
+
+          if (newValue && (oldValue !== undefined)) {
+            this.asyncFire("toast", {text: "Connection established to: "+ this.hostname, status: "ok"});
+          } else if (oldValue !== undefined) {
+            this.asyncFire("toast", {text: "Connection to: "+ this.hostname + "failed", status: "error"});
+          }
+
         },
 
         connectionColorChanged: function() {
           this.connectionColors[0] = this.connectionColor;
-//          this.connectionColors[1] = this.lightenDarkenColor(this.connectionColor, 10);
-//          this.connectionColors[2] = this.lightenDarkenColor(this.connectionColor, 20);
-//          this.connectionColors[3] = this.lightenDarkenColor(this.connectionColor, 30);
-//          this.connectionColors[4] = this.lightenDarkenColor(this.connectionColor, 40);
+
           for (var i = 1; i< 10; i++) {
             this.connectionColors[i] = this.shadeColor2(this.connectionColor, 0.10*i);
 //            console.log(0.10*i);
           }
-//          this.connectionColors[1] = this.shadeColor2(this.connectionColor, 0.10);
-//          this.connectionColors[2] = this.shadeColor2(this.connectionColor, 0.20);
-//          this.connectionColors[3] = this.shadeColor2(this.connectionColor, 0.30);
-//          this.connectionColors[4] = this.shadeColor2(this.connectionColor, 0.40);
-//          this.connectionColors[5] = this.shadeColor2(this.connectionColor, 0.50);
-//          this.connectionColors[6] = this.shadeColor2(this.connectionColor, 0.60);
-//          this.connectionColors[7] = this.shadeColor2(this.connectionColor, 0.70);
-//          this.connectionColors[8] = this.shadeColor2(this.connectionColor, 0.80);
-//          this.connectionColors[9] = this.shadeColor2(this.connectionColor, 0.90);
 
 //          console.log(this.connectionColors);
         },
