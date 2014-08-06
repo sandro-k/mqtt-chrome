@@ -37,11 +37,17 @@
       ]
       }
     </code-pretty>
+    <code-pretty text="{{test}}">
+
+    </code-pretty>
   </template>
   <script>
     Polymer('demo-tag', {
+
+
       ready: function() {
         // populate the element’s data model
+        this.test = "{id: 3}";
         this.numbering = 3;
       }
     });

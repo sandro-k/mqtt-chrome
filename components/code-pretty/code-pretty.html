@@ -160,10 +160,16 @@
 
 //      custom formatter
       parsAndFormatJson: function (string) {
-        if (typeof  string == 'object') {
-          return JSON.stringify(string, null, 2);
-        } else {
-          return JSON.stringify(JSON.parse(string), null, 2);
+        console.log(string);
+        if (string.trim().length > 0) {
+          if (typeof  string == 'object') {
+            return JSON.stringify(string, null, 2);
+          } else {
+            return JSON.stringify(JSON.parse(string), null, 2);
+          }
+        }
+        else {
+          return "XXXXX";
         }
 
       },

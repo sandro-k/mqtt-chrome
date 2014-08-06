@@ -1,10 +1,83 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-  <meta charset="UTF-8">
-  <title></title>
-</head>
-<body>
+<script src="http://www.polymer-project.org/platform.js"></script>
+<script src="http://www.polymer-project.org/polymer.js"></script>
 
-</body>
-</html>
+<polymer-element name="demo-element" attributes="names">
+  <template>
+    <h1>heading</h1>
+    <input type="text" value="{{newName}}"/>
+    <button type="button" on-click="{{addName}}">Add new name</button>
+    <button type="button" on-click="{{sortNames}}">Sort names</button>
+    {{names}}
+    <template repeat="{{name in names}}">
+      {{name}}
+      <demo-item name="{{name}}"></demo-item>
+    </template>
+  </template>
+  <script>
+    Polymer('demo-element', {
+
+
+      publish: {
+
+      },
+      created: function() {
+        console.log("created %s", this.element.name);
+        // this gives a warning but without names are not parsed as array
+        this.names = [];
+      },
+
+      ready: function () {
+        console.log("ready");
+
+      },
+
+      attached: function () {
+
+      },
+
+      domReady: function() {
+
+      },
+
+      namesChanged: function () {
+        console.log("namesChanged");
+        console.log(this.names);
+        console.log(typeof this.names);
+      },
+
+      addName: function () {
+        this.names.push(this.newName);
+        this.sortNames();
+      },
+
+      sortNames: function () {
+        this.names.sort();
+      },
+    });
+  </script>
+</polymer-element>
+
+<polymer-element name="demo-item" constructor="DemoItem">
+  <template>
+    <div>
+      <h2>{{name}}</h2>
+    </div>
+  </template>
+  <script>
+    Polymer('demo-item', {
+
+      publish: {
+        name: ''
+      },
+      created: function() {
+        console.log("created %s", this.element.name);
+      },
+
+      ready: function () {
+      }
+    });
+  </script>
+</polymer-element>
+
+<demo-element names='["cat", "mouse", "dog"]'></demo-element>
+

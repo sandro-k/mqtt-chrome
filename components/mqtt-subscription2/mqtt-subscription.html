@@ -17,6 +17,7 @@
 <link rel="import" href="../../bower_components/paper-radio-group/paper-radio-group.html">
 
 <link rel="import" href="../changeover-icon/changeover-icon.html"/>
+<link rel="import" href="../code-pretty/code-pretty.html"/>
 
 <script src="../../bower_components/moment/moment.js"></script>
 <script src="../../bower_components/jquery/dist/jquery.js"></script>
@@ -81,6 +82,9 @@
       </div>
 
       <core-collapse id="messages" opened>
+
+
+
         <template if="{{ messages.length > 0 }}">
           <div class="row table-header message-{{message.ID}}">
             <div class="hidden-xs col-sm-2 col-lg-1"><h4>Date</h4></div>
@@ -96,7 +100,20 @@
             <div class="hidden-xs col-sm-2 col-lg-1"><div>{{message.timestamp | moment }}</div></div>
             <div class="col-xs-5 col-sm-3 col-lg-2"><span class="badge">{{message.topic}}</span></div>
             <div class="col-xs-2 col-sm-2 col-lg-1"><span class="badge">QoS: {{message.qos}}</span></div>
-            <div class="col-xs-6 col-sm-5 col-lg-8">{{message.payload}}</div>
+            <template if="{{ message.type == 'json'}}">
+              <div class="col-xs-6 col-sm-5 col-lg-8">
+                <code-pretty lang="json" text="{{message.test}}">
+                </code-pretty>
+                </div>
+            </template>
+            <template if="{{ message.type != 'json' }}">
+              <div class="col-xs-6 col-sm-5 col-lg-8">
+                {{message.payload}}
+              </div>
+            </template>
+
+
+
           </div>
         </template>
        </div>
@@ -346,6 +363,7 @@
       },
 
       domReady: function () {
+//        this.test = '{"id":"387","name":"greenhouse","description":"Thesensorboxofthegreenhouseonmyterrace","datastreams":[{"id":"9347","name":"temperature","description":"Temperature"},{"id":"9348","name":"Humidity","description":"Humidity"}]}';
       },
 
       handelopen: function (event, detail, sender) {
@@ -358,7 +376,18 @@
       },
 
       addMessage: function (message) {
-        console.debug("addMessage: %s", JSON.stringify(message));
+//        console.debug("addMessage: %s", JSON.stringify(message));
+        if (message.payload.charAt(0) == '{'){
+          message.type = 'json'
+          console.log(message.payload);
+          console.log(typeof message.payload);
+          message.payload = "aaa";
+          message.test = "{'bbbb': 'aa'}";
+        } else {
+          message.type = 'plain'
+        }
+
+
         this.messages.push(message);
         if (!this.isOpen){
           this.sumUnRead++;

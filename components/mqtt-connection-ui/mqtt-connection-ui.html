@@ -22,7 +22,6 @@
 <!--<script type="text/javascript" src="tinyscrollbar/tinyscrollbar.js"></script>-->
 
 
-
 <link rel="import" href="../../components/changeover-icon/changeover-icon.html">
 
 
@@ -30,681 +29,635 @@
 <link rel="stylesheet" href="../../css/build/layout.css"/>
 
 
-
-<polymer-element name="mqtt-connection-ui" attributes="connectionName, keepAlive, autoConnect" constructor="MqttConnectionUi">
-  <!-- outermost template defines the element's shadow DOM -->
-  <template>
-    <!--<link rel="stylesheet" href="tinyscrollbar/tinyscrollbar.css" type="text/css" media="screen"/>-->
-    <link rel="stylesheet" href="../../css/build/layout.css"/>
-    <link rel="stylesheet" href="../mqtt-lense/css/main.css"/>
-    <style>
-      .page-header {
-        margin: 0 0 20px 0;
-      }
-
-      #wrapper {
-        /*padding: 4px 8px;*/
-        position: static;
-        top: 50px;
-        width: 80%!important;
-        max-width: 800px!important;;
-        border-top-left-radius: 5px;
-        border-top-right-radius: 5px;
-        border-bottom-left-radius: 5px;
-        border-bottom-right-radius: 5px;
-        background: #ffffff;
-        overflow: auto;
-      }
-
-      #wrapper.narrow {
-        width: 100%!important;
-        left: 0!important;
-        top: 0!important;
-        height: 100vh;
-        max-height: 100vh!important;
-      }
-
-      header {
-        border-bottom: 1px dotted #e5e5e5;
-        background-color: #7694c6;
-
-      }
-
-      header h1 {
-        color: white;
-      }
-
-      #content {
-        border-top: 4px solid #7694c6;
-      }
-
-      .min-width-300 {
-        min-width: 300px;
-      }
-
-      .min-width-200 {
-        min-width: 200px;
-      }
-
-      .min-width-250 {
-        min-width: 250px;
-      }
-
-      .min-width-100 {
-        min-width: 100px;
-      }
-
-      paper-input {
-        border-right: 4px solid transparent;
-        /*margin-left: 4px;*/
-        /*margin-right: 4px;*/
-      }
-
-      .blue {
-        background: cornflowerblue;
-      }
-
-      footer {
-        border-top: 1px dotted #7694c6;
-        margin: 12px ;
-        padding-top: 12px ;
-      }
-
-      .modal-topic {
-        border-bottom: 1px dotted #EEEEEE;
-        margin-bottom: 8px;
-      }
-
-      .redbutton:hover {
-        background: #d9534f;
-      }
-      .greenbutton:hover {
-        background: #5cb85c;
-      }
+<polymer-element name="mqtt-connection-ui" attributes="connectionName, keepAlive, autoConnect"
+                 constructor="MqttConnectionUi">
+<!-- outermost template defines the element's shadow DOM -->
+<template>
+<link rel="stylesheet" href="../../css/build/layout.css"/>
+<link rel="stylesheet" href="../mqtt-lense/css/main.css"/>
+<link rel="stylesheet" href="custom.css"/>
 
 
-    </style>
+<core-media-query query="{{narrowQuery}}" queryMatches="{{narrow}}"></core-media-query>
 
-    <core-media-query query="{{narrowQuery}}" queryMatches="{{narrow}}"></core-media-query>
+<core-overlay id="overlay" target="{{$.wrapper}}" backdrop>
+</core-overlay>
 
-    <core-overlay id="overlay" target="{{$.wrapper}}" backdrop>
-    </core-overlay>
-
-   <div id="wrapper" class="{{{ narrow : narrow } | tokenList }}">
-    <div class="modal-header">
-      <button type="button" class="close" on-click="{{close}}">&times;</button>
-      <h2 class="modal-title" id="newConnectionLabel">Add a new Connection</h2>
-    </div>
-    <div class="row" style="
+<div id="wrapper" class="{{{ narrow : narrow } | tokenList }}">
+<div class="modal-header">
+  <button type="button" class="close" on-click="{{close}}">&times;</button>
+  <h2 class="modal-title" id="newConnectionLabel">Add a new Connection</h2>
+</div>
+<div class="row" style="
     height: 3px;
     background: #443685;
     border-bottom: 1px dotted #FFFFFF;"></div>
-    <div class="row paper-shadow-bottom-z-3" style="
+<div class="row paper-shadow-bottom-z-3" style="
     height: 3px; background: #443685;
     box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.46);"></div>
 
-    <div class="modal-body">
-      <div class="connection-wrapper">
-        <!--Connection Details-->
-        <div>
-          <div class="page-header">
-            <h4>Connection Details</h4>
-          </div>
-          <div class="row">
-            <div class="col-sm-8">
-              <div class="form-group">
-                <label for="connectionName">Connection name</label>
-                <input class="form-control"
-                       id="connectionName"
-                       placeholder="Eclipse MQTT"
-                       value="{{connectionName}}" >
-              </div>
-            </div>
-            <div class="col-sm-4">
-              <div class="form-group">
-                <label for="connectionColor">Connection color scheme</label>
-                <input type="color" id="connectionColor" class="form-control"
-                       value="{{connectionColor}}" size="7">
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-sm-8">
+<div class="modal-body">
+<div class="connection-wrapper">
+<!--Connection Details-->
+<div>
+  <div class="page-header">
+    <h4>Connection Details</h4>
+  </div>
+  <div class="row">
+    <div class="col-sm-8">
+      <div class="form-group">
+        <label for="connectionName">Connection name</label>
+        <input class="form-control"
+               id="connectionName"
+               placeholder="Eclipse MQTT"
+               value="{{connectionName}}">
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="form-group">
+        <label for="connectionColor">Connection color scheme</label>
+        <input type="color" id="connectionColor" class="form-control"
+               value="{{connectionColor}}" size="7">
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-8">
 
-                  <!--TODO(sandro-k) add tooltip -->
-                  <div class="form-group">
-                  <label for="hostnameInput">Hostname</label>
-                  <input class="form-control"
-                         data-toggle="tooltip"
-                         id="hostnameInput"
-                         value="{{hostname}}"
-                         placeholder="e.g. iot.eclipse.org" title=""
-                         data-original-title="Use any MQTT broker.">
-                  </div>
+      <!--TODO(sandro-k) add tooltip -->
+      <div class="form-group">
+        <label for="hostnameInput">Hostname</label>
+        <input class="form-control"
+               data-toggle="tooltip"
+               id="hostnameInput"
+               value="{{hostname}}"
+               placeholder="e.g. iot.eclipse.org" title=""
+               disabled?="{{ mode == 'edit' }}"
+               data-original-title="Use any MQTT broker.">
+      </div>
 
 
-            </div>
-            <div class="col-sm-4">
-              <div class="form-group">
-                <label for="portInput">Port</label>
-                <input
-                    class="form-control"
-                    id="portInput"
-                    placeholder="Enter port number"
-                       value="{{hostPort}}">
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-xs-7 col-sm-8">
-              <div class="form-group">
-                <label for="clientIdInput">Client ID</label>
-                <input class="form-control"
-                       data-toggle="tooltip"
-                       id="clientIdInput"
-                       value="{{clientID}}"
-                       placeholder="Enter client ID"
-                       title=""
-                       data-original-title="MQTT client ID. 1-23 characters long.">
-              </div>
-            </div>
-            <div class="col-xs-5 col-sm-4">
-              <div class="btn btn-primary"
-                   id="generateRandomId"
-                   on-click="{{randomID}}"><span class="visible-xs">Generate ID</span><span class="hidden-xs">Generate a random ID</span></div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-xs-6 col-sm-2">
-              <div class="form-group">
-                <label for="cleanSessionInput">Session</label>
+    </div>
+    <div class="col-sm-4">
+      <div class="form-group">
+        <label for="portInput">Port</label>
+        <input
+            class="form-control"
+            id="portInput"
+            disabled?="{{ mode == 'edit' }}"
+            placeholder="Enter port number"
+            value="{{hostPort}}">
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-7 col-sm-8">
+      <div class="form-group">
+        <label for="clientIdInput">Client ID</label>
+        <input class="form-control"
+               data-toggle="tooltip"
+               id="clientIdInput"
+               value="{{clientID}}"
+               disabled?="{{ mode == 'edit' }}"
+               placeholder="Enter client ID"
+               title=""
+               data-original-title="MQTT client ID. 1-23 characters long.">
+      </div>
+    </div>
+    <div class="col-xs-5 col-sm-4">
+      <div class="btn btn-primary"
+           id="generateRandomId"
+           on-click="{{randomID}}"><span class="visible-xs">Generate ID</span><span class="hidden-xs">Generate a random ID</span>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-6 col-sm-2">
+      <div class="form-group">
+        <label for="cleanSessionInput">Session</label>
 
-                <div class="checkbox">
-                  <label data-toggle="tooltip"
-                         title=""
-                         data-original-title="Uncheck to preserve the list of subscriptions and to receive queued QoS 1 and 2 messages.">
-                    <input
-                        checked="{{cleanSession}}"
-                        id="cleanSessionInput"
-                        type="checkbox">
+        <div class="checkbox">
+          <label data-toggle="tooltip"
+                 title=""
+                 data-original-title="Uncheck to preserve the list of subscriptions and to receive queued QoS 1 and 2 messages.">
+            <input
+                checked="{{cleanSession}}"
+                id="cleanSessionInput"
+                disabled?="{{ mode == 'edit' }}"
+                type="checkbox">
 
-                    Clean Session
-                  </label>
-                </div>
-              </div>
-            </div>
-            <div class="col-xs-6 col-sm-2">
-              <div class="form-group">
-                <label for="useSslInput">SSL</label>
-
-                <div class="checkbox">
-                  <label>
-                    <input
-                        id="useSslInput"
-                        type="checkbox"
-                        checked="{{useSSL}}"
-                        >
-                    Use SSL
-
-                  </label>
-                </div>
-              </div>
-            </div>
-            <div class="col-xs-6 col-sm-4">
-              <div class="form-group">
-                <label for="autoConnectInput">Automatic Connection</label>
-
-                <div class="checkbox">
-                  <label>
-                    <input
-                        id="autoConnectInput"
-                        type="checkbox"
-                        checked="{{autoConnect}}"
-                        >
-                    Automatic Connection
-
-                  </label>
-                </div>
-              </div>
-            </div>
-            <div class="col-xs-6 col-sm-4">
-              <div class="form-group">
-                <label for="keepAliveInput">Keep Alive</label>
-
-                <div class="input-group">
-                  <input class="form-control"
-                         data-toggle="tooltip"
-                         id="keepAliveInput"
-                         placeholder="Enter keep alive time"
-                         title="" value="{{keepAlive}}"
-                         data-original-title="Keep alive in seconds.">
-                  <span class="input-group-addon">seconds</span>
-                </div>
-              </div>
-            </div>
-          </div>
+            Clean Session
+          </label>
         </div>
-        <!--Credentials-->
-        <div>
-          <div class="page-header">
-            <h4>Credentials</h4>
-          </div>
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="usernameInput">Username</label>
-                <input
-                    class="form-control"
-                    id="usernameInput"
-                    placeholder="Enter username"
-                    value="{{username}}">
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="passwordInput">Password</label>
-                <input
-                    class="form-control"
-                    id="passwordInput"
-                    placeholder="Enter password"
-                    type="password"
-                    value="{{password}}">
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-12">
-              <div class="checkbox">
-                <label
-                    data-toggle="tooltip"
-                    title=""
-                    data-original-title="q.m2m.io requires passwords to be hashed.">
+      </div>
+    </div>
+    <div class="col-xs-6 col-sm-2">
+      <div class="form-group">
+        <label for="useSslInput">SSL</label>
 
-                  <input
-                      checked="{{passwordHashFunction}}"
-                      id="md5Input"
-                      type="checkbox">
-                  Hash password with MD5
+        <div class="checkbox">
+          <label>
+            <input
+                id="useSslInput"
+                type="checkbox"
+                disabled?="{{ mode == 'edit' }}"
+                checked="{{useSSL}}">
+            Use SSL
 
-                </label>
-              </div>
-            </div>
-          </div>
+          </label>
         </div>
+      </div>
+    </div>
+    <div class="col-xs-6 col-sm-4">
+      <div class="form-group">
+        <label for="autoConnectInput">Automatic Connection</label>
 
-        <!--Last-Will-->
+        <div class="checkbox">
+          <label>
+            <input
+                id="autoConnectInput"
+                type="checkbox"
+                disabled?="{{ mode == 'edit' }}"
+                checked="{{autoConnect}}"
+                >
+            Automatic Connection
 
-        <div>
-          <div class="page-header">
-            <div layout horizontal center>
-              <div flex>
-                <h4 on-click="{{togglelastWillAndButton}}">Last-Will</h4>
-              </div>
-              <changeover-icon
-                  id="togglelastWillIcon"
-                  on-click="{{togglelastWill}}"
-                  class="pull-right right-spacing"
-                  icon="expand-more"
-                  up="expand-less"
-                  down="expand-more"></changeover-icon>
-            </div>
-          </div>
-          <core-collapse id="lastWillContainerCollapse" target="{{$.lastWillContainer}}">
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-6 col-sm-4">
+      <div class="form-group">
+        <label for="keepAliveInput">Keep Alive</label>
 
-          </core-collapse>
-          <div id="lastWillContainer">
+        <div class="input-group">
+          <input class="form-control"
+                 data-toggle="tooltip"
+                 id="keepAliveInput"
+                 placeholder="Enter keep alive time"
+                 title="" value="{{keepAlive}}"
+                 data-original-title="Keep alive in seconds.">
+          <span class="input-group-addon">seconds</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--Credentials-->
+<div>
+  <div class="page-header">
+    <h4>Credentials</h4>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="form-group">
+        <label for="usernameInput">Username</label>
+        <input
+            class="form-control"
+            id="usernameInput"
+            placeholder="Enter username"
+            value="{{username}}">
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <label for="passwordInput">Password</label>
+        <input
+            class="form-control"
+            id="passwordInput"
+            placeholder="Enter password"
+            type="password"
+            value="{{password}}">
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="checkbox">
+        <label
+            data-toggle="tooltip"
+            title=""
+            data-original-title="q.m2m.io requires passwords to be hashed.">
 
-            <div class="row">
-              <div class="col-md-12">
-                <div class="form-group">
-                  <label for="lastWillTopicInput">Last-Will Topic</label>
-                  <input class="form-control"
-                         id="lastWillTopicInput"
-                         value="{{lastWillTopic}}"
-                         placeholder="Enter last-will topic">
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-12">
-                <div class="form-group">
-                  <label for="lastWillMessageInput">Last-Will Message</label>
-                  <textarea
-                      class="form-control"
-                      id="lastWillMessageInput"
-                      value="{{lastWillMessage}}"
-                            placeholder="Enter last-will message" rows="3"></textarea>
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label for="lastWillQosInput">Last-Will QoS</label>
-                  <select
-                      class="form-control"
-                      data-toggle="tooltip"
-                      value="{{lastWillQoS}}"
-                      id="lastWillQosInput">
-                    <option value="0">0 - at most once</option>
-                    <option value="1">1 - at least once</option>
-                    <option value="2">2 - exactly once</option>
-                  </select>
-                </div>
-              </div>
-              <div class="col-md-push-1 col-md-5">
-                <div class="form-group">
-                  <label for="lastWillRetainInput">Last-Will Retain</label>
+          <input
+              checked="{{passwordHashFunction}}"
+              id="md5Input"
+              type="checkbox">
+          Hash password with MD5
 
-                  <div class="checkbox">
-                    <label>
-                      <input
-                          checked="{{lastWillRetained}}"
-                          id="lastWillRetainInput"
-                          type="checkbox">
-                      Retain
-                    </label>
-                  </div>
-                </div>
-              </div>
-            </div>
+        </label>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Last-Will-->
+
+<div>
+  <div class="page-header">
+    <div layout horizontal center>
+      <div flex>
+        <h4 on-click="{{togglelastWillAndButton}}">Last-Will</h4>
+      </div>
+      <changeover-icon
+          id="togglelastWillIcon"
+          on-click="{{togglelastWill}}"
+          class="pull-right right-spacing"
+          icon="expand-more"
+          up="expand-less"
+          down="expand-more"></changeover-icon>
+    </div>
+  </div>
+  <core-collapse id="lastWillContainerCollapse" target="{{$.lastWillContainer}}">
+
+  </core-collapse>
+  <div id="lastWillContainer">
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label for="lastWillTopicInput">Last-Will Topic</label>
+          <input class="form-control"
+                 id="lastWillTopicInput"
+                 value="{{lastWillTopic}}"
+                 disabled
+                 placeholder="Enter last-will topic">
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label for="lastWillMessageInput">Last-Will Message</label>
+          <textarea
+              class="form-control"
+              id="lastWillMessageInput"
+              value="{{lastWillMessage}}"
+              disabled
+              placeholder="Enter last-will message" rows="3"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="lastWillQosInput">Last-Will QoS</label>
+          <select
+              class="form-control"
+              data-toggle="tooltip"
+              disabled
+              value="{{lastWillQoS}}"
+              id="lastWillQosInput">
+            <option value="0">0 - at most once</option>
+            <option value="1">1 - at least once</option>
+            <option value="2">2 - exactly once</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-push-1 col-md-5">
+        <div class="form-group">
+          <label for="lastWillRetainInput">Last-Will Retain</label>
+
+          <div class="checkbox">
+            <label>
+              <input
+                  checked="{{lastWillRetained}}"
+                  id="lastWillRetainInput"
+                  disabled
+                  type="checkbox">
+              Retain
+            </label>
           </div>
         </div>
       </div>
     </div>
-    <footer layout horizontal>
-
-
-      <paper-button class="redbutton" label="Cancel" icon="delete" raisedbutton on-click="{{close}}">
-      </paper-button>
-
-
-        <div flex>
-          <!--just a spacer-->
-        </div>
-
-      <paper-button class="greenbutton" label="Create connection" icon="save" on-click="{{save}}" affirmative autofocus
-                    raisedbutton></paper-button>
-
-    </footer>
-   </div>
+  </div>
+</div>
+</div>
+</div>
 
 
 
-  </template>
+
+<template if="{{mode == 'new'}}">
+  <footer layout horizontal>
+    <paper-button class="redbutton" label="Cancel" icon="delete" raisedbutton on-click="{{close}}">
+    </paper-button>
 
 
-  <script>
-    Polymer('mqtt-connection-ui', {
+    <div flex>
+      <!--just a spacer-->
+    </div>
+
+    <paper-button class="greenbutton" label="Create connection" icon="save" on-click="{{save}}" affirmative autofocus
+                  raisedbutton></paper-button>
+  </footer>
+</template>
+
+<template if="{{ mode == 'edit' }}">
+  <footer layout horizontal>
+    <paper-button class="redbutton" label="Cancel" icon="delete" raisedbutton on-click="{{close}}">
+    </paper-button>
 
 
-      publish: {
-        /**
-         * A ID to identify the connection
-         * @attribute connectionID
-         * @type string
-         * @default ''
-         */
-        connectionID: '',
+    <div flex>
+      <!--just a spacer-->
+    </div>
 
-        /**
-         * A human readable name for the connection
-         * @attribute connectionName
-         * @type string
-         * @default ''
-         */
-        connectionName: '',
-
-        /**
-         * The base color for the connection
-         * @attribute connectionColor
-         * @type string (hex)
-         * @default '#ccbb22'
-         */
-        connectionColor: '#ccbb22',
+    <paper-button class="greenbutton" label="Save changes" icon="save" on-click="{{save}}" affirmative autofocus
+                  raisedbutton></paper-button>
+  </footer>
+</template>
 
 
-        /**
-         * The brokers hostname or ip-address
-         * @attribute host
-         * @type string
-         * @default ''
-         */
-        hostname: '',
 
-        /**
-         * The port the connection is made with
-         * @attibute hostPort
-         * @type integer
-         * @default 1883
-         */
-        hostPort: 1883,
-
-        /**
-         * A unique client ID to identify the client at the broker
-         * @attribute clientID
-         * @type string
-         * @default ''
-         */
-        clientID: '',
+</div>
 
 
-        /**
-         * Start a clean session
-         * @attribute cleanSession
-         * @type boolean
-         * @default true
-         */
-        cleanSession: true,
-
-        /**
-         * Use SSL for to encrypt the connection
-         * @attrubute useSSL
-         * @type boolean
-         * @default false
-         */
-        useSSL: false,
-
-        /**
-         * Seconds that the connection is kept alive in seconds
-         * @attribute keepAlive
-         * @type integer
-         * @default 120
-         */
-        keepAlive: 120,
+</template>
 
 
-        /**
-         * The username that is user to authenticate the connection with
-         * @attribute username
-         * @type string
-         * @default ''
-         */
-        username: '',
-
-        /**
-         * The password that is used to authenticate the user with
-         * @attribute password
-         * @type string
-         * @default ''
-         */
-        password: '',
-
-        /**
-         *
-         *
-         */
-        passwordHashFunction: true,
-
-        /**
-         * The topic the last will will be published at
-         * @attribute lastWillTopic
-         * @type string
-         * @default ''
-         */
-        lastWillTopic: '',
-
-        /**
-         * The last will message that will be published at `lastWillTopic`
-         * @attribute lastWillMessage
-         * @type  string
-         * @default ''
-         */
-        lastWillMessage: '',
-
-        /**
-         * The QoS the last will will be published with
-         * @attribute lastWillQoS
-         * @type integer (0|1|2)
-         * @default 0
-         */
-        lastWillQoS: 0,
+<script>
+Polymer('mqtt-connection-ui', {
 
 
-        /**
-         * @attribute lastWillRetained
-         * @type boolean
-         * @default false
-         */
-        lastWillRetained: false,
+  publish: {
+
+    /**
+     * A flag that indicates whether the ui is in `new` or `edit` mode
+     * @attribute mode
+     * @type string ['new' || 'edit']
+     * @default 'new'
+     */
+
+    mode: 'new',
+
+    /**
+     * A ID to identify the connection
+     * @attribute connectionID
+     * @type string
+     * @default ''
+     */
+    connectionID: '',
+
+    /**
+     * A human readable name for the connection
+     * @attribute connectionName
+     * @type string
+     * @default ''
+     */
+    connectionName: '',
+
+    /**
+     * The base color for the connection
+     * @attribute connectionColor
+     * @type string (hex)
+     * @default '#ccbb22'
+     */
+    connectionColor: '#ccbb22',
 
 
-        /**
-         * @attribute autoConnect
-         * @type boolean
-         * @default false
-         */
-        autoConnect: true,
+    /**
+     * The brokers hostname or ip-address
+     * @attribute host
+     * @type string
+     * @default ''
+     */
+    hostname: '',
 
-        /**
-         * The host object that will create the MQTT connection
-         * @attribute host
-         * @type object
-         * @default {}
-         */
-        host: {},
+    /**
+     * The port the connection is made with
+     * @attibute hostPort
+     * @type integer
+     * @default 1883
+     */
+    hostPort: 1883,
 
-        /**
-         * The media query that is evaluated to trigger narrow mode
-         */
-        narrowQuery: 'max-width: 680px',
-
-        /**
-         * A flag that indicates whether the connection ui is in narrow mode or not
-         * @attribute narrow
-         * @type boolean
-         * @default false
-         */
-        narrow: false,
-
-      },
-
-      /**
-       * #############
-       * Live cycle
-       * #############
-       */
-      created: function () {
-        console.debug("created");
-      },
-      ready: function () {
-        console.debug("ready");
-
-      },
-      attached: function () {
-        console.debug("attached");
-      },
-      domReady: function () {
-        console.debug("domReady");
-        this.connectionID = "lens"+this.randomString(28)
-        console.debug(this.connectionID);
-      },
-      detached: function () {
-        console.debug("detached");
-      },
+    /**
+     * A unique client ID to identify the client at the broker
+     * @attribute clientID
+     * @type string
+     * @default ''
+     */
+    clientID: '',
 
 
-      /**
-       * #############
-       * Element functions
-       * #############
-       */
+    /**
+     * Start a clean session
+     * @attribute cleanSession
+     * @type boolean
+     * @default true
+     */
+    cleanSession: true,
 
-      toggle: function () {
-        this.$.overlay.toggle();
+    /**
+     * Use SSL for to encrypt the connection
+     * @attrubute useSSL
+     * @type boolean
+     * @default false
+     */
+    useSSL: false,
 
-      },
-      randomID: function () {
-        console.debug("randomID");
-        this.clientID = this.randomString(32);
-      },
-      togglelastWill: function () {
-        console.debug("togglelastWill");
-        this.$.lastWillContainerCollapse.toggle();
-      },
-      togglelastWillAndButton: function () {
-        console.debug("togglelastWillAndButton");
-        this.$.lastWillContainerCollapse.toggle();
-        this.$.togglelastWillIcon.toogle()
-      },
-
-
-      /**
-       * Loads properties
-       * @param values
-       */
-      load: function (values) {
-        console.log(JSON.stringify(values));
-          for (var property in this.publish) {
-            if (values[property]) {
-              this[property] = values[property];
-            }
-          }
-      },
+    /**
+     * Seconds that the connection is kept alive in seconds
+     * @attribute keepAlive
+     * @type integer
+     * @default 120
+     */
+    keepAlive: 120,
 
 
-      close: function (){
-        this.$.overlay.toggle();
-        this.asyncFire('cancelNewMqttConnection');
-      },
+    /**
+     * The username that is user to authenticate the connection with
+     * @attribute username
+     * @type string
+     * @default ''
+     */
+    username: '',
 
-      /**
-       * Fires a `newMqttConnection` event
-       */
-      save: function () {
-        console.debug("%s", "save");
-        var values = {};
-        for (var property in this.publish) {
-          values[property]  = this[property];
+    /**
+     * The password that is used to authenticate the user with
+     * @attribute password
+     * @type string
+     * @default ''
+     */
+    password: '',
+
+    /**
+     *
+     *
+     */
+    passwordHashFunction: true,
+
+    /**
+     * The topic the last will will be published at
+     * @attribute lastWillTopic
+     * @type string
+     * @default ''
+     */
+    lastWillTopic: '',
+
+    /**
+     * The last will message that will be published at `lastWillTopic`
+     * @attribute lastWillMessage
+     * @type  string
+     * @default ''
+     */
+    lastWillMessage: '',
+
+    /**
+     * The QoS the last will will be published with
+     * @attribute lastWillQoS
+     * @type integer (0|1|2)
+     * @default 0
+     */
+    lastWillQoS: 0,
+
+
+    /**
+     * @attribute lastWillRetained
+     * @type boolean
+     * @default false
+     */
+    lastWillRetained: false,
+
+
+    /**
+     * @attribute autoConnect
+     * @type boolean
+     * @default false
+     */
+    autoConnect: true,
+
+    /**
+     * The host object that will create the MQTT connection
+     * @attribute host
+     * @type object
+     * @default {}
+     */
+    host: {},
+
+    /**
+     * The media query that is evaluated to trigger narrow mode
+     */
+    narrowQuery: 'max-width: 680px',
+
+    /**
+     * A flag that indicates whether the connection ui is in narrow mode or not
+     * @attribute narrow
+     * @type boolean
+     * @default false
+     */
+    narrow: false,
+
+  },
+
+  /**
+   * #############
+   * Live cycle
+   * #############
+   */
+  created: function () {
+    console.debug("created");
+  },
+  ready: function () {
+    console.debug("ready");
+
+  },
+  attached: function () {
+    console.debug("attached");
+  },
+  domReady: function () {
+    console.debug("domReady");
+    this.connectionID = "lens" + this.randomString(28)
+    console.debug(this.connectionID);
+  },
+  detached: function () {
+    console.debug("detached");
+  },
+
+
+  /**
+   * #############
+   * Element functions
+   * #############
+   */
+
+  toggle: function () {
+    this.$.overlay.toggle();
+
+  },
+  randomID: function () {
+    console.debug("randomID");
+    this.clientID = this.randomString(32);
+  },
+  togglelastWill: function () {
+    console.debug("togglelastWill");
+    this.$.lastWillContainerCollapse.toggle();
+  },
+  togglelastWillAndButton: function () {
+    console.debug("togglelastWillAndButton");
+    this.$.lastWillContainerCollapse.toggle();
+    this.$.togglelastWillIcon.toogle()
+  },
+
+
+  /**
+   * Loads properties
+   * @param values
+   */
+  load: function (values) {
+    console.log(JSON.stringify(values));
+    for (var property in this.publish) {
+      if (values[property]) {
+        this[property] = values[property];
+      }
+    }
+  },
+
+
+  close: function () {
+    this.$.overlay.toggle();
+    this.asyncFire('cancelNewMqttConnection');
+  },
+
+  /**
+   * Fires a `newMqttConnection` event
+   */
+  save: function () {
+    console.debug("%s", "save");
+    var values = {};
+    for (var property in this.publish) {
+      values[property] = this[property];
 //          console.log("%s: %s",property, this[property]);
-        }
+    }
 //        console.log(JSON.stringify(values));
 
-        this.asyncFire('newMqttConnection', values);
-        this.$.overlay.toggle();
-      },
+    this.asyncFire('newMqttConnection', values);
+    this.$.overlay.toggle();
+  },
 
-      /**
-       * #############
-       * Helper functions
-       * #############
-       */
+  /**
+   * #############
+   * Helper functions
+   * #############
+   */
 
-      /**
-       * Generates a random string
-        * @param length the length of the random string
-       * @returns {string} the random string of length `length`
-       */
-      randomString: function (length) {
-      var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
-      var randomString = '';
-      for (var i=0; i<length; i++) {
-        var rnum = Math.floor(Math.random() * chars.length);
-        randomString += chars.substring(rnum,rnum+1);
-      }
-      return randomString;
+  /**
+   * Generates a random string
+   * @param length the length of the random string
+   * @returns {string} the random string of length `length`
+   */
+  randomString: function (length) {
+    var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
+    var randomString = '';
+    for (var i = 0; i < length; i++) {
+      var rnum = Math.floor(Math.random() * chars.length);
+      randomString += chars.substring(rnum, rnum + 1);
     }
+    return randomString;
+  }
 
-    });
-  </script>
+});
+</script>
 </polymer-element>

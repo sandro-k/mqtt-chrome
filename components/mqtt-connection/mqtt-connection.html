@@ -211,7 +211,7 @@
           /**
            * The color shema of this connection
            * @attribute connectionColors
-           * @type array [0..4]
+           * @type array [0..9]
            * @default []
            */
           connectionColors: [],
@@ -223,10 +223,7 @@
 
         created: function () {
           console.log("created");
-
-          this.that = this;
           this.messages = {};
-          this.that = {};
           this.subscriptions = {};
           this.subscriptions.keys = [];
           this.connectionColors = [];
@@ -475,15 +472,15 @@
         },
 
         createClient: function () {
-          var that = this;
+
 
           var options = { clean: true,
             encoding: "utf8",
-            keepalive: 60,
+            keepalive: this.keepAlive,
             protocolId: "MQIsdp",
             protocolVersion: 3,
             reconnectPeriod: 1000};
-//          console.log(this.hostPort);
+
           this.client = mows.createClient(this.hostPort, this.hostname, options);
 
           this.client.on('connect', function(){
@@ -538,6 +535,18 @@
           }
 
 //          console.log(this.connectionColors);
+        },
+
+        updateConnection: function(conValues) {
+//          this.connectionColor = conValues.connectionColor;
+          console.log(conValues);
+
+          for (var property in this.publish) {
+            if (conValues[property]) {
+              this[property] = conValues[property];
+            }
+          }
+
         },
 
         /**

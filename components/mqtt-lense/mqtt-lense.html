@@ -197,7 +197,13 @@
                  }
 
                </style>
-               <strong tip>First add a connection</strong>
+               <template if="{{mqttConnections.length == 0}}">
+                 <strong tip>First add a connection</strong>
+               </template>
+              <template if="{{mqttConnections.length > 0}}">
+               <strong tip>Add a connection</strong>
+              </template>
+
                <core-icon icon="add" on-click="{{addConnection}}"></core-icon>
              </core-tooltip>
 
@@ -222,7 +228,7 @@
                       <span class="wraptext">{{connection.connectionName}}</span>
                       <span class="badge {{connection.connectionID}} zero bg">{{connection.connected | connectedFilter}}</span>
                     </div>
-                    <!--<core-icon icon="settings" size="14" on-click="{{connectionSettings}}"></core-icon>-->
+                    <core-icon icon="settings" size="14" on-click="{{connectionSettings}}"></core-icon>
                     <core-icon icon="delete"  on-click="{{removeConnection}}"></core-icon>
                   </li>
 
@@ -376,8 +382,10 @@
     </div>
 
 
-
     <paper-toast duration="4000" id="toast" status="{{toaststatus}}"></paper-toast>
+    <content>
+
+    </content>
 
   </template>
 
@@ -405,29 +413,25 @@
         this.subscriptionTopic = 'test';
         this.publishTopicQoS = 0;
         this.publishTopic = 'test';
-        this.publishValue = "Just a test message!"
+        this.publishValue = '{"id":"387","name":"greenhouse","description":"Thesensorboxofthegreenhouseonmyterrace","datastreams":[{"id":"9347","name":"temperature","description":"Temperature"},{"id":"9348","name":"Humidity","description":"Humidity"}]}';
 
       },
       ready: function () {
         console.log("ready");
         this.toast = this.$.toast;
-        var self = this;
       },
       attached: function () {
         console.log("attached");
       },
       domReady: function () {
         console.log("domReady");
-//        this.loadDummy();
+        this.loadDummy();
 
       },
       detached: function () {
         console.log("detached");
       },
-      attributeChanged: function (attrName, oldVal, newVal) {
-        //var newVal = this.getAttribute(attrName);
-        console.log(attrName, 'old: ' + oldVal, 'new:', newVal);
-      },
+
       // functions
       leftMenuToggle: function () {
         console.log("leftMenuToggle");
@@ -453,30 +457,14 @@
           "username":"Sandro",
           "password":"test",
           "passwordHashFunction":true,
-          "lastWillTopic":"topic",
-          "lastWillMessage":"message",
+          "lastWillTopic":"",
+          "lastWillMessage":"",
           "lastWillQoS":0,
-          "lastWillRetained":true,
+          "lastWillRetained":false,
           "autoConnect":true};
 
 
-        var mqttCon = new MqttConnection();
-
-
-        for (var property in mqttCon.publish) {
-          if (values[property]) {
-            mqttCon[property] = values[property];
-          }
-        }
-
-        mqttCon.createClient();
-
-        var self = this;
-        mqttCon.addEventListener("toast", function (e, detail, sender) {
-          self.makeToast.apply(self, arguments);
-        });
-
-        this.mqttConnections.push(mqttCon);
+        this.createConnection(values);
       },
 
       addConnection: function () {
@@ -514,25 +502,7 @@
 
         // add listener for save
         newConnectionUI.addEventListener("newMqttConnection", function(e) {
-          console.log(e.detail);
-          var conValues = e.detail;
-          var mqttCon = new MqttConnection();
-
-          for (var property in mqttCon.publish) {
-            if (conValues[property]) {
-              mqttCon[property] = conValues[property];
-            }
-          }
-
-          mqttCon.createClient();
-
-          self.mqttConnections.push(mqttCon);
-
-
-          mqttCon.addEventListener("toast", function (e, detail, sender) {
-            self.makeToast.apply(self, arguments);
-          });
-
+          self.createConnection(e.detail);
         });
 
         newConnectionUI.addEventListener("cancelNewMqttConnection", function() {
@@ -543,6 +513,24 @@
         this.shadowRoot.appendChild(newConnectionUI);
 
         newConnectionUI.toggle();
+      },
+
+      createConnection: function(conValues) {
+        var self = this;
+        var mqttCon = new MqttConnection();
+
+        for (var property in mqttCon.publish) {
+          if (conValues[property]) {
+            mqttCon[property] = conValues[property];
+          }
+        }
+
+        mqttCon.createClient();
+        this.mqttConnections.push(mqttCon);
+
+        mqttCon.addEventListener("toast", function (e, detail, sender) {
+          self.makeToast.apply(self, arguments);
+        });
       },
 
       connectionListCollapse: function () {
@@ -575,7 +563,36 @@
       },
 
       connectionSettings: function (inEvent, inDetail ,inSender) {
-        console.error("TODO(sandro-k) open connection settings");
+        var self = this;
+        var connection = inSender.templateInstance.model.connection;
+
+        var values = {};
+
+        for (var property in connection.publish) {
+          if (connection[property]) {
+            values[property] = connection[property];
+          }
+        }
+
+        // create modal
+        var newConnectionUI = new MqttConnectionUi();
+
+        // load values
+        newConnectionUI.load(values)
+
+        newConnectionUI.mode = 'edit';
+
+        // add listener for save
+        newConnectionUI.addEventListener("newMqttConnection", function(e) {
+          connection.updateConnection(e.detail);
+          //self.createConnection(e.detail);
+        });
+
+        this.shadowRoot.appendChild(newConnectionUI);
+
+        newConnectionUI.toggle();
+
+
       },
 
       toogleSubscribe: function (inEvent, inDetail ,inSender) {

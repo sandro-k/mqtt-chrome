@@ -1,0 +1,80 @@
+.page-header {
+  margin: 0 0 20px 0;
+}
+
+#wrapper {
+  position: static;
+  top: 50px;
+  width: 80%!important;
+  max-width: 800px!important;;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  background: #ffffff;
+  overflow: auto;
+}
+
+#wrapper.narrow {
+  width: 100%!important;
+  left: 0!important;
+  top: 0!important;
+  height: 100vh;
+  max-height: 100vh!important;
+}
+
+header {
+  border-bottom: 1px dotted #e5e5e5;
+  background-color: #7694c6;
+
+}
+
+header h1 {
+  color: white;
+}
+
+#content {
+  border-top: 4px solid #7694c6;
+}
+
+.min-width-300 {
+  min-width: 300px;
+}
+
+.min-width-200 {
+  min-width: 200px;
+}
+
+.min-width-250 {
+  min-width: 250px;
+}
+
+.min-width-100 {
+  min-width: 100px;
+}
+
+paper-input {
+  border-right: 4px solid transparent;
+}
+
+.blue {
+  background: cornflowerblue;
+}
+
+footer {
+  border-top: 1px dotted #7694c6;
+  margin: 12px ;
+  padding-top: 12px ;
+}
+
+.modal-topic {
+  border-bottom: 1px dotted #EEEEEE;
+  margin-bottom: 8px;
+}
+
+.redbutton:hover {
+  background: #d9534f;
+}
+.greenbutton:hover {
+  background: #5cb85c;
+}
