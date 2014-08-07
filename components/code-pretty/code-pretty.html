@@ -96,6 +96,7 @@
       collapsed: false,
       inlinetext: "",
       changed: false,
+      text: '',
 //      numbering: false,
 //      number: false,
       created: function () {
@@ -103,7 +104,10 @@
         this.codeLang.json = this.parsAndFormatJson;
       },
       ready: function () {
-        this.text = this.trim(this.textContent);
+        if (this.trim(this.textContent) > 0) {
+          this.text = this.trim(this.textContent);
+        }
+
         var that = this;
 
         this.$.collapse.addEventListener(
@@ -129,6 +133,9 @@
 
       },
       textChanged: function () {
+        console.log("Text changed:\n %s", this.text);
+
+
         // get a formatter for the specified language
         if( typeof this.lang != 'undefined' && typeof this.codeLang[this.lang] == 'function'  ) {
           this.formattedCode = this.codeLang[this.lang](this.text);
