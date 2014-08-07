@@ -1,0 +1,191 @@
+<!--polymer-->
+<link rel="import" href="../../bower_components/polymer/polymer.html"/>
+<link rel="import" href="../../bower_components/core-tooltip/core-tooltip.html"/>
+<link rel="import" href="../../bower_components/core-overlay/core-overlay.html"/>
+<link rel="import" href="../../components/code-pretty/code-pretty.html"/>
+
+
+<script src="../../bower_components/moment/moment.js"></script>
+
+<!--element definition-->
+<polymer-element name="mqtt-message-detail-ui" attributes="message" condstructor="MqttMessageDetailUi">
+  <template>
+
+    <link rel="stylesheet" href="../../css/build/layout.css"/>
+    <link rel="stylesheet" href="../mqtt-lense/css/main.css"/>
+    <link rel="stylesheet" href="../mqtt-new-subscription-ui/custom.css"/>
+    <link rel="stylesheet" href="custom.css"/>
+    <style>
+      .badge {
+        background: whitesmoke;
+        color: #626267;
+      }
+
+      core-overlay {
+        background: whitesmoke;
+      }
+
+      .modal-header h2 {
+        color: #443685;
+      }
+    </style>
+
+    <core-overlay id="overlay" target="{{$.wrapper}}" backdrop autoCloseDisabled="true">
+    </core-overlay>
+
+    <div id="wrapper">
+      <div class="modal-header">
+        <button type="button" class="close" on-click="{{close}}">&times;</button>
+        <h2 class="modal-title">Message details</h2>
+      </div>
+
+      <div class="row" style="
+    height: 3px;
+    background: #443685;
+    border-bottom: 1px dotted #FFFFFF;"></div>
+      <div class="row paper-shadow-bottom-z-3" style="
+    height: 3px; background: #443685;
+    box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.46);"></div>
+
+      <div class="modal-body">
+        <div class="broker row">
+          <div class="col-lg-12">
+            <h3>Connection Name</h3>
+            <span class="label label-primary">{{message.connectionName}}</span>
+
+          </div>
+        </div>
+
+        <div class="topic row">
+          <div class="col-lg-12">
+            <h3>Topic</h3>
+            <span class="label label-primary">{{message.topic}}</span>
+          </div>
+        </div>
+
+        <div class="time row">
+          <div class="col-lg-12">
+            <h3>Time</h3>
+            <span class="label label-primary">{{message.timestamp | moment}}</span>
+          </div>
+        </div>
+
+        <div class="qos row">
+          <div class="col-lg-12">
+            <h3>QoS</h3>
+            <span class="label label-primary">{{message.qos | qosFormat}}</span>
+          </div>
+        </div>
+
+        <div class="dub row">
+          <div class="col-lg-12">
+            <h3>
+              <abbr title="The dup flag indicates whether or not this message is a duplicate"
+                    class="initialism">dup</abbr>
+            </h3>
+            <span class="label label-primary">{{message.dup}}</span>
+
+          </div>
+        </div>
+        <div class="message row">
+          <div class="col-lg-12">
+
+            <h3>Message:</h3>
+
+            <!--json message-->
+            <template if="{{ message.type == 'json'}}">
+              <code-pretty lang="json" text="{{message.payload}}">
+              </code-pretty>
+            </template>
+
+            <!--plain message-->
+            <template if="{{ message.type != 'json' }}">
+              <pre>{{message.payload | messageFormat}}</pre>
+            </template>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </template>
+  <script>
+    Polymer("mqtt-message-detail-ui", {
+
+      publish: {
+        'message': {}
+      },
+
+      observe: {
+
+      },
+
+      created: function () {
+        console.log("%s Created ", this.element.name);
+        this.message = {};
+      },
+      ready: function () {
+        console.log("%s ready", this.element.name);
+        this.test = "test";
+      },
+
+      attached: function () {
+        console.log("%s attached", this.element.name);
+      },
+
+      domReady: function () {
+        console.log("%s domReady", this.element.name);
+      },
+
+      detached: function () {
+        console.log("%s detached", this.element.name);
+      },
+
+      attributeChanged: function (attrName, oldVal, newVal) {
+
+        //var newVal = this.getAttribute(attrName);
+        console.log(attrName, 'old: ' + oldVal, 'new:', newVal);
+
+      },
+
+      messageChanged: function () {
+        console.log(this.message);
+      },
+
+      /**
+       * #############
+       * Element functions
+       * #############
+       */
+
+      toggle: function () {
+        this.$.overlay.toggle();
+      },
+
+      /**
+       * #############
+       * Helper functions
+       * #############
+       */
+
+      messageFormat: function (value) {
+        return JSON.stringify(value, null, 2);
+      },
+
+      moment: function (value) {
+        return moment(value).format('h:mm:ss');
+      },
+      qosFormat: function (value) {
+        switch (value) {
+          case 0:
+            return "0 - at most once";
+          case 1:
+            return "1 - at least once";
+          case 2:
+            return "2 - exactly once";
+        }
+      }
+
+    });
+  </script>
+</polymer-element>

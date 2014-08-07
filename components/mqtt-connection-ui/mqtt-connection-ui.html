@@ -607,7 +607,7 @@ Polymer('mqtt-connection-ui', {
    * @param values
    */
   load: function (values) {
-    console.log(JSON.stringify(values));
+//    console.log(JSON.stringify(values));
     for (var property in this.publish) {
       if (values[property]) {
         this[property] = values[property];

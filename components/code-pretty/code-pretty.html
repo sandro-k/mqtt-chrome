@@ -26,14 +26,18 @@
         border: 0;
         padding: 0;
         /*overflow: scroll;*/
-        overflow:auto;
+        overflow: auto;
       }
+
       #code {
         margin: 0;
       }
+
       .wrapper {
         border: 1px solid #888;
         min-height: 32px;
+        background-color: whitesmoke;
+        border-radius: 4px;
       }
 
       .head span {
@@ -53,6 +57,7 @@
       core-collapse {
         margin-top: -27px;
       }
+
       .inlinetext {
         margin-top: -20px;
         padding-left: 8px;
@@ -68,7 +73,7 @@
     <div class="wrapper">
 
 
-    <div class="head" on-click="{{handelopen}}">
+      <div class="head" on-click="{{handelopen}}">
       <span class="{{ {collapsed:collapsed } | tokenList}}">
         {{lang}}
         <template bind if="{{!collapsed}}">
@@ -78,27 +83,26 @@
         <core-icon icon="arrow-drop-down"></core-icon>
       </template>
       </span>
-    </div>
-    <!--host element for the source code-->
-    <core-collapse id="collapse" opened="true">
-    <pre id="code" class="prettyprint" part="code"></pre>
-    </core-collapse>
-    <template bind if="{{collapsed}}">
-      <span class="inlinetext">{{inlinetext}}</span>
-    </template>
+      </div>
+      <!--host element for the source code-->
+      <core-collapse id="collapse" opened="true">
+        <pre id="code" class="prettyprint" part="code"></pre>
+      </core-collapse>
+      <template bind if="{{collapsed}}">
+        <span class="inlinetext">{{inlinetext}}</span>
+      </template>
     </div>
   </template>
   <script>
     Polymer("code-pretty", {
       lang: "",
-      formattedCode : "",
-      codeLang : [],
+      formattedCode: "",
+      codeLang: [],
       collapsed: false,
       inlinetext: "",
       changed: false,
       text: '',
-//      numbering: false,
-//      number: false,
+
       created: function () {
         // add language handler
         this.codeLang.json = this.parsAndFormatJson;
@@ -112,32 +116,32 @@
 
         this.$.collapse.addEventListener(
             'core-transitionend',
-            function(e) {
+            function (e) {
               console.log(e);
               console.log("core-transitionend");
             }
         );
         this.$.collapse.addEventListener(
             'transitionend',
-            function(e) {
+            function (e) {
               if (!that.changed) {
                 that.collapsed = !that.collapsed;
               }
               that.changed = false;
             }
         );
-
-
-
-//        transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd
-
       },
       textChanged: function () {
         console.log("Text changed:\n %s", this.text);
 
 
         // get a formatter for the specified language
-        if( typeof this.lang != 'undefined' && typeof this.codeLang[this.lang] == 'function'  ) {
+        console.log(typeof this.lang != 'undefined');
+        console.log(typeof this.codeLang[this.lang] == 'function');
+
+        var text = "";
+
+        if ((typeof this.lang != 'undefined') && (typeof this.codeLang[this.lang] == 'function')) {
           this.formattedCode = this.codeLang[this.lang](this.text);
 
           this.$.code.innerHTML = PR.prettyPrintOne(this.formattedCode, this.lang, this.number);
@@ -145,15 +149,15 @@
           this.$.code.innerHTML = PR.prettyPrintOne(this.text);
         }
 
-        this.inlinetext = this.text.replace(/(\r\n|\n|\r)/gm,"");
+        this.inlinetext = this.text.replace(/(\r\n|\n|\r)/gm, "");
       },
-      numberingChanged: function() {
-         var parsedInt = parseInt(this.numbering);
-         if (!isNaN(parsedInt)){
-           this.number = parsedInt
-         } else  {
-           this.number = this.numbering == "true" ? true : false
-         }
+      numberingChanged: function () {
+        var parsedInt = parseInt(this.numbering);
+        if (!isNaN(parsedInt)) {
+          this.number = parsedInt
+        } else {
+          this.number = this.numbering == "true" ? true : false
+        }
         this.textChanged();
 
       },
@@ -167,27 +171,20 @@
 
 //      custom formatter
       parsAndFormatJson: function (string) {
-        console.log(string);
-        if (string.trim().length > 0) {
-          if (typeof  string == 'object') {
-            return JSON.stringify(string, null, 2);
-          } else {
+
+
+        if (typeof  string == 'object') {
+          return JSON.stringify(string, null, 2);
+        } else if (typeof string == 'string'){
+          if (string.trim().length > 0) {
             return JSON.stringify(JSON.parse(string), null, 2);
           }
         }
-        else {
-          return "XXXXX";
-        }
-
+        return "Parsing Error";
       },
 
       handelopen: function (event, detail, sender) {
-        // this will toggle the collapse at data-target
-        console.log("log");
-
-
         this.$.collapse.toggle();
-        console.log("done");
         if (this.collapsed) {
           this.collapsed = false;
           this.changed = true;

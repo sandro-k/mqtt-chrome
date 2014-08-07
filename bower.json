@@ -57,7 +57,6 @@
     "paper-dialog": ">=0.3.0 <1.0.0",
     "paper-button": ">=0.3.0 <1.0.0",
     "core-drawer-panel": ">=0.3.0 <1.0.0",
-    "polymer-selector": "^0.3.0",
     "core-ajax": "~0.3.1",
     "google-signin": "~0.0.7",
     "google-apis": "~0.3.0",

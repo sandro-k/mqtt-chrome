@@ -391,6 +391,7 @@
 
           // add a timestamp to the message as it has none
           object.timestamp = Date.now();
+          object.connectionName = this.connectionName;
           if (this.subscriptions[topic]) {
             // add message to viewModel
             this.subscriptions[topic].addMessage(object);

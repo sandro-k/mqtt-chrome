@@ -18,6 +18,7 @@
 
 <link rel="import" href="../changeover-icon/changeover-icon.html"/>
 <link rel="import" href="../code-pretty/code-pretty.html"/>
+<link rel="import" href="../../components/mqtt-message-detail-ui/mqtt-message-detail-ui.html">
 
 <script src="../../bower_components/moment/moment.js"></script>
 <script src="../../bower_components/jquery/dist/jquery.js"></script>
@@ -41,7 +42,7 @@
     <div class="connection {{connectionID}} bg nine border zero sub expanded">
       <div class="row">
         <div class="col-xs-6 col-lg-9">
-          <h3>"{{topic}}"</h3>
+          <h3>Topic: "{{topic}}"</h3>
         </div>
 
         <div class="col-xs-6 col-lg-3 options" layout horizontal>
@@ -100,12 +101,15 @@
             <div class="hidden-xs col-sm-2 col-lg-1"><div>{{message.timestamp | moment }}</div></div>
             <div class="col-xs-5 col-sm-3 col-lg-2"><span class="badge">{{message.topic}}</span></div>
             <div class="col-xs-2 col-sm-2 col-lg-1"><span class="badge">QoS: {{message.qos}}</span></div>
+            <!--json message-->
             <template if="{{ message.type == 'json'}}">
               <div class="col-xs-6 col-sm-5 col-lg-8">
                 <code-pretty lang="json" text="{{message.payload}}">
                 </code-pretty>
                 </div>
             </template>
+
+            <!--plain message-->
             <template if="{{ message.type != 'json' }}">
               <div class="col-xs-6 col-sm-5 col-lg-8">
                 {{message.payload}}
@@ -113,9 +117,41 @@
             </template>
 
 
-
           </div>
         </template>
+
+          <template repeat="{{message in messages}}">
+            <div class="row message message-{{message.ID}}" on-tap="{{showMessageDetails}}" layout horizontal>
+
+              <mqtt-message-detail-ui id="messageUi" message="{{message}}">
+              </mqtt-message-detail-ui>
+
+              <div layout vertical>
+                <div>Time: {{message.timestamp | moment }}</div>
+                <div>
+                  <span class="badge" flex one>Topic: {{message.topic}}</span>
+                </div>
+                <div>
+                  <span class="badge"flex one>QoS: {{message.qos}}</span>
+                </div>
+              </div>
+              <!--json message-->
+              <template if="{{ message.type == 'json'}}">
+
+                  <code-pretty lang="json" text="{{message.payload}}" flex>
+                  </code-pretty>
+
+              </template>
+
+              <!--plain message-->
+              <template if="{{ message.type != 'json' }}">
+                <div flex>
+                  {{message.payload}}
+                </div>
+              </template>
+
+            </div>
+          </template>
        </div>
       </core-collapse>
 
@@ -376,7 +412,6 @@
       },
 
       addMessage: function (message) {
-//        console.debug("addMessage: %s", JSON.stringify(message));
         if (message.payload.charAt(0) == '{'){
           message.type = 'json'
           console.log(message.payload);
@@ -394,6 +429,13 @@
         }
 
       },
+      showMessageDetails: function (inEvent, inDetail ,inSender) {
+        var message = inSender.templateInstance.model.message;
+        console.log(message);
+        inSender.querySelector("mqtt-message-detail-ui").toggle();
+
+      },
+
       settings: function () {
         this.$.subscriptionOptions.toggle();
       },
@@ -462,7 +504,8 @@
 
 
       moment: function (value) {
-        return moment(value).calendar();
+        return moment(value).format('h:mm:ss');
+//        return moment(value).calendar();
 //        return moment(value).format('MMMM Do YYYY, h:mm:ss a');
       }
 

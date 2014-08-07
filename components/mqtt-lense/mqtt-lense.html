@@ -16,6 +16,7 @@
 <link rel="import" href="../../components/mqtt-connection/mqtt-connection.html">
 <link rel="import" href="../../components/mqtt-connection-ui/mqtt-connection-ui.html">
 <!--<link rel="import" href="../../components/mqtt-subscription/mqtt-subscription.html">-->
+
 <link rel="import" href="../../components/changeover-icon/changeover-icon.html">
 
 <polymer-element name="mqtt-lense" constructo="Mqttlense">
@@ -25,11 +26,6 @@
       body {
         font-family: sans-serif;
       }
-      .test {
-        background: #ffff00;
-      }
-
-
 
     </style>
 
@@ -87,10 +83,7 @@
         background: {{connection.connectionColors[9]}}!important;
         }
 
-        :host .test {
-        /*border-left: 3px solid {{connection.connectionColor}}!important;*/
-          /*background: red!important;*/
-        }
+
 
 
         paper-toast {
@@ -413,7 +406,7 @@
         this.subscriptionTopic = 'test';
         this.publishTopicQoS = 0;
         this.publishTopic = 'test';
-        this.publishValue = '{"id":"387","name":"greenhouse","description":"Thesensorboxofthegreenhouseonmyterrace","datastreams":[{"id":"9347","name":"temperature","description":"Temperature"},{"id":"9348","name":"Humidity","description":"Humidity"}]}';
+        this.publishValue = '{"id":"387","name":"greenhouse","description":"The sensorbox of the greenhouse on my terrace","datastreams":[{"id":"9347","name":"temperature","description":"Temperature"},{"id":"9348","name":"Humidity","description":"Humidity"}]}';
 
       },
       ready: function () {
