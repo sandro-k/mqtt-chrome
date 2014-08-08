@@ -1,0 +1,52 @@
+<!--polymer-->
+<link rel="import" href="../../bower_components/polymer/polymer.html"/>
+
+
+<!--element definition-->
+<polymer-element name="x-demo" attributes="test" condstructor="XDemo">
+  <template>
+    <style>
+    </style>
+    <div>{{test}}</div>
+  </template>
+  <script>
+    Polymer("x-demo", {
+
+      publish: {
+        'test': ''
+      },
+
+      observe: {
+
+      },
+
+      created: function () {
+        console.log("%s Created ", this.element.name);
+
+      },
+      ready: function () {
+        console.log("%s ready", this.element.name);
+        this.test = "test";
+      },
+
+      attached: function () {
+        console.log("%s attached", this.element.name);
+      },
+
+      domReady: function() {
+        console.log("%s domReady", this.element.name);
+      },
+
+      detached: function() {
+        console.log("%s detached", this.element.name);
+      },
+
+      attributeChanged: function(attrName, oldVal, newVal) {
+
+        //var newVal = this.getAttribute(attrName);
+        console.log(attrName, 'old: ' + oldVal, 'new:', newVal);
+
+      },
+    });
+  </script>
+</polymer-element>
