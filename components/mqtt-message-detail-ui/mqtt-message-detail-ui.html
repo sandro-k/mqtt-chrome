@@ -3,6 +3,7 @@
 <link rel="import" href="../../bower_components/core-tooltip/core-tooltip.html"/>
 <link rel="import" href="../../bower_components/core-overlay/core-overlay.html"/>
 <link rel="import" href="../../components/code-pretty/code-pretty.html"/>
+<link rel="import" href="../../bower_components/core-overlay/core-key-helper.html">
 
 
 <script src="../../bower_components/moment/moment.js"></script>
@@ -120,13 +121,22 @@
 
       },
 
+      targetListeners: {
+        'tap': 'tapHandler',
+        'keydown': 'keydownHandler',
+      },
+
       created: function () {
         console.log("%s Created ", this.element.name);
         this.message = {};
       },
       ready: function () {
         console.log("%s ready", this.element.name);
-        this.test = "test";
+        this.addElementListenerList(this.$.wrapper, this.targetListeners);
+      },
+
+      registerCallback: function(element) {
+        this.keyHelper = document.createElement('core-key-helper');
       },
 
       attached: function () {
@@ -153,6 +163,31 @@
       },
 
       /**
+       *
+       * on-* handler
+       *
+       */
+
+      close: function () {
+        this.$.overlay.toggle();
+      },
+
+
+      /**
+       *
+       * Event Handler
+       *
+       */
+
+      keydownHandler: function(e) {
+        console.log("keydownHandler");
+        if (e.keyCode == this.keyHelper.ESCAPE_KEY) {
+          this.close();
+          e.stopPropagation();
+        }
+      },
+
+      /**
        * #############
        * Element functions
        * #############
@@ -167,6 +202,33 @@
        * Helper functions
        * #############
        */
+
+      addElementListenerList: function(node, events) {
+        for (var i in events) {
+          this.addElementListener(node, i, events[i]);
+        }
+      },
+
+      addElementListener: function(node, event, methodName, capture) {
+        var fn = this._makeBoundListener(methodName);
+        if (node && fn) {
+          node.addEventListener(event, fn, capture);
+        }
+      },
+
+      _makeBoundListener: function(methodName) {
+        var self = this, method = this[methodName];
+        if (!method) {
+          return;
+        }
+        var bound = '_bound' + methodName;
+        if (!this[bound]) {
+          this[bound] = function(e) {
+            method.call(self, e);
+          }
+        }
+        return this[bound];
+      },
 
       messageFormat: function (value) {
         return JSON.stringify(value, null, 2);

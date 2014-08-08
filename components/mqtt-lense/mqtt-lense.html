@@ -41,6 +41,23 @@
           border-right: 1px solid {{connection.connectionColors[0]}}!important;
         }
 
+        :host /deep/ .{{connection.connectionID}} .badge  {
+          background: {{connection.connectionColors[0]}}!important;
+
+        }
+
+
+
+
+        :host /deep/ .message-{{connection.connectionID}}.row.message  {
+        border-top: 2px solid {{connection.connectionColors[9]}}!important;
+        border-left: 3px solid {{connection.connectionColors[0]}}!important;
+        border-bottom: 2px solid {{connection.connectionColors[9]}}!important;
+        -webkit-animation: okAnimationa 5s;
+        }
+
+
+
         :host /deep/ .{{connection.connectionID}}.one.bg   {
 
         background: {{connection.connectionColors[1]}}!important;

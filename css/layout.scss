@@ -979,6 +979,14 @@ pre.prettyprint {
   }
 }
 
+@-webkit-keyframes okAnimationa {
+  from {
+    background: #bcf5bc; }
+
+  to {
+    background: none; }
+}
+
 // animations
 /* Chrome, Safari, Opera */
 @-webkit-keyframes failAnimation {

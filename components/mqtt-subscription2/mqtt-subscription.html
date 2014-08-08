@@ -19,6 +19,7 @@
 <link rel="import" href="../changeover-icon/changeover-icon.html"/>
 <link rel="import" href="../code-pretty/code-pretty.html"/>
 <link rel="import" href="../../components/mqtt-message-detail-ui/mqtt-message-detail-ui.html">
+<link rel="import" href="../../components/mqtt-message-ui/mqtt-message.html">
 
 <script src="../../bower_components/moment/moment.js"></script>
 <script src="../../bower_components/jquery/dist/jquery.js"></script>
@@ -41,12 +42,14 @@
 
     <div class="connection {{connectionID}} bg nine border zero sub expanded">
       <div class="row">
-        <div class="col-xs-6 col-lg-9">
-          <h3>Topic: "{{topic}}"</h3>
-        </div>
+        <div class="options" layout horizontal center>
+          <h3 class="mr">Topic: "{{topic}}"</h3>
 
-        <div class="col-xs-6 col-lg-3 options" layout horizontal>
-
+          <div>
+            Showing messages from {{((showMessageCount > messages.length ) ? 0 : messages.length - showMessageCount ) }}  to {{messages.length}}
+          </div>
+          <core-icon icon="remove" on-click="{{lessMessages}}" disabled></core-icon>
+          <core-icon icon="add" on-click="{{moreMessages}}"></core-icon>
 
           <!--<core-icon-->
               <!--class="pull-right"-->
@@ -55,6 +58,7 @@
 
 
           <div flex></div>
+
 
           <core-tooltip id="unsubscribeTooltip" position="top">
             <core-icon
@@ -71,88 +75,35 @@
           </span>
 
 
-          <changeover-icon icon="arrow-drop-up"
-                           up="arrow-drop-down"
-                           on-click="{{handelopen}}"
-                           disabled?="{{ messages.length < 1 }}"
-          down="arrow-drop-up"></changeover-icon>
-
-
+          <changeover-icon
+              icon="expand-less"
+              up="expand-more"
+              on-click="{{handelopen}}"
+              disabled?="{{ messages.length < 1 }}"
+              down="expand-less"></changeover-icon>
 
         </div>
       </div>
 
       <core-collapse id="messages" opened>
+          <template repeat="{{message, index in messages}}">
+
+            <!--<h1>{{index}} - {{messages.length}}</h1>-->
+            <!--<h1>-->
+              <!--{{messages.length > 5 }} &&-->
+              <!--{{index >= messages.length-5}} ||-->
+              <!--{{messages.length <= 5}} &&-->
+              <!--{{index < 5}} = {{ ((messages.length > 5) &&  (index >= messages.length-5)) || ((messages.length <= 5) && (index < 5))  }}-->
 
 
-
-        <template if="{{ messages.length > 0 }}">
-          <div class="row table-header message-{{message.ID}}">
-            <div class="hidden-xs col-sm-2 col-lg-1"><h4>Date</h4></div>
-            <div class="col-xs-5 col-sm-3 col-lg-2"><h4>Topic</h4></div>
-            <div class="col-xs-2 col-sm-2 col-lg-1"><h4>QoS</h4></div>
-            <div class="col-xs-6 col-sm-5 col-lg-8"><h4>Message</h4></div>
-          </div>
-        </template>
-
-        <div id="message-warpper">
-        <template repeat="{{message in messages}}">
-          <div class="row message message-{{message.ID}}">
-            <div class="hidden-xs col-sm-2 col-lg-1"><div>{{message.timestamp | moment }}</div></div>
-            <div class="col-xs-5 col-sm-3 col-lg-2"><span class="badge">{{message.topic}}</span></div>
-            <div class="col-xs-2 col-sm-2 col-lg-1"><span class="badge">QoS: {{message.qos}}</span></div>
-            <!--json message-->
-            <template if="{{ message.type == 'json'}}">
-              <div class="col-xs-6 col-sm-5 col-lg-8">
-                <code-pretty lang="json" text="{{message.payload}}">
-                </code-pretty>
-                </div>
-            </template>
-
-            <!--plain message-->
-            <template if="{{ message.type != 'json' }}">
-              <div class="col-xs-6 col-sm-5 col-lg-8">
-                {{message.payload}}
-              </div>
-            </template>
+            <!--</h1>-->
+           <template if="{{ ((messages.length > showMessageCount) &&  (index >= messages.length-showMessageCount)) || ((messages.length <= showMessageCount) && (index < showMessageCount)) || showAll }}">
+             <mqtt-message id="[[index]]" message="{{message}}"></mqtt-message>
+           </template>
 
 
-          </div>
-        </template>
-
-          <template repeat="{{message in messages}}">
-            <div class="row message message-{{message.ID}}" on-tap="{{showMessageDetails}}" layout horizontal>
-
-              <mqtt-message-detail-ui id="messageUi" message="{{message}}">
-              </mqtt-message-detail-ui>
-
-              <div layout vertical>
-                <div>Time: {{message.timestamp | moment }}</div>
-                <div>
-                  <span class="badge" flex one>Topic: {{message.topic}}</span>
-                </div>
-                <div>
-                  <span class="badge"flex one>QoS: {{message.qos}}</span>
-                </div>
-              </div>
-              <!--json message-->
-              <template if="{{ message.type == 'json'}}">
-
-                  <code-pretty lang="json" text="{{message.payload}}" flex>
-                  </code-pretty>
-
-              </template>
-
-              <!--plain message-->
-              <template if="{{ message.type != 'json' }}">
-                <div flex>
-                  {{message.payload}}
-                </div>
-              </template>
-
-            </div>
           </template>
-       </div>
+
       </core-collapse>
 
     </div>
@@ -372,6 +323,10 @@
 
       topic : '',
 
+      showMessageCount: 5,
+
+      showAll: false,
+
 
 
       observe: {
@@ -388,7 +343,7 @@
         // todo change
 //        this.connectionID = "1";
         this.sumUnRead = 0;
-        this.isOpen = false;
+        this.isOpen = true;
         this.removeDialog = false;
 
         this.options_shadow = {qos: this.options.qos, messageId: this.options.messageId};
@@ -427,12 +382,6 @@
         if (!this.isOpen){
           this.sumUnRead++;
         }
-
-      },
-      showMessageDetails: function (inEvent, inDetail ,inSender) {
-        var message = inSender.templateInstance.model.message;
-        console.log(message);
-        inSender.querySelector("mqtt-message-detail-ui").toggle();
 
       },
 
@@ -502,12 +451,26 @@
 
       },
 
+      moreMessages: function (inEvent, inDetail ,inSender) {
+        if (this.showMessageCount < this.messages.length){
+          this.showMessageCount++;
+        }
+      },
 
-      moment: function (value) {
-        return moment(value).format('h:mm:ss');
-//        return moment(value).calendar();
-//        return moment(value).format('MMMM Do YYYY, h:mm:ss a');
-      }
+      lessMessages: function (inEvent, inDetail ,inSender) {
+        if (this.showMessageCount > 1){
+          this.showMessageCount--;
+        }
+      },
+
+      toggleShowAll: function (inEvent, inDetail ,inSender) {
+        this.showAll = !this.showAll;
+      },
+
+      test: function (value) {
+        console.log(value);
+
+      },
 
     });
 

@@ -154,19 +154,33 @@ header {
   margin-bottom: $margin ;
 }
 
-.mr {
+:host /deep/ .mr {
   margin-right: $margin;
 }
 
-.ml {
+:host /deep/ .ml {
   margin-left: $margin;
 }
 
-.mlr {
+:host /deep/ .mlr {
   margin-left: $margin;
   margin-right: $margin;
 }
 
+:host /deep/ .mb {
+ margin-bottom: $margin;
+}
+
+:host /deep/ .mt {
+  margin-top: $margin;
+}
+
+:host /deep/ .pl {
+ padding-left: $margin;
+}
+:host /deep/ .pr {
+ padding-right: $margin;
+}
 .label-primary {
   background-color: $brand-primary;
 }

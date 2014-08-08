@@ -71,21 +71,19 @@
       }
     </style>
     <div class="wrapper">
-
-
       <div class="head" on-click="{{handelopen}}">
       <span class="{{ {collapsed:collapsed } | tokenList}}">
         {{lang}}
         <template bind if="{{!collapsed}}">
-          <core-icon icon="arrow-drop-up"></core-icon>
+          <core-icon icon="expand-less"></core-icon>
         </template>
       <template bind if="{{collapsed}}">
-        <core-icon icon="arrow-drop-down"></core-icon>
+        <core-icon icon="expand-more"></core-icon>
       </template>
       </span>
       </div>
       <!--host element for the source code-->
-      <core-collapse id="collapse" opened="true">
+      <core-collapse id="collapse" opened?={{!collapsed}}>
         <pre id="code" class="prettyprint" part="code"></pre>
       </core-collapse>
       <template bind if="{{collapsed}}">
@@ -149,7 +147,13 @@
           this.$.code.innerHTML = PR.prettyPrintOne(this.text);
         }
 
-        this.inlinetext = this.text.replace(/(\r\n|\n|\r)/gm, "");
+        if (typeof this.text == 'object'){
+//          replace(/(\r\n|\n|\r)/gm, "");
+          this.inlinetext = JSON.stringify(this.text);
+        } else if (typeof this.text == 'string'){
+          this.inlinetext = this.text.replace(/(\r\n|\n|\r)/gm, "");
+        }
+
       },
       numberingChanged: function () {
         var parsedInt = parseInt(this.numbering);

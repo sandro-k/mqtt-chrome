@@ -1,19 +1,66 @@
 <!--polymer-->
 <link rel="import" href="../../bower_components/polymer/polymer.html"/>
 
+<script src="../../bower_components/moment/moment.js"></script>
 
 <!--element definition-->
-<polymer-element name="x-demo" attributes="test" condstructor="XDemo">
+<polymer-element name="mqtt-message" attributes="message, id" condstructor="MqttMessage">
   <template>
-    <style>
-    </style>
-    <div>{{test}}</div>
+    <link rel="stylesheet" href="style.css"/>
+    <div class="row message message-{{message.connectionID}} mr pl"  layout vertical>
+      <div class="mb" layout horizontal>
+        <div class="ml">
+          <h4>#</h4>
+          {{id}}
+        </div>
+        <div class="ml">
+          <h4>Time</h4>
+          {{message.timestamp | moment }}</div>
+        <div class="ml">
+          <h4>Topic</h4>
+          <span class="badge" flex one>{{message.topic}}</span>
+        </div>
+        <div class="ml">
+          <h4>QoS</h4>
+          <span class="badge"flex one>{{message.qos}}</span>
+        </div>
+        <div flex></div>
+        <div>
+          <core-icon-button icon="info" on-click="{{showMessageDetails}}">
+          </core-icon-button>
+          <mqtt-message-detail-ui id="messageUi" message="{{message}}">
+          </mqtt-message-detail-ui>
+        </div>
+      </div>
+      <!--json message-->
+      <template if="{{ message.type == 'json'}}">
+
+        <code-pretty lang="json" text="{{message.payload}}" collapsed flex>
+        </code-pretty>
+
+      </template>
+
+      <!--plain message-->
+      <template if="{{ message.type != 'json' }}">
+        <div layout horizontal center>
+          <div class="mr">
+            <h4>Message:</h4>
+          </div>
+          <div flex>
+            {{message.payload}}
+          </div>
+
+        </div>
+      </template>
+
+    </div>
   </template>
   <script>
-    Polymer("x-demo", {
+    Polymer("mqtt-message", {
 
       publish: {
-        'test': ''
+        'message': {},
+        'id': -1
       },
 
       observe: {
@@ -22,7 +69,7 @@
 
       created: function () {
         console.log("%s Created ", this.element.name);
-
+        this.message = {};
       },
       ready: function () {
         console.log("%s ready", this.element.name);
@@ -47,6 +94,14 @@
         console.log(attrName, 'old: ' + oldVal, 'new:', newVal);
 
       },
+
+      showMessageDetails: function (inEvent, inDetail ,inSender) {
+        inSender.parentElement.querySelector("mqtt-message-detail-ui").toggle();
+      },
+
+      moment: function (value) {
+        return moment(value).format('h:mm:ss');
+      }
     });
   </script>
 </polymer-element>
