@@ -40,7 +40,7 @@
 
 <core-media-query query="{{narrowQuery}}" queryMatches="{{narrow}}"></core-media-query>
 
-<core-overlay id="overlay" target="{{$.wrapper}}" backdrop>
+<core-overlay id="overlay" target="{{$.wrapper}}" backdrop autoCloseDisabled>
 </core-overlay>
 
 <div id="wrapper" class="{{{ narrow : narrow } | tokenList }}">
@@ -562,6 +562,7 @@ Polymer('mqtt-connection-ui', {
   },
   ready: function () {
     console.debug("ready");
+    console.log("autoCloseDisabled: %s", this.$.overlay.autoCloseDisabled);
 
   },
   attached: function () {

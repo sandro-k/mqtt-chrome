@@ -39,7 +39,7 @@
 
 <core-media-query query="{{narrowQuery}}" queryMatches="{{narrow}}"></core-media-query>
 
-<core-overlay id="overlay" target="{{$.wrapper}}" backdrop open>
+<core-overlay id="overlay" target="{{$.wrapper}}" backdrop opened autoCloseDisabled>
 </core-overlay>
 
 <div id="wrapper" class="{{{ narrow : narrow } | tokenList }}">

@@ -477,12 +477,31 @@
 
 
           var options = { clean: true,
-            encoding: "utf8",
-            keepalive: this.keepAlive,
             protocolId: "MQIsdp",
             protocolVersion: 3,
-            reconnectPeriod: 1000};
+            keepalive: this.keepAlive,
+            clientId: this.clientId,
+            will: {
+              topic: this.lastWillTopic,
+              payload: this.lastWillMessage,
+              qos: this.lastWillQoS,
+              retain: this.lastWillRetained
+            },
+            encoding: "utf8",
+            clean: this.clean
+          };
 
+          //reconnectPeriod: 1000
+
+          if (this.username != '' && this.password != '') {
+            options.username = this.username;
+            options.password = this.password;
+          }
+
+          console.log("Options: %s", JSON.stringify(options, null, 4));
+          console.log("HostName: %s, Port: %s", this.hostname, this.hostPort);
+
+          this.hostPort = parseInt(this.hostPort);
           this.client = mows.createClient(this.hostPort, this.hostname, options);
 
           this.client.on('connect', function(){
