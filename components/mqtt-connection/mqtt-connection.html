@@ -9,7 +9,7 @@
 <script src="../../node_modules/mows/mows.js"></script>
 <script src="../../bower_components/underscore/underscore.js"></script>
 
-<polymer-element name="mqtt-connection" attributes="messages, publish, createClient, autoConnect, hostname, user, password, clientID" constructor="MqttConnection">
+<polymer-element name="mqtt-connection" attributes="" constructor="MqttConnection">
 
   <template>
     <div id="container"></div>
@@ -79,13 +79,6 @@
           hostPort: 1883,
 
 
-          /**
-           * A unique client ID to identify the client at the broker
-           * @attribute clientID
-           * @type string
-           * @default ''
-           */
-          clientID: '',
 
 
           /**
@@ -215,6 +208,24 @@
            * @default []
            */
           connectionColors: [],
+
+
+          /**
+           * A unique client ID to identify the client at the broker
+           * @attribute clientId
+           * @type string
+           * @default ''
+           */
+          clientId: '',
+
+
+          /**
+           * @attribute autoConnect
+           * @type boolean
+           * @default false
+           */
+          autoConnect: false,
+
         },
 
         observe: {
@@ -242,7 +253,7 @@
          * @param {Object} opt_options (optional) additional options that effect the subscription type
          * @param opt_target (optional) the target element the subscription should be appended to
          */
-        subscribe: function (topic, opt_options, opt_target) {
+        subscribe: function (topic, opt_options, opt_target, opt_callback) {
           console.debug("Subscribing to: \"%s\'", topic);
 
           var alreadyInDom = false;
@@ -253,7 +264,7 @@
           }
 
           // actually subscribing to the topic
-          this.client.subscribe(topic);
+          this.client.subscribe(topic, opt_options, opt_callback);
 
           if (!alreadyInDom) {
             // creating the View
@@ -382,12 +393,14 @@
         },
 
         mqttPublish: function (topic, message, opt_options, opt_callback) {
+          console.log(message);
           this.client.publish(topic, message, opt_options, opt_callback);
 
         },
 
         onMessage: function (topic, payload, object) {
 //          console.log("onMessage %s: %s", topic, payload);
+          console.log(object);
 
           // add a timestamp to the message as it has none
           object.timestamp = Date.now();
@@ -473,6 +486,13 @@
 
         },
 
+        logPublishedValues: function() {
+          for (var property in this.publish) {
+            console.log("%s: %s", property, this[property]);
+          }
+
+        },
+
         createClient: function () {
 
 
@@ -498,8 +518,7 @@
             options.password = this.password;
           }
 
-          console.log("Options: %s", JSON.stringify(options, null, 4));
-          console.log("HostName: %s, Port: %s", this.hostname, this.hostPort);
+//          this.logPublishedValues();
 
           this.hostPort = parseInt(this.hostPort);
           this.client = mows.createClient(this.hostPort, this.hostname, options);

@@ -106,9 +106,9 @@
         <input class="form-control"
                data-toggle="tooltip"
                id="clientIdInput"
-               value="{{clientID}}"
+               value="{{clientId}}"
                placeholder="Enter client ID"
-               title=""
+               maxlength="23"
                data-original-title="MQTT client ID. 1-23 characters long.">
       </div>
     </div>
@@ -316,11 +316,11 @@ Polymer('mqtt-new-subscription-ui', {
 
     /**
      * A unique client ID to identify the client at the broker
-     * @attribute clientID
+     * @attribute clientId
      * @type string
      * @default ''
      */
-    clientID: '',
+    clientId: '',
 
 
     /**

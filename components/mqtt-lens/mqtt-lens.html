@@ -155,10 +155,6 @@
     </a>
 
 
-
-
-
-
     <!--header-->
     <div id="header">
       <header class="header gradient">
@@ -403,6 +399,9 @@
   <script>
     Polymer('mqtt-lens', {
 
+
+
+
       publish: {
         leftMenu: true,
         appName: "MQTT",
@@ -566,8 +565,17 @@
         var connection = inSender.templateInstance.model.connection;
         // get the target
         var target = this.$.subscriptions.querySelector('#ID'+connection.connectionID);
+
+        var options = {
+          qos: parseInt(this.subscriptionTopicQoS)
+        }
+        console.log(options);
+
+
         // subscribe
-        connection.subscribe(this.subscriptionTopic, {} , target);
+        connection.subscribe(this.subscriptionTopic, options , target, function() {
+          console.log("addSubscription callback");
+        });
 
 
       },
@@ -616,9 +624,14 @@
       },
 
       mqttPublish: function (inEvent, inDetail ,inSender) {
+
+
         var topic = this.publishTopic;
-        var qos = this.publishTopicQoS;
+        var qos = parseInt(this.publishTopicQoS)
         var message = this.publishValue;
+
+        console.log("Qos:%s", qos);
+
 
         var options = {
           qos: qos,

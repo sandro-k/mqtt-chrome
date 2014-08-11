@@ -34,7 +34,7 @@
 <!-- outermost template defines the element's shadow DOM -->
 <template>
 <link rel="stylesheet" href="../../css/build/layout.css"/>
-<link rel="stylesheet" href="../mqtt-lense/css/main.css"/>
+<link rel="stylesheet" href="../mqtt-lens/css/main.css"/>
 <link rel="stylesheet" href="custom.css"/>
 
 
@@ -117,7 +117,7 @@
         <input class="form-control"
                data-toggle="tooltip"
                id="clientIdInput"
-               value="{{clientID}}"
+               value="{{clientId}}"
                disabled?="{{ mode == 'edit' }}"
                placeholder="Enter client ID"
                title=""
@@ -280,7 +280,6 @@
           <input class="form-control"
                  id="lastWillTopicInput"
                  value="{{lastWillTopic}}"
-                 disabled
                  placeholder="Enter last-will topic">
         </div>
       </div>
@@ -293,7 +292,6 @@
               class="form-control"
               id="lastWillMessageInput"
               value="{{lastWillMessage}}"
-              disabled
               placeholder="Enter last-will message" rows="3"></textarea>
         </div>
       </div>
@@ -305,7 +303,6 @@
           <select
               class="form-control"
               data-toggle="tooltip"
-              disabled
               value="{{lastWillQoS}}"
               id="lastWillQosInput">
             <option value="0">0 - at most once</option>
@@ -435,11 +432,11 @@ Polymer('mqtt-connection-ui', {
 
     /**
      * A unique client ID to identify the client at the broker
-     * @attribute clientID
+     * @attribute clientId
      * @type string
      * @default ''
      */
-    clientID: '',
+    clientId: '',
 
 
     /**
@@ -562,16 +559,14 @@ Polymer('mqtt-connection-ui', {
   },
   ready: function () {
     console.debug("ready");
-    console.log("autoCloseDisabled: %s", this.$.overlay.autoCloseDisabled);
-
+    this.randomID();
+    this.connectionID = "lens_" + this.randomString(27)
   },
   attached: function () {
     console.debug("attached");
   },
   domReady: function () {
     console.debug("domReady");
-    this.connectionID = "lens" + this.randomString(28)
-    console.debug(this.connectionID);
   },
   detached: function () {
     console.debug("detached");
@@ -590,7 +585,7 @@ Polymer('mqtt-connection-ui', {
   },
   randomID: function () {
     console.debug("randomID");
-    this.clientID = this.randomString(32);
+    this.clientId = "lens_"+this.randomString(27);
   },
   togglelastWill: function () {
     console.debug("togglelastWill");
