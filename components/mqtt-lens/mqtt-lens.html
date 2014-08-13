@@ -1,6 +1,9 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html"/>
 
 
+
+
+
 <link rel="import" href="../../bower_components/core-scaffold/core-scaffold.html">
 <link rel="import" href="../../bower_components/core-header-panel/core-header-panel.html">
 <link rel="import" href="../../bower_components/core-menu/core-menu.html">
@@ -13,11 +16,11 @@
 
 
 <!--custom components-->
-<link rel="import" href="../../components/mqtt-connection/mqtt-connection.html">
+<link rel="import" href="../../bower_components/mqtt-connection/mqtt-connection.html">
 <link rel="import" href="../../components/mqtt-connection-ui/mqtt-connection-ui.html">
 <!--<link rel="import" href="../../components/mqtt-subscription/mqtt-subscription.html">-->
 
-<link rel="import" href="../../components/changeover-icon/changeover-icon.html">
+<link rel="import" href="../../bower_components/changeover-icon/changeover-icon.html">
 
 <polymer-element name="mqtt-lens" constructo="Mqttlens">
   <!-- outermost template defines the element's shadow DOM -->
@@ -25,6 +28,11 @@
     <style>
       body {
         font-family: sans-serif;
+      }
+
+      .big {
+        height: 48px;
+        width: 48px;
       }
 
     </style>
@@ -163,7 +171,7 @@
           <div class="row">
 
             <div class="col-xs-8 col-sm-10">
-              <h1 class="app-name"><span class="glyphicon glyphicon-search"></span> {{appName}}<span>{{appSubname}}</span></h1>
+              <h1 class="app-name"><core-icon icon="search" class="big rot-75"></core-icon> {{appName}}<span>{{appSubname}}</span></h1>
             </div>
 
             <div class="col-xs-4 col-sm-2">
