@@ -38,7 +38,6 @@
     "mark-down": "~0.5.2",
     "roboto-fontface": "~0.2.0",
     "moment": "~2.7.0",
-    "bs-modal": "EatYourSpinach/bs-modal#master",
     "x-tag-tooltip": "x-tag/tooltip#master",
     "polymer-flex-layout": "PolymerLabs/polymer-flex-layout#master",
     "sampler-scaffold": "Polymer/sampler-scaffold#master",
@@ -54,6 +53,7 @@
     "bootstrap-sass-official": "v3.2.0+1",
     "code-pretty": "sandro-k/code-pretty#master",
     "mqtt-message-ui": "sandro-k/mqtt-message-ui",
+    "mqtt-connection-ui": "sandro-k/mqtt-connection-ui"
   },
   "resolutions": {
     "platform": ">=0.3.0 <1.0.0",
