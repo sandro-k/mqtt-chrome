@@ -1,6 +1,6 @@
 {
   "name": "MQTTlens",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "authors": [
     "Sandro Kock <sandro.kock@gmail.com>"
   ],
@@ -47,7 +47,10 @@
     "paper-elements": "Polymer/paper-elements#~0.3.4",
     "core-drawer-panel": "Polymer/core-drawer-panel#master",
     "polymer-ui-tabs": "Polymer/polymer-ui-tabs#master",
-    "google-web-components": "PolymerLabs/google-web-components"
+    "google-web-components": "PolymerLabs/google-web-components",
+    "mqtt-connection": "sandro-k/mqtt-connection#master",
+    "mqtt-subscription-ui": "sandro-k/mqtt-subscription-ui#master",
+    "bootstrap-sass-official": "v3.2.0+1"
   },
   "resolutions": {
     "platform": ">=0.3.0 <1.0.0",
@@ -60,6 +63,14 @@
     "core-ajax": "~0.3.1",
     "google-signin": "~0.0.7",
     "google-apis": "~0.3.0",
-    "google-map": "~0.2.3"
+    "google-map": "~0.2.3",
+    "core-item": "~0.3.4",
+    "core-header-panel": "~0.3.4",
+    "core-icon-button": "~0.3.4",
+    "core-menu": "~0.3.4",
+    "core-overlay": "0.3.5",
+    "core-toolbar": "~0.3.4",
+    "polymer-flex-layout": "^0.3.0",
+    "polymer-ui-tabs": "^0.3.0"
   }
 }
