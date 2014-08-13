@@ -50,7 +50,10 @@
     "google-web-components": "PolymerLabs/google-web-components",
     "mqtt-connection": "sandro-k/mqtt-connection#master",
     "mqtt-subscription-ui": "sandro-k/mqtt-subscription-ui#master",
-    "bootstrap-sass-official": "v3.2.0+1"
+    "changeover-icon": "sandro-k/changeover-icon#master",
+    "bootstrap-sass-official": "v3.2.0+1",
+    "code-pretty": "sandro-k/code-pretty#master",
+    "mqtt-message-ui": "sandro-k/mqtt-message-ui",
   },
   "resolutions": {
     "platform": ">=0.3.0 <1.0.0",
